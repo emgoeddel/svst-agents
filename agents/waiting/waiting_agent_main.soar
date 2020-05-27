@@ -1,0 +1,13 @@
+popd
+popd
+
+pushd common
+pushd wait
+source wait.soar
+popd
+popd
+
+pushd agents
+pushd waiting
+
+source waiting_agent_init.soar

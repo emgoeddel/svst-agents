@@ -1,0 +1,18 @@
+# Give the agent a name
+sp {init-agent*propose*add-name
+   (state <s> ^attribute state
+             -^agent-name
+   )
+   -->
+   (<s> ^operator <o> + <)
+   (<o> ^name add-name)
+}
+
+sp {init-agent*apply*add-name
+   (state <s> ^attribute state
+             -^agent-name
+              ^operator.name add-name
+   )
+   -->
+   (<s> ^agent-name waiting)
+}

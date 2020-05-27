@@ -1,0 +1,44 @@
+# Start waiting and counting waited cycles
+sp {state-no-change*propose*wait*start
+   (state <s> ^attribute state
+              ^quiescence t
+              ^choices none
+             -^wait
+             -^operator.name wait
+   )
+   -->
+   (<s> ^operator <o> + <)
+   (<o> ^name wait)
+}
+
+sp {state-no-change*apply*wait*start
+   (state <s> ^attribute state
+             -^wait
+              ^operator.name wait
+   )
+   -->
+   (<s> ^wait 1)
+}
+
+# Continue waiting and counting waited cycles
+sp {state-no-change*propose*wait*continue
+   (state <s> ^attribute state
+              ^quiescence t
+              ^choices none
+             -^operator.name wait
+              ^wait
+   )
+   -->
+   (<s> ^operator <o> + <)
+   (<o> ^name wait)
+}
+
+sp {state-no-change*apply*wait*first
+   (state <s> ^attribute state
+              ^operator.name wait
+              ^wait <w>
+   )
+   -->
+   (<s> ^wait <w> -
+        ^wait (+ <w> 1) +)
+}
