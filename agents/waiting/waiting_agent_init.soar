@@ -1,15 +1,15 @@
 # Give the agent a name
 sp {init-agent*propose*add-name
-   (state <s> ^attribute state
+   (state <s> ^superstate nil
              -^agent-name
    )
    -->
-   (<s> ^operator <o> + <)
+   (<s> ^operator <o> +)
    (<o> ^name add-name)
 }
 
 sp {init-agent*apply*add-name
-   (state <s> ^attribute state
+   (state <s> ^superstate nil
              -^agent-name
               ^operator.name add-name
    )

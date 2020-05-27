@@ -4,17 +4,16 @@ sp {state-no-change*propose*wait*start
               ^quiescence t
               ^choices none
              -^wait
-             -^operator.name wait
    )
    -->
    (<s> ^operator <o> + <)
-   (<o> ^name wait)
+   (<o> ^name start-wait)
 }
 
 sp {state-no-change*apply*wait*start
    (state <s> ^attribute state
              -^wait
-              ^operator.name wait
+              ^operator.name start-wait
    )
    -->
    (<s> ^wait 1)
@@ -25,7 +24,6 @@ sp {state-no-change*propose*wait*continue
    (state <s> ^attribute state
               ^quiescence t
               ^choices none
-             -^operator.name wait
               ^wait
    )
    -->
@@ -33,7 +31,7 @@ sp {state-no-change*propose*wait*continue
    (<o> ^name wait)
 }
 
-sp {state-no-change*apply*wait*first
+sp {state-no-change*apply*wait*continue
    (state <s> ^attribute state
               ^operator.name wait
               ^wait <w>
