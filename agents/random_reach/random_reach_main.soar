@@ -1,0 +1,12 @@
+cd ../..
+
+pushd common
+pushd wait
+source wait.soar
+popd
+popd
+
+pushd agents
+pushd random_reach
+source random_reach_init.soar
+source random_reach_new_set_request.soar

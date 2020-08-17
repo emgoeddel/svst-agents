@@ -1,0 +1,21 @@
+sp {set-request*propose*sample-xyz
+   (state <s> ^superstate nil
+              ^agent-name random-reach
+             -^target)
+   -->
+   (<s> ^operator <o> +)
+   (<o> ^name sample-xyz)
+}
+
+sp {set-request*apply*sample-xyz
+   (state <s> ^superstate nil
+              ^agent-name random-reach
+             -^target
+              ^operator.name sample-xyz)
+   -->
+   (<s> ^target <t>)
+   (<t> ^center <c>)
+   (<c> ^x (rand-float)
+        ^y (rand-float)
+        ^z (rand-float))
+}
