@@ -1,0 +1,24 @@
+sp {execute-request*propose*make-execute
+   (state <s> ^superstate nil
+              ^agent-name random-reach
+              ^svs.motor.trajectories <t>)
+   (<t> ^set <e>)
+   (<e> ^trajectory <r>)
+   -->
+   (<s> ^operator <o> +)
+   (<o> ^name make-execute)
+}
+
+sp {execute-request*apply*make-execute
+   (state <s> ^superstate nil
+              ^agent-name random-reach
+              ^svs <v>
+              ^operator.name make-execute)
+   (<v> ^command <c>
+        ^motor.trajectories <t>)
+   (<t> ^set <e>)
+   (<e> ^trajectory <r>)
+   -->
+   (<c> ^execute-trajectory <x>)
+   (<x> ^trajectory <r>)
+}

@@ -1,6 +1,6 @@
 # Turn on SVS
 svs --enable
-svs ros.enable fetch
+svs ros.enable all
 
 # Give the agent a name
 sp {init-agent*propose*add-name

@@ -15,7 +15,29 @@ sp {set-request*apply*sample-xyz
    -->
    (<s> ^target <t>)
    (<t> ^center <c>)
-   (<c> ^x (rand-float)
-        ^y (rand-float)
-        ^z (rand-float))
+   (<c> ^x 0.7
+        ^y 0.5
+        ^z 0.3)
+}
+
+sp {set-request*propose*make-command
+   (state <s> ^superstate nil
+              ^agent-name random-reach
+              ^svs.command <cmd>
+              ^target <t>)
+   (<cmd> -^find-trajectories)
+   -->
+   (<s> ^operator <o> +)
+   (<o> ^name make-command)
+}
+
+sp {set-request*apply*make-command
+   (state <s> ^superstate nil
+              ^agent-name random-reach
+              ^svs.command <cmd>
+              ^target <t>
+              ^operator.name make-command)
+   -->
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^target <t>)
 }
