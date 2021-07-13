@@ -39,5 +39,6 @@ sp {set-request*apply*make-command
               ^operator.name make-command)
    -->
    (<cmd> ^find-trajectories <ft>)
-   (<ft> ^target <t>)
+   (<ft> ^target <t>
+         ^min-number 8)
 }
