@@ -2,24 +2,27 @@ sp {execute-request*propose*make-execute
    (state <s> ^superstate nil
               ^agent-name random-reach
               ^svs.motor.trajectories <t>)
-   (<t> ^set.trajectory)
+   (<t> ^set <st>)
+   (<st> ^command-id <sid>
+         ^trajectory.id <tid>)
    -->
    (<s> ^operator <o> +)
-   (<o> ^name make-execute)
+   (<o> ^name make-execute
+        ^trajectory-set <sid>
+        ^trajectory-id <tid>)
 }
 
 sp {execute-request*apply*make-execute
    (state <s> ^superstate nil
               ^agent-name random-reach
               ^svs <v>
-              ^operator.name make-execute)
-   (<v> ^command <c>
-        ^motor.trajectories <t>)
-   (<t> ^set <e>)
-   (<e> ^command-id <i>
-        ^trajectory.id <r>)
+              ^operator <op>)
+   (<op> ^name make-execute
+         ^trajectory-set <sid>
+         ^trajectory-id <tid>)
+   (<v> ^command <c>)
    -->
    (<c> ^execute-trajectory <x>)
-   (<x> ^set-id <i>
-        ^trajectory-id <r>)
+   (<x> ^set-id <sid>
+        ^trajectory-id <tid>)
 }
