@@ -10,4 +10,5 @@ pushd agents
 pushd random_reach
 source random_reach_init.soar
 source random_reach_new_set_request.soar
+source random_reach_select_request.soar
 source random_reach_execute_request.soar
