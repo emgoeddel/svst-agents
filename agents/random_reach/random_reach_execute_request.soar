@@ -2,10 +2,11 @@ sp {execute-request*propose*make-execute
    (state <s> ^superstate nil
               ^agent-name random-reach
               ^svs.motor.trajectories <t>)
-   (<t> ^set <st>
-        ^nothing no)
+   (<t> ^set <st>)
    (<st> ^command-id <sid>
-         ^trajectory.id <tid>)
+         ^trajectory <tr>)
+   (<tr> ^id <tid>
+         ^selected-by waypoints)
 -->
    (<s> ^operator <o> +)
    (<o> ^name make-execute
