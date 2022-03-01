@@ -1,0 +1,11 @@
+cd ../..
+
+pushd common
+pushd wait
+source wait.soar
+popd
+popd
+
+pushd agents
+pushd rearrangement
+source rearrangement_init.soar
