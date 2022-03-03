@@ -1,0 +1,9 @@
+# Propose to pick up an object
+sp {rearrangement*propose*pick-up
+   (state <s> ^superstate nil
+              ^agent-name rearrangement)
+   -->
+   (<s> ^operator <o> +)
+   (<o> ^name pick-up
+        ^object test)
+}

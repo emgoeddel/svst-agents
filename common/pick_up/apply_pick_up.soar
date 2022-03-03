@@ -1,0 +1,11 @@
+# If the superstate has impassed on pick-up, start the pick-up process
+sp {pick-up*propose*get-targets
+   (state <s> ^superstate <ss>
+              ^impasse no-change)
+   (<ss> ^operator <o>)
+   (<o> ^name pick-up
+        ^object <b>)
+   -->
+   (write |Reached the pick-up state|)
+   (halt)
+}

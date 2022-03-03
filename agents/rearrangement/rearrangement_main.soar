@@ -4,8 +4,12 @@ pushd common
 pushd wait
 source wait.soar
 popd
+pushd pick_up
+source apply_pick_up.soar
+popd
 popd
 
 pushd agents
 pushd rearrangement
 source rearrangement_init.soar
+source rearrangement_pick.soar
