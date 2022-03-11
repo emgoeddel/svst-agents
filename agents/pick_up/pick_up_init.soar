@@ -18,5 +18,5 @@ sp {init-agent*apply*add-name
               ^operator.name add-name
    )
    -->
-   (<s> ^agent-name rearrangement)
+   (<s> ^agent-name pick-up)
 }

@@ -1,0 +1,33 @@
+# Figure out which objects could be picked up
+sp {topstate*propose*filter-objects
+   (state <s> ^superstate nil
+              ^agent-name pick-up
+              ^svs.command <cmd>)
+   (<cmd> -^extract_once.type graspable)
+   -->
+   (<s> ^operator <o> +)
+   (<o> ^name filter-objects)
+}
+
+sp {topstate*apply*filter-objects
+   (state <s> ^superstate nil
+              ^agent-name pick-up
+              ^svs.command <cmd>
+              ^operator.name filter-objects)
+   -->
+   (<cmd> ^extract_once <eo>)
+   (<eo> ^type graspable_select
+         ^a <a>)
+   (<a> ^type all_nodes)
+}
+
+# Propose to pick up an object
+sp {topstate*propose*pick-up
+   (state <s> ^superstate nil
+              ^agent-name pick-up
+              ^nope)
+   -->
+   (<s> ^operator <o> +)
+   (<o> ^name pick-up
+        ^object test)
+}

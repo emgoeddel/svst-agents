@@ -10,6 +10,6 @@ popd
 popd
 
 pushd agents
-pushd rearrangement
-source rearrangement_init.soar
-source rearrangement_pick.soar
+pushd pick_up
+source pick_up_init.soar
+source pick_up_pick.soar
