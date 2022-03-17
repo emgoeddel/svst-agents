@@ -1,11 +1,61 @@
 # If the superstate has impassed on pick-up, start the pick-up process
-sp {pick-up*propose*get-targets
-   (state <s> ^superstate <ss>
-              ^impasse no-change)
-   (<ss> ^operator <o>)
-   (<o> ^name pick-up
-        ^object <b>)
+sp {pick-up*propose*get-grasp-target
+   (state <s> ^name pick-up
+              ^target-object
+              ^svs.command <cmd>)
+   (<cmd> -^extract_once.type grasp_first)
    -->
-   (write |Reached the pick-up state|)
-   (halt)
+   (<s> ^operator <o> +)
+   (<o> ^name get-grasp-target)
+}
+
+sp {pick-up*apply*get-grasp-target
+   (state <s> ^name pick-up
+              ^target-object <id>
+              ^svs.command <cmd>
+              ^operator.name get-grasp-target)
+   -->
+   (<cmd> ^extract_once <eo> )
+   (<eo> ^type grasp_first
+         ^a <a>
+         ^frame self)
+   (<a> ^type node
+        ^id <id>)
+}
+
+sp {pick-up*propose*make-find-trajectories
+   (state <s> ^name pick-up
+              ^svs.command <cmd>
+              ^target-pose <t>)
+   (<cmd> -^find-trajectories)
+   -->
+   (<s> ^operator <o> +)
+   (<o> ^name make-find-trajectories)
+}
+
+sp {set-request*apply*make-command
+   (state <s> ^name pick-up
+              ^svs.command <cmd>
+              ^target-pose <tp>
+              ^operator.name make-find-trajectories)
+   (<tp> ^x <px>
+         ^y <py>
+         ^z <pz>
+         ^roll <rx>
+         ^pitch <ry>
+         ^yaw <rz>)
+   -->
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^target <t>
+         ^min-number 6
+         ^max-number 20)
+   (<t> ^center <c>
+        ^orientation <or>
+        ^orientation-flex false)
+   (<c> ^x <px>
+        ^y <py>
+        ^z <pz>)
+   (<or> ^x <rx>
+         ^y <ry>
+         ^z <rz>)
 }

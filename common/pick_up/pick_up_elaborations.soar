@@ -1,0 +1,24 @@
+# Copy superstate operator info to substate
+sp {pick-up*elaborate*state
+   (state <s> ^superstate <ss>
+              ^impasse no-change)
+   (<ss> ^operator <o>)
+   (<o> ^name pick-up
+        ^object-id <id>)
+   -->
+   (<s> ^name pick-up
+        ^target-object <id>)
+}
+
+# Make the grasp target easy to find when it exists
+sp {pick-up*elaborate*target-pose-result
+   (state <s> ^name pick-up
+              ^svs.command <cmd>)
+   (<cmd> ^extract_once <eo>)
+   (<eo> ^result <r>
+         ^type grasp_first
+         ^status success)
+   (<r> ^record.value <v>)
+   -->
+   (<s> ^target-pose <v>)
+}

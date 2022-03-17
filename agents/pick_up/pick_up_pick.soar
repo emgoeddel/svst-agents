@@ -21,7 +21,7 @@ sp {topstate*apply*filter-objects
    (<a> ^type all_nodes)
 }
 
-# Propose to pick up the graspable objects
+# Propose to pick up a random graspable object
 sp {topstate*propose*pick-up
    (state <s> ^superstate nil
               ^agent-name pick-up
@@ -32,7 +32,7 @@ sp {topstate*propose*pick-up
          ^result <r>)
    (<r> ^record.value <id>)
    -->
-   (<s> ^operator <o> +)
+   (<s> ^operator <o> + =)
    (<o> ^name pick-up
         ^object-id <id>)
 }
