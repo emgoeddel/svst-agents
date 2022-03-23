@@ -1,0 +1,14 @@
+cd ../..
+
+pushd common
+pushd wait
+source wait.soar
+popd
+popd
+
+pushd agents
+pushd conditional_stop
+source conditional_stop_init.soar
+source conditional_stop_new_set_request.soar
+source conditional_stop_select_request.soar
+source conditional_stop_execute_request.soar

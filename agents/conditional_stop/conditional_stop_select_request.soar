@@ -1,0 +1,32 @@
+sp {select-request*propose*make-select
+   (state <s> ^superstate nil
+              ^agent-name conditional-stop
+              ^svs <v>)
+   (<v> ^command <cmd>
+        ^motor.trajectories <t>)
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^id <sid>
+         ^status complete)
+   (<t> ^set <st>)
+   (<st> ^command-id <sid>
+        -^trajectory.selected-by waypoints)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name make-select
+        ^trajectory-set <sid>)
+}
+
+sp {select-request*apply*make-select
+   (state <s> ^superstate nil
+              ^agent-name conditional-stop
+              ^svs <v>
+              ^operator <op>)
+   (<op> ^name make-select
+         ^trajectory-set <sid>)
+   (<v> ^command <c>)
+-->
+   (<c> ^select-trajectory <se>)
+   (<se> ^set-id <sid>
+         ^objective waypoints
+         ^number 1)
+}

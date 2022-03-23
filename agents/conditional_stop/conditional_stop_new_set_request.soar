@@ -1,0 +1,65 @@
+sp {set-request*propose*sample-xyz
+   (state <s> ^superstate nil
+              ^agent-name conditional-stop
+             -^target)
+   -->
+   (<s> ^operator <o> +)
+   (<o> ^name sample-xyz)
+}
+
+sp {set-request*apply*sample-xyz
+   (state <s> ^superstate nil
+              ^agent-name conditional-stop
+             -^target
+              ^operator.name sample-xyz)
+   -->
+   (<s> ^target <t>)
+   (<t> ^center <c>)
+   (<c> ^x 0.7
+        ^y 0.5
+        ^z 0.3)
+}
+
+sp {set-request*propose*make-command
+   (state <s> ^superstate nil
+              ^agent-name conditional-stop
+              ^svs.command <cmd>
+              ^target <t>)
+   (<cmd> -^find-trajectories)
+   -->
+   (<s> ^operator <o> +)
+   (<o> ^name make-command)
+}
+
+sp {set-request*apply*make-command
+   (state <s> ^superstate nil
+              ^agent-name conditional-stop
+              ^svs.command <cmd>
+              ^target <t>
+              ^operator.name make-command)
+   -->
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^target <t>)
+}
+
+sp {set-request*propose*stop-command
+   (state <s> ^superstate nil
+              ^agent-name conditional-stop
+              ^svs.command <cmd>
+              ^target <t>)
+   (<cmd> ^find-trajectories)
+   -->
+   (<s> ^operator <o> +)
+   (<o> ^name stop-command)
+}
+
+sp {set-request*apply*stop-command
+   (state <s> ^superstate nil
+              ^agent-name conditional-stop
+              ^svs.command <cmd>
+              ^target <t>
+              ^operator.name stop-command)
+   (<cmd> ^find-trajectories <ft>)
+   -->
+   (<ft> ^stop now)
+}
