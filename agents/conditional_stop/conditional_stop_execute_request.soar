@@ -1,7 +1,10 @@
 sp {execute-request*propose*make-execute
    (state <s> ^superstate nil
               ^agent-name conditional-stop
-              ^svs.motor.trajectories <t>)
+              ^svs <svs>)
+   (<svs> ^motor.trajectories <t>
+          ^command <cmd>)
+   (<cmd> -^execute-trajectory)
    (<t> ^set <st>)
    (<st> ^command-id <sid>
          ^trajectory <tr>)

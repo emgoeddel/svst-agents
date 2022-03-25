@@ -12,3 +12,4 @@ source conditional_stop_init.soar
 source conditional_stop_new_set_request.soar
 source conditional_stop_select_request.soar
 source conditional_stop_execute_request.soar
+source conditional_stop_cleanup.soar
