@@ -6,7 +6,7 @@ sp {select-request*propose*make-select
         ^motor.trajectories <t>)
    (<cmd> ^find-trajectories <ft>)
    (<ft> ^id <sid>
-         ^status complete)
+         ^status stopped)
    (<t> ^set <st>)
    (<st> ^command-id <sid>
         -^trajectory.selected-by waypoints)
