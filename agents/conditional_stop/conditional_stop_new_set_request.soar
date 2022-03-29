@@ -17,7 +17,7 @@ sp {set-request*apply*sample-xyz
    (<t> ^center <c>)
    (<c> ^x (+ 0.5 (rand-float 0.4))
         ^y (+ -1.0 (rand-float 2.0))
-        ^z (rand-float 1.0))
+        ^z (+ 0.2 (rand-float 1.0)))
 }
 
 sp {set-request*propose*make-command
@@ -50,9 +50,11 @@ sp {set-request*propose*stop-command*success
    (<v> ^command <cmd>
         ^motor.trajectories <traj>)
    (<cmd> ^find-trajectories <ft>)
-   (<ft> -^stop)
+   (<ft> -^stop
+          ^id <cid>)
    (<traj> ^set <set>)
-   (<set> ^trajectory-count > 10)
+   (<set> ^trajectory-count > 10
+          ^command-id <cid>)
    -->
    (<s> ^operator <o> + =)
    (<o> ^name stop-command)

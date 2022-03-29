@@ -39,11 +39,33 @@ sp {cleanup*propose*cleanup-previous*goal-failure
    (<o> ^name cleanup-previous)
 }
 
-sp {cleanup*apply*cleanup-previous
+sp {cleanup*apply*cleanup-previous*target
    (state <s> ^superstate nil
               ^agent-name conditional-stop
-              ^operator.name cleanup-previous)
+              ^operator.name cleanup-previous
+              ^target <t>)
 -->
-    (write |Cleanup time|)
-    (halt)
+   (<s> ^target <t> -)
+}
+
+sp {cleanup*apply*cleanup-previous*find
+   (state <s> ^superstate nil
+              ^agent-name conditional-stop
+              ^operator.name cleanup-previous
+              ^svs.command <cmd>)
+   (<cmd> ^find-trajectories <ft>)
+-->
+   (<cmd> ^find-trajectories <ft> -)
+}
+
+sp {cleanup*apply*cleanup-previous*select-execute
+   (state <s> ^superstate nil
+              ^agent-name conditional-stop
+              ^operator.name cleanup-previous
+              ^svs.command <cmd>)
+   (<cmd> ^select-trajectory <st>
+          ^execute-trajectory <et>)
+-->
+   (<cmd> ^select-trajectory <st> -
+          ^execute-trajectory <et> -)
 }

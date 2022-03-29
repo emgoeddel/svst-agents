@@ -4,7 +4,8 @@ sp {execute-request*propose*make-execute
               ^svs <svs>)
    (<svs> ^motor.trajectories <t>
           ^command <cmd>)
-   (<cmd> -^execute-trajectory)
+   (<cmd> ^find-trajectories.id <sid>
+         -^execute-trajectory)
    (<t> ^set <st>)
    (<st> ^command-id <sid>
          ^trajectory <tr>)
