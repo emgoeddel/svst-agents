@@ -1,3 +1,15 @@
+sp {select-request*prefer*select*over*cleanup
+   (state <s> ^superstate nil
+              ^agent-name conditional-stop
+              ^svs <v>
+              ^operator <op1> +
+              ^operator <op2> +)
+   (<op1> ^name make-select)
+   (<op2> ^name cleanup-previous)
+-->
+   (<s> ^operator <op1> > <op2>)
+}
+
 sp {select-request*propose*make-select
    (state <s> ^superstate nil
               ^agent-name conditional-stop
@@ -27,6 +39,7 @@ sp {select-request*apply*make-select
 -->
    (<c> ^select-trajectory <se>)
    (<se> ^set-id <sid>
+         ^type select
          ^objective waypoints
          ^number 1)
 }
