@@ -1,0 +1,34 @@
+sp {execute-request*propose*make-execute
+   (state <s> ^superstate nil
+              ^agent-name value-based-stop
+              ^svs <svs>)
+   (<svs> ^motor.trajectories <t>
+          ^command <cmd>)
+   (<cmd> ^find-trajectories.id <sid>
+         -^execute-trajectory)
+   (<t> ^set <st>)
+   (<st> ^command-id <sid>
+         ^trajectory <tr>)
+   (<tr> ^id <tid>
+         ^selected-by waypoints)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name make-execute
+        ^trajectory-set <sid>
+        ^trajectory-id <tid>)
+}
+
+sp {execute-request*apply*make-execute
+   (state <s> ^superstate nil
+              ^agent-name value-based-stop
+              ^svs <v>
+              ^operator <op>)
+   (<op> ^name make-execute
+         ^trajectory-set <sid>
+         ^trajectory-id <tid>)
+   (<v> ^command <c>)
+-->
+   (<c> ^execute-trajectory <x>)
+   (<x> ^set-id <sid>
+        ^trajectory-id <tid>)
+}
