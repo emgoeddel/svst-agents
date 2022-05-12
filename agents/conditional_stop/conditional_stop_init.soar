@@ -2,6 +2,9 @@
 svs --enable
 svs ros.enable all
 
+#output console on
+#output callbacks off
+
 # Give the agent a name
 sp {init-agent*propose*add-name
    (state <s> ^superstate nil

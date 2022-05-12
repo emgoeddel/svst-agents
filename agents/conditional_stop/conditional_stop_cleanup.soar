@@ -3,7 +3,7 @@ sp {cleanup*propose*cleanup-previous*success
               ^agent-name conditional-stop
               ^svs.command <cmd>)
    (<cmd> ^find-trajectories
-          ^select-trajectory
+          ^evaluate-trajectories
           ^execute-trajectory <et>)
    (<et> ^status finished)
 -->
@@ -16,7 +16,7 @@ sp {cleanup*propose*cleanup-previous*execute-failure
               ^agent-name conditional-stop
               ^svs.command <cmd>)
    (<cmd> ^find-trajectories
-          ^select-trajectory
+          ^evaluate-trajectories
           ^execute-trajectory <et>)
    (<et> -^status running
          -^status finished)
@@ -77,9 +77,9 @@ sp {cleanup*apply*cleanup-previous*select-execute
               ^agent-name conditional-stop
               ^operator.name cleanup-previous
               ^svs.command <cmd>)
-   (<cmd> ^select-trajectory <st>
+   (<cmd> ^evaluate-trajectories <st>
           ^execute-trajectory <et>)
 -->
-   (<cmd> ^select-trajectory <st> -
+   (<cmd> ^evaluate-trajectories <st> -
           ^execute-trajectory <et> -)
 }

@@ -53,7 +53,7 @@ sp {set-request*propose*stop-command*success
    (<ft> -^stop
           ^id <cid>)
    (<traj> ^set <set>)
-   (<set> ^trajectory-count > 2
+   (<set> ^trajectory-count > 10
           ^command-id <cid>)
    -->
    (<s> ^operator <o> + =)

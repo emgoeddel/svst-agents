@@ -37,9 +37,9 @@ sp {select-request*apply*make-select
          ^trajectory-set <sid>)
    (<v> ^command <c>)
 -->
-   (<c> ^select-trajectory <se>)
-   (<se> ^set-id <sid>
-         ^type select
-         ^objective waypoints
-         ^number 1)
+   (<c> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^type select
+           ^objective waypoints
+           ^number 1)
 }
