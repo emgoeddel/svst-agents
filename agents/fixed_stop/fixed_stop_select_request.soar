@@ -1,6 +1,6 @@
 sp {select-request*propose*make-select
    (state <s> ^superstate nil
-              ^agent-name random-reach
+              ^agent-name fixed-stop
               ^svs <v>)
    (<v> ^command <cmd>
         ^motor.trajectories <t>)
@@ -18,14 +18,16 @@ sp {select-request*propose*make-select
 
 sp {select-request*apply*make-select
    (state <s> ^superstate nil
-              ^agent-name random-reach
+              ^agent-name fixed-stop
               ^svs <v>
               ^operator <op>)
    (<op> ^name make-select
          ^trajectory-set <sid>)
    (<v> ^command <c>)
 -->
-   (<c> ^select-trajectory <se>)
-   (<se> ^set-id <sid>
-         ^objective waypoints)
+   (<c> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^type select
+           ^objective waypoints
+           ^number 1)
 }

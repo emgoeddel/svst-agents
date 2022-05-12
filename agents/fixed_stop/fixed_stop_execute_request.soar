@@ -1,6 +1,6 @@
 sp {execute-request*propose*make-execute
    (state <s> ^superstate nil
-              ^agent-name random-reach
+              ^agent-name fixed-stop
               ^svs.motor.trajectories <t>)
    (<t> ^set <st>)
    (<st> ^command-id <sid>
@@ -16,7 +16,7 @@ sp {execute-request*propose*make-execute
 
 sp {execute-request*apply*make-execute
    (state <s> ^superstate nil
-              ^agent-name random-reach
+              ^agent-name fixed-stop
               ^svs <v>
               ^operator <op>)
    (<op> ^name make-execute

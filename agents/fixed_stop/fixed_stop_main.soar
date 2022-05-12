@@ -1,0 +1,15 @@
+cd ../..
+
+pushd common
+pushd wait
+source wait.soar
+popd
+popd
+
+pushd agents
+pushd fixed_stop
+source fixed_stop_init.soar
+source fixed_stop_new_set_request.soar
+source fixed_stop_select_request.soar
+source fixed_stop_execute_request.soar
+source fixed_stop_cleanup.soar
