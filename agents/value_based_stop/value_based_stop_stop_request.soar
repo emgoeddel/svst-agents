@@ -1,0 +1,182 @@
+### Stop logic for successful planning
+
+sp {stop-request*propose*record-best*first
+   (state <s> ^superstate nil
+              ^agent-name value-based-stop
+              ^svs <v>
+              ^target <t>
+             -^best-value)
+   (<v> ^command <cmd>
+        ^motor.trajectories <traj>)
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> -^stop
+          ^id <cid>)
+   (<traj> ^set <set>)
+   (<set> ^command-id <cid>
+          ^trajectory <r>)
+   (<r> ^waypoints <wv>)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name record-best-first
+        ^value <wv>)
+}
+
+sp {stop-request*apply*record-best*first
+   (state <s> ^superstate nil
+              ^agent-name value-based-stop
+              ^operator <op>)
+   (<op> ^name record-best-first
+         ^value <wv>)
+-->
+   (<s> ^best-value <wv>
+        ^value-count 1)
+}
+
+sp {stop-request*record-first*prefer*lowest
+   (state <s> ^superstate nil
+              ^agent-name value-based-stop
+              ^operator <op1> +
+              ^operator <op2> +)
+   (<op1> ^name record-best-first
+          ^value <v1>)
+   (<op2> ^name record-best-first
+          ^value <v2> > <v1>)
+-->
+   (<s> ^operator <op1> > <op2>)
+}
+
+sp {stop-request*propose*record-best*continuing
+   (state <s> ^superstate nil
+              ^agent-name value-based-stop
+              ^svs <v>
+              ^target <t>
+              ^best-value
+              ^value-count)
+   (<v> ^command <cmd>
+        ^motor.trajectories <traj>)
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> -^stop
+          ^id <cid>)
+   (<traj> ^set <set>)
+   (<set> ^command-id <cid>
+          ^trajectory <r>)
+   (<r> ^waypoints <wv>)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name record-best-cont
+        ^value <wv>)
+}
+
+sp {stop-request*apply*record-best*continuing*same
+   (state <s> ^superstate nil
+              ^agent-name value-based-stop
+              ^operator <op>
+              ^best-value <pb>
+              ^value-count <pc>)
+   (<op> ^name record-best-cont
+         ^value <pb>)
+-->
+   (<s> ^value-count <pc> -
+        ^value-count (+ <pc> 1) +)
+}
+
+sp {stop-request*apply*record-best*continuing*different
+   (state <s> ^superstate nil
+              ^agent-name value-based-stop
+              ^operator <op>
+              ^best-value <pb>
+              ^value-count <pc>)
+   (<op> ^name record-best-cont
+         ^value <wv> <> <pb>)
+-->
+   (<s> ^best-value <pb> -
+        ^best-value <vw>
+        ^value-count <pc> -
+        ^value-count 1)
+}
+
+sp {stop-request*record-continue*prefer*lowest
+   (state <s> ^superstate nil
+              ^agent-name value-based-stop
+              ^operator <op1> +
+              ^operator <op2> +)
+   (<op1> ^name record-best-cont
+          ^value <v1>)
+   (<op2> ^name record-best-cont
+          ^value <v2> > <v1>)
+-->
+   (<s> ^operator <op1> > <op2>)
+}
+
+sp {stop-request*propose*stop-command
+   (state <s> ^superstate nil
+              ^agent-name value-based-stop
+              ^svs <v>
+              ^target <t>
+              ^best-value
+              ^value-count <vc> > 5)
+   (<v> ^command <cmd>
+        ^motor.trajectories <traj>)
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> -^stop
+          ^id <cid>)
+   (<traj> ^set <set>)
+   (<set> ^command-id <cid>
+          ^trajectory <r>)
+   (<r> ^waypoints <wv>)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name stop-command)
+}
+
+### Stop options for planning failures
+
+sp {stop-request*propose*stop-command*planning-failure
+   (state <s> ^superstate nil
+              ^agent-name value-based-stop
+              ^svs.command <cmd>
+              ^target <t>)
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^failures.planning-failure > 10
+        -^stop)
+   -->
+   (<s> ^operator <o> + =)
+   (<o> ^name stop-command)
+}
+
+sp {stop-request*propose*stop-command*goal-failure
+   (state <s> ^superstate nil
+              ^agent-name value-based-stop
+              ^svs.command <cmd>
+              ^target <t>)
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^failures.goal-invalid > 10
+        -^stop)
+   -->
+   (<s> ^operator <o> + =)
+   (<o> ^name stop-command)
+}
+
+sp {stop-request*propose*stop-command*start-failure
+   (state <s> ^superstate nil
+              ^agent-name value-based-stop
+              ^svs.command <cmd>
+              ^target <t>)
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^failures.start-invalid > 10
+        -^stop)
+   -->
+   (write |Reached an invalid start state!|)
+   (halt)
+}
+
+sp {stop-request*apply*stop-command
+   (state <s> ^superstate nil
+              ^agent-name value-based-stop
+              ^svs.command <cmd>
+              ^target <t>
+              ^operator.name stop-command)
+   (<cmd> ^find-trajectories <ft>)
+   -->
+   (<ft> ^stop now)
+}
