@@ -72,14 +72,26 @@ sp {cleanup*apply*cleanup-previous*find
    (<cmd> ^find-trajectories <ft> -)
 }
 
-sp {cleanup*apply*cleanup-previous*select-execute
+sp {cleanup*apply*cleanup-previous*eval
+   (state <s> ^superstate nil
+              ^agent-name value-based-stop
+              ^operator.name cleanup-previous
+              ^svs.command <cmd>
+              ^best-value <bv>
+              ^value-count <vc>)
+   (<cmd> ^evaluate-trajectories <et>)
+-->
+   (<s> ^best-value <bv> -
+        ^value-count <vc> -)
+   (<cmd> ^execute-trajectory <et> -)
+}
+
+sp {cleanup*apply*cleanup-previous*execute
    (state <s> ^superstate nil
               ^agent-name value-based-stop
               ^operator.name cleanup-previous
               ^svs.command <cmd>)
-   (<cmd> ^evaluate-trajectories <st>
-          ^execute-trajectory <et>)
+   (<cmd> ^execute-trajectory <et>)
 -->
-   (<cmd> ^evaluate-trajectories <st> -
-          ^execute-trajectory <et> -)
+   (<cmd> ^execute-trajectory <et> -)
 }

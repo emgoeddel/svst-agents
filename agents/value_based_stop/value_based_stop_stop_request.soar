@@ -89,6 +89,7 @@ sp {stop-request*apply*record-best*continuing*different
    (<op> ^name record-best-cont
          ^value <wv> <> <pb>)
 -->
+   (interrupt)
    (<s> ^best-value <pb> -
         ^best-value <vw>
         ^value-count <pc> -
@@ -114,7 +115,7 @@ sp {stop-request*propose*stop-command
               ^svs <v>
               ^target <t>
               ^best-value
-              ^value-count <vc> > 5)
+              ^value-count <vc> > 1000)
    (<v> ^command <cmd>
         ^motor.trajectories <traj>)
    (<cmd> ^find-trajectories <ft>)
