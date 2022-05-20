@@ -5,7 +5,7 @@ sp {stop-request*propose*record-best*first
               ^agent-name value-based-stop
               ^svs <v>
               ^target <t>
-             -^best-value)
+             -^best-trajectory)
    (<v> ^command <cmd>
         ^motor.trajectories <traj>)
    (<cmd> ^find-trajectories <ft>)
@@ -14,10 +14,12 @@ sp {stop-request*propose*record-best*first
    (<traj> ^set <set>)
    (<set> ^command-id <cid>
           ^trajectory <r>)
-   (<r> ^waypoints <wv>)
+   (<r> ^id <tid>
+        ^waypoints <wv>)
 -->
    (<s> ^operator <o> + =)
    (<o> ^name record-best-first
+        ^trajectory <tid>
         ^value <wv>)
 }
 
@@ -26,10 +28,10 @@ sp {stop-request*apply*record-best*first
               ^agent-name value-based-stop
               ^operator <op>)
    (<op> ^name record-best-first
-         ^value <wv>)
+         ^trajectory <tid>)
 -->
-   (<s> ^best-value <wv>
-        ^value-count 1)
+   (<s> ^best-trajectory <tid>
+        ^start-count (dc))
 }
 
 sp {stop-request*record-first*prefer*lowest
@@ -45,66 +47,123 @@ sp {stop-request*record-first*prefer*lowest
    (<s> ^operator <op1> > <op2>)
 }
 
-sp {stop-request*propose*record-best*continuing
+sp {stop-request*propose*record-best*update
    (state <s> ^superstate nil
               ^agent-name value-based-stop
               ^svs <v>
               ^target <t>
-              ^best-value
-              ^value-count)
+              ^best-trajectory <tid>)
    (<v> ^command <cmd>
         ^motor.trajectories <traj>)
    (<cmd> ^find-trajectories <ft>)
-   (<ft> -^stop
-          ^id <cid>)
+   (<ft> ^id <cid>)
    (<traj> ^set <set>)
    (<set> ^command-id <cid>
-          ^trajectory <r>)
-   (<r> ^waypoints <wv>)
+          ^trajectory <curr>
+          ^trajectory <comp>)
+   (<curr> ^id <tid>
+           ^waypoints <bv>)
+   (<comp> ^id <alt>
+           ^waypoints <wv> < <bv>)
 -->
    (<s> ^operator <o> + =)
-   (<o> ^name record-best-cont
+   (<o> ^name record-best-update
+        ^trajectory <alt>
         ^value <wv>)
 }
 
-sp {stop-request*apply*record-best*continuing*same
+
+sp {stop-request*apply*record-best*update
    (state <s> ^superstate nil
               ^agent-name value-based-stop
-              ^operator <op>
-              ^best-value <pb>
-              ^value-count <pc>)
-   (<op> ^name record-best-cont
-         ^value <pb>)
+              ^best-trajectory <prev>
+              ^start-count <psc>
+              ^operator <op>)
+   (<op> ^name record-best-update
+         ^trajectory <tid>)
 -->
-   (<s> ^value-count <pc> -
-        ^value-count (+ <pc> 1) +)
+   (<s> ^best-trajectory <prev> -
+        ^best-trajectory <tid>
+        ^start-count <psc> -
+        ^start-count (dc))
 }
 
-sp {stop-request*apply*record-best*continuing*different
-   (state <s> ^superstate nil
-              ^agent-name value-based-stop
-              ^operator <op>
-              ^best-value <pb>
-              ^value-count <pc>)
-   (<op> ^name record-best-cont
-         ^value <wv> <> <pb>)
--->
-   (interrupt)
-   (<s> ^best-value <pb> -
-        ^best-value <vw>
-        ^value-count <pc> -
-        ^value-count 1)
-}
-
-sp {stop-request*record-continue*prefer*lowest
+sp {stop-request*record-update*prefer*lowest
    (state <s> ^superstate nil
               ^agent-name value-based-stop
               ^operator <op1> +
               ^operator <op2> +)
-   (<op1> ^name record-best-cont
+   (<op1> ^name record-best-update
           ^value <v1>)
-   (<op2> ^name record-best-cont
+   (<op2> ^name record-best-update
           ^value <v2> > <v1>)
+-->
+   (<s> ^operator <op1> > <op2>)
+}
+
+sp {stop-request*propose*init-dc-elapsed
+   (state <s> ^superstate nil
+              ^agent-name value-based-stop
+              ^svs <v>
+              ^target <t>
+              ^start-count
+             -^dc-since-update)
+   (<v> ^command <cmd>
+        ^motor.trajectories <traj>)
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^id <cid>)
+   (<traj> ^set <set>)
+   (<set> ^command-id <cid>)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name init-dc-elapsed)
+}
+
+sp {stop-request*apply*init-dc-elapsed
+   (state <s> ^superstate nil
+              ^agent-name value-based-stop
+              ^start-count <sc>
+              ^operator.name init-dc-elapsed)
+-->
+   (<s> ^dc-since-update (- (dc) <sc>))
+}
+
+sp {stop-request*propose*update-dc-elapsed
+   (state <s> ^superstate nil
+              ^agent-name value-based-stop
+              ^svs <v>
+              ^target <t>
+              ^start-count
+              ^dc-since-update)
+   (<v> ^command <cmd>
+        ^motor.trajectories <traj>)
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^id <cid>)
+   (<traj> ^set <set>)
+   (<set> ^command-id <cid>)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name update-dc-elapsed)
+}
+
+sp {stop-request*apply*update-dc-elapsed
+   (state <s> ^superstate nil
+              ^agent-name value-based-stop
+              ^dc-since-update <prev>
+              ^start-count <sc>
+              ^operator.name update-dc-elapsed)
+-->
+   (<s> ^dc-since-update <prev> -
+        ^dc-since-update (- (dc) <sc>))
+}
+
+sp {stop-request*record-update*prefer*update*over*dc
+   (state <s> ^superstate nil
+              ^agent-name value-based-stop
+              ^operator <op1> +
+              ^operator <op2> +)
+   (<op1> ^name record-best-update)
+   (<op2> ^name << init-dc-elapsed update-dc-elapsed >> )
 -->
    (<s> ^operator <op1> > <op2>)
 }
@@ -114,8 +173,7 @@ sp {stop-request*propose*stop-command
               ^agent-name value-based-stop
               ^svs <v>
               ^target <t>
-              ^best-value
-              ^value-count <vc> > 1000)
+              ^dc-since-update <ct> > 1000)
    (<v> ^command <cmd>
         ^motor.trajectories <traj>)
    (<cmd> ^find-trajectories <ft>)
@@ -128,6 +186,7 @@ sp {stop-request*propose*stop-command
 -->
    (<s> ^operator <o> + =)
    (<o> ^name stop-command)
+   (interrupt)
 }
 
 ### Stop options for planning failures
