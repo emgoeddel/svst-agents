@@ -1,0 +1,25 @@
+# Turn on SVS
+svs --enable
+svs ros.enable all
+
+#output console on
+#output callbacks off
+
+# Give the agent a name
+sp {init-agent*propose*add-name
+   (state <s> ^superstate nil
+             -^agent-name
+   )
+   -->
+   (<s> ^operator <o> +)
+   (<o> ^name add-name)
+}
+
+sp {init-agent*apply*add-name
+   (state <s> ^superstate nil
+             -^agent-name
+              ^operator.name add-name
+   )
+   -->
+   (<s> ^agent-name impatient-stop)
+}

@@ -1,0 +1,85 @@
+sp {cleanup*propose*cleanup-previous*success
+   (state <s> ^superstate nil
+              ^agent-name impatient-stop
+              ^svs.command <cmd>)
+   (<cmd> ^find-trajectories
+          ^evaluate-trajectories
+          ^execute-trajectory <et>)
+   (<et> ^status finished)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name cleanup-previous)
+}
+
+sp {cleanup*propose*cleanup-previous*execute-failure
+   (state <s> ^superstate nil
+              ^agent-name impatient-stop
+              ^svs.command <cmd>)
+   (<cmd> ^find-trajectories
+          ^evaluate-trajectories
+          ^execute-trajectory <et>)
+   (<et> -^status running
+         -^status finished)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name cleanup-previous)
+}
+
+sp {cleanup*propose*cleanup-previous*planning-failure
+   (state <s> ^superstate nil
+              ^agent-name impatient-stop
+              ^svs <svs>)
+   (<svs> ^command <cmd>
+          ^motor.trajectories <t>)
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^status stopped
+         ^failures.planning-failure > 10)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name cleanup-previous)
+}
+
+sp {cleanup*propose*cleanup-previous*goal-failure
+   (state <s> ^superstate nil
+              ^agent-name impatient-stop
+              ^svs <svs>)
+   (<svs> ^command <cmd>
+          ^motor.trajectories <t>)
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^status stopped
+         ^failures.goal-invalid > 10)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name cleanup-previous)
+}
+
+sp {cleanup*apply*cleanup-previous*target
+   (state <s> ^superstate nil
+              ^agent-name impatient-stop
+              ^operator.name cleanup-previous
+              ^target <t>)
+-->
+   (<s> ^target <t> -)
+}
+
+sp {cleanup*apply*cleanup-previous*find
+   (state <s> ^superstate nil
+              ^agent-name impatient-stop
+              ^operator.name cleanup-previous
+              ^svs.command <cmd>)
+   (<cmd> ^find-trajectories <ft>)
+-->
+   (<cmd> ^find-trajectories <ft> -)
+}
+
+sp {cleanup*apply*cleanup-previous*select-execute
+   (state <s> ^superstate nil
+              ^agent-name impatient-stop
+              ^operator.name cleanup-previous
+              ^svs.command <cmd>)
+   (<cmd> ^evaluate-trajectories <st>
+          ^execute-trajectory <et>)
+-->
+   (<cmd> ^evaluate-trajectories <st> -
+          ^execute-trajectory <et> -)
+}

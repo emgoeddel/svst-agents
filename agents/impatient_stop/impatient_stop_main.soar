@@ -1,0 +1,15 @@
+cd ../..
+
+pushd common
+pushd wait
+source wait.soar
+popd
+popd
+
+pushd agents
+pushd impatient_stop
+source impatient_stop_init.soar
+source impatient_stop_new_set_request.soar
+source impatient_stop_select_request.soar
+source impatient_stop_execute_request.soar
+source impatient_stop_cleanup.soar

@@ -1,0 +1,45 @@
+sp {select-request*prefer*select*over*cleanup
+   (state <s> ^superstate nil
+              ^agent-name impatient-stop
+              ^svs <v>
+              ^operator <op1> +
+              ^operator <op2> +)
+   (<op1> ^name make-select)
+   (<op2> ^name cleanup-previous)
+-->
+   (<s> ^operator <op1> > <op2>)
+}
+
+sp {select-request*propose*make-select
+   (state <s> ^superstate nil
+              ^agent-name impatient-stop
+              ^svs <v>)
+   (<v> ^command <cmd>
+        ^motor.trajectories <t>)
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^id <sid>
+         ^status << stopped complete >> )
+   (<t> ^set <st>)
+   (<st> ^command-id <sid>
+        -^trajectory.selected-by waypoints)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name make-select
+        ^trajectory-set <sid>)
+}
+
+sp {select-request*apply*make-select
+   (state <s> ^superstate nil
+              ^agent-name impatient-stop
+              ^svs <v>
+              ^operator <op>)
+   (<op> ^name make-select
+         ^trajectory-set <sid>)
+   (<v> ^command <c>)
+-->
+   (<c> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^type select
+           ^objective waypoints
+           ^number 1)
+}
