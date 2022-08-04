@@ -14,7 +14,8 @@ sp {set-request*apply*sample-xyz
               ^operator.name sample-xyz)
    -->
    (<s> ^target <t>)
-   (<t> ^center <c>)
+   (<t> ^center <c>
+        ^frame self)
    (<c> ^x (+ 0.5 (rand-float 0.4))
         ^y (+ -1.0 (rand-float 2.0))
         ^z (+ 0.2 (rand-float 1.0)))
@@ -26,9 +27,14 @@ sp {set-request*propose*make-command
               ^svs.command <cmd>
               ^target <t>)
    (<cmd> -^find-trajectories)
+   (<t> ^center <c>)
+   (<c> ^x <xval>
+        ^y <yval>
+        ^z <zval>)
    -->
    (<s> ^operator <o> +)
    (<o> ^name make-command)
+   (write (crlf) |Reach to x = | <xval> | y = | <yval> | z = | <zval>)
 }
 
 sp {set-request*apply*make-command
@@ -40,8 +46,8 @@ sp {set-request*apply*make-command
    -->
    (<cmd> ^find-trajectories <ft>)
    (<ft> ^target <t>
-         ^min-number 10
-         ^max-number 30
+         ^min-number 2
+         ^max-number 5
          ^max-time 5
          ^target-samples 2)
 }

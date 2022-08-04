@@ -14,7 +14,8 @@ sp {set-request*apply*sample-xyz
               ^operator.name sample-xyz)
    -->
    (<s> ^target <t>)
-   (<t> ^center <c>)
+   (<t> ^center <c>
+        ^frame self)
    (<c> ^x (+ 0.5 (rand-float 0.4))
         ^y (+ -1.0 (rand-float 2.0))
         ^z (+ 0.2 (rand-float 1.0)))
@@ -37,9 +38,14 @@ sp {set-request*apply*make-command
               ^svs.command <cmd>
               ^target <t>
               ^operator.name make-command)
+   (<t> ^center <c>)
+   (<c> ^x <xval>
+        ^y <yval>
+        ^z <zval>)
    -->
    (<cmd> ^find-trajectories <ft>)
    (<ft> ^target <t>)
+   (write (crlf) |Reach to x = | <xval> | y = | <yval> | z = | <zval>)
 }
 
 sp {set-request*propose*stop-command*success
@@ -53,7 +59,7 @@ sp {set-request*propose*stop-command*success
    (<ft> -^stop
           ^id <cid>)
    (<traj> ^set <set>)
-   (<set> ^trajectory-count > 10
+   (<set> ^trajectory-count > 4
           ^command-id <cid>)
    -->
    (<s> ^operator <o> + =)
@@ -66,7 +72,7 @@ sp {set-request*propose*stop-command*planning-failure
               ^svs.command <cmd>
               ^target <t>)
    (<cmd> ^find-trajectories <ft>)
-   (<ft> ^failures.planning-failure > 10
+   (<ft> ^failures.planning-failure > 4
         -^stop)
    -->
    (<s> ^operator <o> + =)
@@ -79,7 +85,7 @@ sp {set-request*propose*stop-command*goal-failure
               ^svs.command <cmd>
               ^target <t>)
    (<cmd> ^find-trajectories <ft>)
-   (<ft> ^failures.goal-invalid > 10
+   (<ft> ^failures.goal-invalid > 4
         -^stop)
    -->
    (<s> ^operator <o> + =)
@@ -92,7 +98,7 @@ sp {set-request*propose*stop-command*start-failure
               ^svs.command <cmd>
               ^target <t>)
    (<cmd> ^find-trajectories <ft>)
-   (<ft> ^failures.start-invalid > 10
+   (<ft> ^failures.start-invalid > 4
         -^stop)
    -->
    (write |Reached an invalid start state!|)
