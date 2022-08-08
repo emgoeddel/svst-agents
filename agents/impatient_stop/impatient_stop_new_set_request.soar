@@ -46,7 +46,7 @@ sp {set-request*apply*make-command
    (<cmd> ^find-trajectories <ft>)
    (<ft> ^target <t>
          ^min-number 1
-         ^max-time 90)
+         ^max-time 30)
    (write (crlf) |Reach to x = | <xval> | y = | <yval> | z = | <zval>)
 }
 
@@ -61,7 +61,7 @@ sp {set-request*propose*stop-command*success
    (<ft> -^stop
           ^id <cid>)
    (<traj> ^set <set>)
-   (<set> ^trajectory-count > 4
+   (<set> ^trajectory-count > 6
           ^command-id <cid>)
    -->
    (<s> ^operator <o> + =)
@@ -74,7 +74,7 @@ sp {set-request*propose*stop-command*planning-failure
               ^svs.command <cmd>
               ^target <t>)
    (<cmd> ^find-trajectories <ft>)
-   (<ft> ^failures.planning-failure > 4
+   (<ft> ^failures.planning-failure > 6
         -^stop)
    -->
    (<s> ^operator <o> + =)
@@ -87,7 +87,20 @@ sp {set-request*propose*stop-command*goal-failure
               ^svs.command <cmd>
               ^target <t>)
    (<cmd> ^find-trajectories <ft>)
-   (<ft> ^failures.goal-invalid > 4
+   (<ft> ^failures.goal-invalid > 6
+        -^stop)
+   -->
+   (<s> ^operator <o> + =)
+   (<o> ^name stop-command)
+}
+
+sp {set-request*propose*stop-command*other-failure
+   (state <s> ^superstate nil
+              ^agent-name impatient-stop
+              ^svs.command <cmd>
+              ^target <t>)
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^failures.other-error > 6
         -^stop)
    -->
    (<s> ^operator <o> + =)
@@ -100,11 +113,11 @@ sp {set-request*propose*stop-command*start-failure
               ^svs.command <cmd>
               ^target <t>)
    (<cmd> ^find-trajectories <ft>)
-   (<ft> ^failures.start-invalid > 4
+   (<ft> ^failures.start-invalid > 6
         -^stop)
    -->
-   (write |Reached an invalid start state!|)
-   (halt)
+   (<s> ^operator <o> + =)
+   (<o> ^name stop-command)
 }
 
 sp {set-request*apply*stop-command
