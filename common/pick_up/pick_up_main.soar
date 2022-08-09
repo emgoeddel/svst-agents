@@ -1,2 +1,3 @@
 source apply_pick_up.soar
 source pick_up_elaborations.soar
+source pick_up_errors.soar

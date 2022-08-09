@@ -50,6 +50,7 @@ sp {set-request*apply*make-command
          ^min-number 6
          ^max-number 20)
    (<t> ^center <c>
+        ^frame self
         ^orientation <or>
         ^orientation-flex false)
    (<c> ^x <px>

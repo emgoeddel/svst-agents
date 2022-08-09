@@ -1,0 +1,70 @@
+sp {errors*propose*stop-command*planning-failure
+   (state <s> ^name pick-up
+              ^svs.command <cmd>)
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^failures.planning-failure > 6
+        -^stop)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name stop-command)
+}
+
+sp {errors*propose*stop-command*goal-failure
+   (state <s> ^name pick-up
+              ^svs.command <cmd>)
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^failures.goal-invalid > 6
+        -^stop)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name stop-command)
+}
+
+sp {errors*propose*stop-command*other-failure
+   (state <s> ^name pick-up
+              ^svs.command <cmd>)
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^failures.other-error > 6
+        -^stop)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name stop-command)
+}
+
+sp {errors*propose*stop-command*start-failure
+   (state <s> ^name pick-up
+              ^svs.command <cmd>)
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^failures.start-invalid > 6
+        -^stop)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name stop-command)
+}
+
+sp {errors*apply*stop-command
+   (state <s> ^name pick-up
+              ^svs.command <cmd>
+              ^operator.name stop-command)
+   (<cmd> ^find-trajectories <ft>)
+-->
+   (<ft> ^stop now)
+}
+
+sp {errors*propose*interrupt-on-error
+   (state <s> ^name pick-up
+              ^svs.command <cmd>)
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^stop <p>
+         ^status stopped)
+-->
+   (<s> ^operator <o>)
+   (<o> ^name interrupt-on-error)
+}
+
+sp {errors*apply*interrupt-on-error
+   (state <s> ^name pick-up
+              ^operator.name interrupt-on-error)
+-->
+   (interrupt)
+}
