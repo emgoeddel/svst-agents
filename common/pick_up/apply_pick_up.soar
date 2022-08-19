@@ -4,7 +4,7 @@ sp {pick-up*propose*get-grasp-target
               ^target-object
               ^svs.command <cmd>)
    (<cmd> -^extract_once.type grasp_first)
-   -->
+-->
    (<s> ^operator <o> +)
    (<o> ^name get-grasp-target)
 }
@@ -14,7 +14,7 @@ sp {pick-up*apply*get-grasp-target
               ^target-object <id>
               ^svs.command <cmd>
               ^operator.name get-grasp-target)
-   -->
+-->
    (<cmd> ^extract_once <eo> )
    (<eo> ^type grasp_first
          ^a <a>
@@ -23,17 +23,18 @@ sp {pick-up*apply*get-grasp-target
         ^id <id>)
 }
 
+############## FIND TRAJECTORIES ################
 sp {pick-up*propose*make-find-trajectories
    (state <s> ^name pick-up
               ^svs.command <cmd>
               ^target-pose <t>)
    (<cmd> -^find-trajectories)
-   -->
+-->
    (<s> ^operator <o> +)
    (<o> ^name make-find-trajectories)
 }
 
-sp {set-request*apply*make-command
+sp {pick-up*apply*make-find-trajectories
    (state <s> ^name pick-up
               ^svs.command <cmd>
               ^target-pose <tp>
@@ -44,19 +45,99 @@ sp {set-request*apply*make-command
          ^roll <rx>
          ^pitch <ry>
          ^yaw <rz>)
-   -->
+-->
    (<cmd> ^find-trajectories <ft>)
    (<ft> ^target <t>
          ^min-number 6
-         ^max-number 20)
+         ^max-number 10
+         ^target-samples 5)
    (<t> ^center <c>
-        ^frame self
         ^orientation <or>
-        ^orientation-flex false)
+#        ^orientation-flex 0.01
+        ^frame self)
    (<c> ^x <px>
         ^y <py>
         ^z <pz>)
    (<or> ^x <rx>
          ^y <ry>
          ^z <rz>)
+}
+
+############## SELECT TRAJECTORY ################
+
+# Let the agent stop a command if needed before doing selection
+sp {pick-up*prefer*stop-over-select
+   (state <s> ^name pick-up
+              ^operator <op1> +
+              ^operator <op2> +)
+   (<op1> ^name stop-command)
+   (<op2> ^name make-select)
+-->
+   (<s> ^operator <op1> > <op2>)
+}
+
+sp {pick-up*propose*make-select
+   (state <s> ^name pick-up
+              ^svs <v>)
+   (<v> ^command <cmd>
+        ^motor.trajectories <t>)
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^id <sid>
+         ^status << stopped complete >> )
+   (<t> ^set <st>)
+   (<st> ^command-id <sid>
+        -^trajectory.selected-by waypoints)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name make-select
+        ^trajectory-set <sid>)
+}
+
+sp {pick-up*apply*make-select
+   (state <s> ^name pick-up
+              ^svs <v>
+              ^operator <op>)
+   (<op> ^name make-select
+         ^trajectory-set <sid>)
+   (<v> ^command <c>)
+-->
+   (<c> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^type select
+           ^objective waypoints
+           ^number 1)
+}
+
+############## EXEC TRAJECTORY ################
+sp {pick-up*propose*make-execute
+   (state <s> ^name pick-up
+              ^svs <svs>)
+   (<svs> ^motor.trajectories <t>
+          ^command <cmd>)
+   (<cmd> ^find-trajectories.id <sid>
+         -^execute-trajectory)
+   (<t> ^set <st>)
+   (<st> ^command-id <sid>
+         ^trajectory <tr>)
+   (<tr> ^id <tid>
+         ^selected-by waypoints)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name make-execute
+        ^trajectory-set <sid>
+        ^trajectory-id <tid>)
+}
+
+sp {pick-up*apply*make-execute
+   (state <s> ^name pick-up
+              ^svs <v>
+              ^operator <op>)
+   (<op> ^name make-execute
+         ^trajectory-set <sid>
+         ^trajectory-id <tid>)
+   (<v> ^command <c>)
+-->
+   (<c> ^execute-trajectory <x>)
+   (<x> ^set-id <sid>
+        ^trajectory-id <tid>)
 }

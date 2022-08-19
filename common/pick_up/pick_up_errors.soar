@@ -2,7 +2,7 @@ sp {errors*propose*stop-command*planning-failure
    (state <s> ^name pick-up
               ^svs.command <cmd>)
    (<cmd> ^find-trajectories <ft>)
-   (<ft> ^failures.planning-failure > 6
+   (<ft> ^failures.planning-failure > 10
         -^stop)
 -->
    (<s> ^operator <o> + =)
@@ -13,7 +13,7 @@ sp {errors*propose*stop-command*goal-failure
    (state <s> ^name pick-up
               ^svs.command <cmd>)
    (<cmd> ^find-trajectories <ft>)
-   (<ft> ^failures.goal-invalid > 6
+   (<ft> ^failures.goal-invalid > 10
         -^stop)
 -->
    (<s> ^operator <o> + =)
@@ -24,7 +24,7 @@ sp {errors*propose*stop-command*other-failure
    (state <s> ^name pick-up
               ^svs.command <cmd>)
    (<cmd> ^find-trajectories <ft>)
-   (<ft> ^failures.other-error > 6
+   (<ft> ^failures.other-error > 10
         -^stop)
 -->
    (<s> ^operator <o> + =)
@@ -35,7 +35,7 @@ sp {errors*propose*stop-command*start-failure
    (state <s> ^name pick-up
               ^svs.command <cmd>)
    (<cmd> ^find-trajectories <ft>)
-   (<ft> ^failures.start-invalid > 6
+   (<ft> ^failures.start-invalid > 10
         -^stop)
 -->
    (<s> ^operator <o> + =)
@@ -51,12 +51,33 @@ sp {errors*apply*stop-command
    (<ft> ^stop now)
 }
 
-sp {errors*propose*interrupt-on-error
+sp {errors*propose*interrupt-on-error*empty-set
    (state <s> ^name pick-up
-              ^svs.command <cmd>)
+              ^svs <v>)
+   (<v> ^command <cmd>
+        ^motor.trajectories <mt>)
    (<cmd> ^find-trajectories <ft>)
    (<ft> ^stop <p>
+         ^id <sid>
          ^status stopped)
+   (<mt> ^set <ts>)
+   (<ts> ^command-id <sid>
+         ^trajectory-count 0)
+-->
+   (<s> ^operator <o>)
+   (<o> ^name interrupt-on-error)
+}
+
+sp {errors*propose*interrupt-on-error*no-set
+   (state <s> ^name pick-up
+              ^svs <v>)
+   (<v> ^command <cmd>
+        ^motor.trajectories <mt>)
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^stop <p>
+         ^id <sid>
+         ^status stopped)
+   (<mt> -^set.command-id <sid>)
 -->
    (<s> ^operator <o>)
    (<o> ^name interrupt-on-error)
