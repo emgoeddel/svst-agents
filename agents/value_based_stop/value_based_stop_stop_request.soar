@@ -137,8 +137,10 @@ sp {stop-request*propose*update-dc-elapsed
               ^dc-since-update)
    (<v> ^command <cmd>
         ^motor.trajectories <traj>)
-   (<cmd> ^find-trajectories <ft>)
-   (<ft> ^id <cid>)
+   (<cmd> ^find-trajectories <ft>
+         -^execute-trajectory)
+   (<ft> ^id <cid>
+         ^status << running continuing >>)
    (<traj> ^set <set>)
    (<set> ^command-id <cid>)
 -->
@@ -173,11 +175,12 @@ sp {stop-request*propose*stop-command
               ^agent-name value-based-stop
               ^svs <v>
               ^target <t>
-              ^dc-since-update <ct> > 1000)
+              ^dc-since-update <ct> > 5000)
    (<v> ^command <cmd>
         ^motor.trajectories <traj>)
    (<cmd> ^find-trajectories <ft>)
    (<ft> -^stop
+          ^status << running continuing >>
           ^id <cid>)
    (<traj> ^set <set>)
    (<set> ^command-id <cid>
@@ -186,7 +189,6 @@ sp {stop-request*propose*stop-command
 -->
    (<s> ^operator <o> + =)
    (<o> ^name stop-command)
-   (interrupt)
 }
 
 ### Stop options for planning failures
@@ -198,8 +200,9 @@ sp {stop-request*propose*stop-command*planning-failure
               ^target <t>)
    (<cmd> ^find-trajectories <ft>)
    (<ft> ^failures.planning-failure > 10
+         ^status << running continuing >>
         -^stop)
-   -->
+-->
    (<s> ^operator <o> + =)
    (<o> ^name stop-command)
 }
@@ -211,23 +214,11 @@ sp {stop-request*propose*stop-command*goal-failure
               ^target <t>)
    (<cmd> ^find-trajectories <ft>)
    (<ft> ^failures.goal-invalid > 10
+         ^status << running continuing >>
         -^stop)
    -->
    (<s> ^operator <o> + =)
    (<o> ^name stop-command)
-}
-
-sp {stop-request*propose*stop-command*start-failure
-   (state <s> ^superstate nil
-              ^agent-name value-based-stop
-              ^svs.command <cmd>
-              ^target <t>)
-   (<cmd> ^find-trajectories <ft>)
-   (<ft> ^failures.start-invalid > 10
-        -^stop)
-   -->
-   (write |Reached an invalid start state!|)
-   (halt)
 }
 
 sp {stop-request*apply*stop-command
@@ -240,3 +231,19 @@ sp {stop-request*apply*stop-command
    -->
    (<ft> ^stop now)
 }
+
+# XXX Need to stop the planning THEN halt
+sp {stop-request*propose*stop-and-halt*start-failure
+   (state <s> ^superstate nil
+              ^agent-name value-based-stop
+              ^svs.command <cmd>
+              ^target <t>)
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^failures.start-invalid > 10
+         ^status << running continuing >>
+        -^stop)
+   -->
+   (write |Reached an invalid start state!|)
+   (halt)
+}
+

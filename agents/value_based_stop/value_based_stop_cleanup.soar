@@ -77,13 +77,15 @@ sp {cleanup*apply*cleanup-previous*eval
               ^agent-name value-based-stop
               ^operator.name cleanup-previous
               ^svs.command <cmd>
-              ^best-value <bv>
-              ^value-count <vc>)
+              ^best-trajectory <bt>
+              ^start-count <sc>
+              ^dc-since-update <dcu>)
    (<cmd> ^evaluate-trajectories <et>)
 -->
-   (<s> ^best-value <bv> -
-        ^value-count <vc> -)
-   (<cmd> ^execute-trajectory <et> -)
+   (<s> ^best-trajectory <bt> -
+        ^start-count <sc> -
+        ^dc-since-update <dcu> -)
+   (<cmd> ^evaluate-trajectories <et> -)
 }
 
 sp {cleanup*apply*cleanup-previous*execute

@@ -14,7 +14,8 @@ sp {set-request*apply*sample-xyz
               ^operator.name sample-xyz)
    -->
    (<s> ^target <t>)
-   (<t> ^center <c>)
+   (<t> ^center <c>
+        ^frame self)
    (<c> ^x (+ 0.5 (rand-float 0.4))
         ^y (+ -1.0 (rand-float 2.0))
         ^z (+ 0.2 (rand-float 1.0)))
@@ -40,5 +41,5 @@ sp {set-request*apply*make-command
    -->
    (<cmd> ^find-trajectories <ft>)
    (<ft> ^target <t>
-         ^max-time 5)
+         ^max-time 60)
 }

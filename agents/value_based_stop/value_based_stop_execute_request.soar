@@ -2,23 +2,22 @@ sp {execute-request*propose*make-execute
    (state <s> ^superstate nil
               ^agent-name value-based-stop
               ^svs <svs>
-              ^best-value <bv>)
+              ^best-trajectory <bt>)
    (<svs> ^motor.trajectories <t>
           ^command <cmd>)
    (<cmd> ^find-trajectories <ft>
          -^execute-trajectory)
-   (<ft> ^stop now
+   (<ft> ^status << stopped complete >>
          ^id <sid>)
    (<t> ^set <st>)
    (<st> ^command-id <sid>
          ^trajectory <tr>)
-   (<tr> ^id <tid>
-         ^waypoints <bv>)
+   (<tr> ^id <bt>)
 -->
    (<s> ^operator <o> + =)
    (<o> ^name make-execute
         ^trajectory-set <sid>
-        ^trajectory-id <tid>)
+        ^trajectory-id <bt>)
 }
 
 sp {execute-request*apply*make-execute
