@@ -22,7 +22,7 @@ sp {execute-request*propose*make-execute
    (<st> ^command-id <sid>
          ^trajectory <tr>)
    (<tr> ^id <tid>
-         ^selected-by waypoints)
+         ^selected-by <any>)
 -->
    (<s> ^operator <o> +)
    (<o> ^name make-execute
