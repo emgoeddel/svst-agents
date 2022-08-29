@@ -1,4 +1,6 @@
 # If the superstate has impassed on pick-up, start the pick-up process
+
+############## GRASP FIRST ################
 sp {pick-up*propose*get-grasp-target
    (state <s> ^name pick-up
               ^target-object
@@ -140,4 +142,31 @@ sp {pick-up*apply*make-execute
    (<c> ^execute-trajectory <x>)
    (<x> ^set-id <sid>
         ^trajectory-id <tid>)
+}
+
+############## GRASP SECOND ################
+sp {pick-up*propose*get-final-grasp
+   (state <s> ^name pick-up
+              ^target-object
+              ^svs.command <cmd>)
+   (<cmd> ^execute-trajectory <x>
+         -^extract_once.type grasp_second)
+   (<x> ^status finished)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name get-final-grasp)
+}
+
+sp {pick-up*apply*get-final-grasp
+   (state <s> ^name pick-up
+              ^target-object <id>
+              ^svs.command <cmd>
+              ^operator.name get-final-grasp)
+-->
+   (<cmd> ^extract_once <eo> )
+   (<eo> ^type grasp_second
+         ^a <a>
+         ^frame self)
+   (<a> ^type node
+        ^id <id>)
 }
