@@ -22,3 +22,16 @@ sp {pick-up*elaborate*target-pose-result
    -->
    (<s> ^target-pose <v>)
 }
+
+# Make the second grasp pose also easy to find
+sp {pick-up*elaborate*final-pose-result
+   (state <s> ^name pick-up
+              ^svs.command <cmd>)
+   (<cmd> ^extract_once <eo>)
+   (<eo> ^result <r>
+         ^type grasp_second
+         ^status success)
+   (<r> ^record.value <v>)
+   -->
+   (<s> ^final-pose <v>)
+}

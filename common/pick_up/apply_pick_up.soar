@@ -170,3 +170,32 @@ sp {pick-up*apply*get-final-grasp
    (<a> ^type node
         ^id <id>)
 }
+
+############## STRAIGHT LINE ################
+sp {pick-up*propose*plan-straight-line
+   (state <s> ^name pick-up
+              ^target-object
+              ^final-pose
+              ^svs.command <cmd>)
+   (<cmd> -^straight-line-trajectory)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name plan-straight-line)
+}
+
+sp {pick-up*apply*plan-straight-line
+   (state <s> ^name pick-up
+              ^target-object <id>
+              ^final-pose <p>
+              ^svs.command <cmd>
+              ^operator.name plan-straight-line)
+   (<p> ^x <px>
+        ^y <py>
+        ^z <pz>)
+-->
+   (<cmd> ^straight-line-trajectory <sl> )
+   (<sl> ^target <xyz>)
+   (<xyz> ^x <px>
+          ^y <py>
+          ^z <pz>)
+}
