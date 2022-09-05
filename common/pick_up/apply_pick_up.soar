@@ -171,29 +171,76 @@ sp {pick-up*apply*get-final-grasp
         ^id <id>)
 }
 
-############## STRAIGHT LINE ################
-sp {pick-up*propose*plan-straight-line
+############## STRAIGHT LINE IN ################
+sp {pick-up*propose*do-straight-line-in
    (state <s> ^name pick-up
-              ^target-object
               ^final-pose
               ^svs.command <cmd>)
-   (<cmd> -^straight-line-trajectory)
+   (<cmd> -^straight-line-motion)
 -->
    (<s> ^operator <o> +)
-   (<o> ^name plan-straight-line)
+   (<o> ^name do-straight-line-in)
 }
 
-sp {pick-up*apply*plan-straight-line
+sp {pick-up*apply*do-straight-line-in
    (state <s> ^name pick-up
-              ^target-object <id>
               ^final-pose <p>
               ^svs.command <cmd>
-              ^operator.name plan-straight-line)
+              ^operator.name do-straight-line-in)
    (<p> ^x <px>
         ^y <py>
         ^z <pz>)
 -->
-   (<cmd> ^straight-line-trajectory <sl> )
+   (<cmd> ^straight-line-motion <sl> )
+   (<sl> ^target <xyz>)
+   (<xyz> ^x <px>
+          ^y <py>
+          ^z <pz>)
+}
+
+############## CLOSE GRIPPER ################
+sp {pick-up*propose*close-gripper
+   (state <s> ^name pick-up
+              ^svs.command <cmd>)
+   (<cmd> ^straight-line-motion <sl>
+         -^set-gripper)
+   (<sl> ^status finished)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name close-gripper)
+}
+
+sp {pick-up*apply*close-gripper
+   (state <s> ^name pick-up
+              ^svs.command <cmd>
+              ^operator.name close-gripper)
+-->
+   (<cmd> ^set-gripper <sg> )
+   (<sg> ^target 0.0)
+}
+
+############## STRAIGHT LINE OUT ################
+sp {pick-up*propose*do-straight-line-out
+   (state <s> ^name pick-up
+              ^target-pose
+              ^svs.command <cmd>)
+   (<cmd> ^set-gripper <cg>)
+   (<cg> ^status finished)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name do-straight-line-out)
+}
+
+sp {pick-up*apply*do-straight-line-out
+   (state <s> ^name pick-up
+              ^target-pose <p>
+              ^svs.command <cmd>
+              ^operator.name do-straight-line-out)
+   (<p> ^x <px>
+        ^y <py>
+        ^z <pz>)
+-->
+   (<cmd> ^straight-line-motion <sl> )
    (<sl> ^target <xyz>)
    (<xyz> ^x <px>
           ^y <py>
