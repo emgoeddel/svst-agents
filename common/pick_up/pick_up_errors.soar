@@ -1,6 +1,6 @@
 sp {errors*propose*stop-command*planning-failure
    (state <s> ^name pick-up
-              ^svs.command <cmd>)
+              ^topstate-svs.command <cmd>)
    (<cmd> ^find-trajectories <ft>)
    (<ft> ^failures.planning-failure > 10
         -^stop)
@@ -11,7 +11,7 @@ sp {errors*propose*stop-command*planning-failure
 
 sp {errors*propose*stop-command*goal-failure
    (state <s> ^name pick-up
-              ^svs.command <cmd>)
+              ^topstate-svs.command <cmd>)
    (<cmd> ^find-trajectories <ft>)
    (<ft> ^failures.goal-invalid > 10
         -^stop)
@@ -22,7 +22,7 @@ sp {errors*propose*stop-command*goal-failure
 
 sp {errors*propose*stop-command*other-failure
    (state <s> ^name pick-up
-              ^svs.command <cmd>)
+              ^topstate-svs.command <cmd>)
    (<cmd> ^find-trajectories <ft>)
    (<ft> ^failures.other-error > 10
         -^stop)
@@ -33,7 +33,7 @@ sp {errors*propose*stop-command*other-failure
 
 sp {errors*propose*stop-command*start-failure
    (state <s> ^name pick-up
-              ^svs.command <cmd>)
+              ^topstate-svs.command <cmd>)
    (<cmd> ^find-trajectories <ft>)
    (<ft> ^failures.start-invalid > 10
         -^stop)
@@ -44,7 +44,7 @@ sp {errors*propose*stop-command*start-failure
 
 sp {errors*apply*stop-command
    (state <s> ^name pick-up
-              ^svs.command <cmd>
+              ^topstate-svs.command <cmd>
               ^operator.name stop-command)
    (<cmd> ^find-trajectories <ft>)
 -->
@@ -53,7 +53,7 @@ sp {errors*apply*stop-command
 
 sp {errors*propose*interrupt-on-error*empty-set
    (state <s> ^name pick-up
-              ^svs <v>)
+              ^topstate-svs <v>)
    (<v> ^command <cmd>
         ^motor.trajectories <mt>)
    (<cmd> ^find-trajectories <ft>)
@@ -70,7 +70,7 @@ sp {errors*propose*interrupt-on-error*empty-set
 
 sp {errors*propose*interrupt-on-error*no-set
    (state <s> ^name pick-up
-              ^svs <v>)
+              ^topstate-svs <v>)
    (<v> ^command <cmd>
         ^motor.trajectories <mt>)
    (<cmd> ^find-trajectories <ft>)

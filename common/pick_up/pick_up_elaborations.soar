@@ -4,34 +4,46 @@ sp {pick-up*elaborate*state
               ^impasse no-change)
    (<ss> ^operator <o>)
    (<o> ^name pick-up
-        ^object-id <id>)
-   -->
+        ^object-id <id>
+        ^use-objective <obj>)
+-->
    (<s> ^name pick-up
-        ^target-object <id>)
+        ^target-object <id>
+        ^objective <obj>)
+}
+
+# Use topstate SVS so that commands can actually be executed
+sp {pick-up*elaborate*svs
+   (state <s> ^superstate <ss>
+              ^name pick-up)
+   (<ss> ^superstate nil
+         ^svs <v>)
+-->
+   (<s> ^topstate-svs <v>)
 }
 
 # Make the grasp target easy to find when it exists
 sp {pick-up*elaborate*target-pose-result
    (state <s> ^name pick-up
-              ^svs.command <cmd>)
+              ^topstate-svs.command <cmd>)
    (<cmd> ^extract_once <eo>)
    (<eo> ^result <r>
          ^type grasp_first
          ^status success)
    (<r> ^record.value <v>)
-   -->
+-->
    (<s> ^target-pose <v>)
 }
 
 # Make the second grasp pose also easy to find
 sp {pick-up*elaborate*final-pose-result
    (state <s> ^name pick-up
-              ^svs.command <cmd>)
+              ^topstate-svs.command <cmd>)
    (<cmd> ^extract_once <eo>)
    (<eo> ^result <r>
          ^type grasp_second
          ^status success)
    (<r> ^record.value <v>)
-   -->
+-->
    (<s> ^final-pose <v>)
 }

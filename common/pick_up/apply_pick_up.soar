@@ -4,7 +4,7 @@
 sp {pick-up*propose*get-grasp-target
    (state <s> ^name pick-up
               ^target-object
-              ^svs.command <cmd>)
+              ^topstate-svs.command <cmd>)
    (<cmd> -^extract_once.type grasp_first)
 -->
    (<s> ^operator <o> +)
@@ -14,7 +14,7 @@ sp {pick-up*propose*get-grasp-target
 sp {pick-up*apply*get-grasp-target
    (state <s> ^name pick-up
               ^target-object <id>
-              ^svs.command <cmd>
+              ^topstate-svs.command <cmd>
               ^operator.name get-grasp-target)
 -->
    (<cmd> ^extract_once <eo> )
@@ -28,7 +28,7 @@ sp {pick-up*apply*get-grasp-target
 ############## FIND TRAJECTORIES ################
 sp {pick-up*propose*make-find-trajectories
    (state <s> ^name pick-up
-              ^svs.command <cmd>
+              ^topstate-svs.command <cmd>
               ^target-pose <t>)
    (<cmd> -^find-trajectories)
 -->
@@ -38,7 +38,7 @@ sp {pick-up*propose*make-find-trajectories
 
 sp {pick-up*apply*make-find-trajectories
    (state <s> ^name pick-up
-              ^svs.command <cmd>
+              ^topstate-svs.command <cmd>
               ^target-pose <tp>
               ^operator.name make-find-trajectories)
    (<tp> ^x <px>
@@ -79,7 +79,7 @@ sp {pick-up*prefer*stop-over-select
 
 sp {pick-up*propose*make-select
    (state <s> ^name pick-up
-              ^svs <v>)
+              ^topstate-svs <v>)
    (<v> ^command <cmd>
         ^motor.trajectories <t>)
    (<cmd> ^find-trajectories <ft>)
@@ -96,7 +96,8 @@ sp {pick-up*propose*make-select
 
 sp {pick-up*apply*make-select
    (state <s> ^name pick-up
-              ^svs <v>
+              ^objective <obj>
+              ^topstate-svs <v>
               ^operator <op>)
    (<op> ^name make-select
          ^trajectory-set <sid>)
@@ -105,7 +106,7 @@ sp {pick-up*apply*make-select
    (<c> ^evaluate-trajectories <eval>)
    (<eval> ^set-id <sid>
            ^type select
-           ^objective waypoints
+           ^objective <obj>
            ^direction min
            ^number 1)
 }
@@ -113,7 +114,7 @@ sp {pick-up*apply*make-select
 ############## EXEC TRAJECTORY ################
 sp {pick-up*propose*make-execute
    (state <s> ^name pick-up
-              ^svs <svs>)
+              ^topstate-svs <svs>)
    (<svs> ^motor.trajectories <t>
           ^command <cmd>)
    (<cmd> ^find-trajectories.id <sid>
@@ -132,7 +133,7 @@ sp {pick-up*propose*make-execute
 
 sp {pick-up*apply*make-execute
    (state <s> ^name pick-up
-              ^svs <v>
+              ^topstate-svs <v>
               ^operator <op>)
    (<op> ^name make-execute
          ^trajectory-set <sid>
@@ -149,7 +150,7 @@ sp {pick-up*apply*make-execute
 sp {pick-up*reach-test*halt
    (state <s> ^name pick-up
               ^superstate <ss>
-              ^svs.command <cmd>)
+              ^topstate-svs.command <cmd>)
    (<cmd> ^execute-trajectory <x>)
    (<ss> ^agent-name reach-test)
    (<x> ^status finished)
@@ -160,7 +161,7 @@ sp {pick-up*reach-test*halt
 sp {pick-up*propose*get-final-grasp
    (state <s> ^name pick-up
               ^target-object
-              ^svs.command <cmd>)
+              ^topstate-svs.command <cmd>)
    (<cmd> ^execute-trajectory <x>
          -^extract_once.type grasp_second)
    (<x> ^status finished)
@@ -172,7 +173,7 @@ sp {pick-up*propose*get-final-grasp
 sp {pick-up*apply*get-final-grasp
    (state <s> ^name pick-up
               ^target-object <id>
-              ^svs.command <cmd>
+              ^topstate-svs.command <cmd>
               ^operator.name get-final-grasp)
 -->
    (<cmd> ^extract_once <eo> )
@@ -188,7 +189,7 @@ sp {pick-up*apply*get-final-grasp
 sp {pick-up*propose*do-straight-line-in
    (state <s> ^name pick-up
               ^final-pose
-              ^svs.command <cmd>)
+              ^topstate-svs.command <cmd>)
    (<cmd> -^straight-line-motion)
 -->
    (<s> ^operator <o> +)
@@ -198,7 +199,7 @@ sp {pick-up*propose*do-straight-line-in
 sp {pick-up*apply*do-straight-line-in
    (state <s> ^name pick-up
               ^final-pose <p>
-              ^svs.command <cmd>
+              ^topstate-svs.command <cmd>
               ^operator.name do-straight-line-in)
    (<p> ^x <px>
         ^y <py>
@@ -214,7 +215,7 @@ sp {pick-up*apply*do-straight-line-in
 ############## CLOSE GRIPPER ################
 sp {pick-up*propose*close-gripper
    (state <s> ^name pick-up
-              ^svs.command <cmd>)
+              ^topstate-svs.command <cmd>)
    (<cmd> ^straight-line-motion <sl>
          -^set-gripper)
    (<sl> ^status finished)
@@ -225,7 +226,7 @@ sp {pick-up*propose*close-gripper
 
 sp {pick-up*apply*close-gripper
    (state <s> ^name pick-up
-              ^svs.command <cmd>
+              ^topstate-svs.command <cmd>
               ^operator.name close-gripper)
 -->
    (<cmd> ^set-gripper <sg> )
@@ -236,7 +237,7 @@ sp {pick-up*apply*close-gripper
 sp {pick-up*propose*do-straight-line-out
    (state <s> ^name pick-up
               ^target-pose
-              ^svs.command <cmd>)
+              ^topstate-svs.command <cmd>)
    (<cmd> ^set-gripper <cg>)
    (<cg> ^status finished)
 -->
@@ -247,7 +248,7 @@ sp {pick-up*propose*do-straight-line-out
 sp {pick-up*apply*do-straight-line-out
    (state <s> ^name pick-up
               ^target-pose <p>
-              ^svs.command <cmd>
+              ^topstate-svs.command <cmd>
               ^operator.name do-straight-line-out)
    (<p> ^x <px>
         ^y <py>

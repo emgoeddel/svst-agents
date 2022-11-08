@@ -5,5 +5,6 @@ sp {topstate*propose*pick-up
 -->
    (<s> ^operator <o> + =)
    (<o> ^name pick-up
-        ^object-id blue_cube5cm)
+        ^object-id blue_cube5cm
+        ^use-objective execution-time)
 }
