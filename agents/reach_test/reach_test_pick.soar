@@ -1,0 +1,9 @@
+# Propose to pick up the target object for tests
+sp {topstate*propose*pick-up
+   (state <s> ^superstate nil
+              ^agent-name reach-test)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name pick-up
+        ^object-id blue_cube5cm)
+}

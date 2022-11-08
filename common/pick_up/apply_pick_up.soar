@@ -50,9 +50,8 @@ sp {pick-up*apply*make-find-trajectories
 -->
    (<cmd> ^find-trajectories <ft>)
    (<ft> ^target <t>
-         ^min-number 6
-         ^max-number 10
-         ^target-samples 5)
+         ^max-number 2)
+#         ^target-samples 5)
    (<t> ^center <c>
         ^orientation <or>
 #        ^orientation-flex 0.01
@@ -88,7 +87,7 @@ sp {pick-up*propose*make-select
          ^status << stopped complete >> )
    (<t> ^set <st>)
    (<st> ^command-id <sid>
-        -^trajectory.selected-by waypoints)
+        -^trajectory.selected-by <any>)
 -->
    (<s> ^operator <o> +)
    (<o> ^name make-select
@@ -107,6 +106,7 @@ sp {pick-up*apply*make-select
    (<eval> ^set-id <sid>
            ^type select
            ^objective waypoints
+           ^direction min
            ^number 1)
 }
 
@@ -122,7 +122,7 @@ sp {pick-up*propose*make-execute
    (<st> ^command-id <sid>
          ^trajectory <tr>)
    (<tr> ^id <tid>
-         ^selected-by waypoints)
+         ^selected-by <any>)
 -->
    (<s> ^operator <o> +)
    (<o> ^name make-execute
@@ -141,10 +141,22 @@ sp {pick-up*apply*make-execute
 -->
    (<c> ^execute-trajectory <x>)
    (<x> ^set-id <sid>
-        ^trajectory-id <tid>)
+        ^trajectory-id <tid>) # set to 0 for no MAST
 }
 
 ############## GRASP SECOND ################
+
+sp {pick-up*reach-test*halt
+   (state <s> ^name pick-up
+              ^superstate <ss>
+              ^svs.command <cmd>)
+   (<cmd> ^execute-trajectory <x>)
+   (<ss> ^agent-name reach-test)
+   (<x> ^status finished)
+-->
+   (halt)
+}
+
 sp {pick-up*propose*get-final-grasp
    (state <s> ^name pick-up
               ^target-object
@@ -172,6 +184,7 @@ sp {pick-up*apply*get-final-grasp
 }
 
 ############## STRAIGHT LINE IN ################
+
 sp {pick-up*propose*do-straight-line-in
    (state <s> ^name pick-up
               ^final-pose
