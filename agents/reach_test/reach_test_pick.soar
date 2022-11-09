@@ -1,10 +1,11 @@
 # Propose to pick up the target object for tests
 sp {topstate*propose*pick-up
    (state <s> ^superstate nil
-              ^agent-name reach-test)
+              ^agent-name reach-test
+              ^selected-objective <j>)
 -->
    (<s> ^operator <o> + =)
    (<o> ^name pick-up
         ^object-id blue_cube5cm
-        ^use-objective execution-time)
+        ^use-objective <j>)
 }

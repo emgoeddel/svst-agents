@@ -36,10 +36,11 @@ sp {pick-up*propose*make-find-trajectories
    (<o> ^name make-find-trajectories)
 }
 
-sp {pick-up*apply*make-find-trajectories
+sp {pick-up*apply*make-find-trajectories*mast
    (state <s> ^name pick-up
               ^topstate-svs.command <cmd>
               ^target-pose <tp>
+             -^objective none
               ^operator.name make-find-trajectories)
    (<tp> ^x <px>
          ^y <py>
@@ -50,11 +51,36 @@ sp {pick-up*apply*make-find-trajectories
 -->
    (<cmd> ^find-trajectories <ft>)
    (<ft> ^target <t>
-         ^max-number 2)
-#         ^target-samples 5)
+         ^max-number 30)
    (<t> ^center <c>
         ^orientation <or>
-#        ^orientation-flex 0.01
+        ^frame self)
+   (<c> ^x <px>
+        ^y <py>
+        ^z <pz>)
+   (<or> ^x <rx>
+         ^y <ry>
+         ^z <rz>)
+}
+
+sp {pick-up*apply*make-find-trajectories*no-mast
+   (state <s> ^name pick-up
+              ^topstate-svs.command <cmd>
+              ^target-pose <tp>
+              ^objective none
+              ^operator.name make-find-trajectories)
+   (<tp> ^x <px>
+         ^y <py>
+         ^z <pz>
+         ^roll <rx>
+         ^pitch <ry>
+         ^yaw <rz>)
+-->
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^target <t>
+         ^max-number 3)
+   (<t> ^center <c>
+        ^orientation <or>
         ^frame self)
    (<c> ^x <px>
         ^y <py>
@@ -96,7 +122,29 @@ sp {pick-up*propose*make-select
 
 sp {pick-up*apply*make-select
    (state <s> ^name pick-up
-              ^objective <obj>
+              ^objective <obj> <> none
+              ^topstate-svs <v>
+              ^operator <op>)
+   (<op> ^name make-select
+         ^trajectory-set <sid>)
+   (<obj> ^name <on>
+          ^target-object <to>
+          ^direction <dir>)
+   (<v> ^command <c>)
+-->
+   (<c> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^type select
+           ^objective <on>
+           ^obstacle <to>
+           ^direction <dir>
+           ^number 1)
+}
+
+# This is only so that the evaluation function is called in SVS!
+sp {pick-up*apply*make-select*no-mast
+   (state <s> ^name pick-up
+              ^objective none
               ^topstate-svs <v>
               ^operator <op>)
    (<op> ^name make-select
@@ -106,14 +154,14 @@ sp {pick-up*apply*make-select
    (<c> ^evaluate-trajectories <eval>)
    (<eval> ^set-id <sid>
            ^type select
-           ^objective <obj>
-           ^direction min
+           ^objective waypoints
            ^number 1)
 }
 
 ############## EXEC TRAJECTORY ################
 sp {pick-up*propose*make-execute
    (state <s> ^name pick-up
+             -^objective none
               ^topstate-svs <svs>)
    (<svs> ^motor.trajectories <t>
           ^command <cmd>)
@@ -131,6 +179,25 @@ sp {pick-up*propose*make-execute
         ^trajectory-id <tid>)
 }
 
+sp {pick-up*propose*make-execute*no-mast
+   (state <s> ^name pick-up
+              ^objective none
+              ^topstate-svs <svs>)
+   (<svs> ^motor.trajectories <t>
+          ^command <cmd>)
+   (<cmd> ^find-trajectories.id <sid>
+         -^execute-trajectory)
+   (<t> ^set <st>)
+   (<st> ^command-id <sid>
+         ^trajectory <tr>)
+   (<tr> ^selected-by waypoints) #Selection not used in this case!
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name make-execute
+        ^trajectory-set <sid>
+        ^trajectory-id 0)
+}
+
 sp {pick-up*apply*make-execute
    (state <s> ^name pick-up
               ^topstate-svs <v>
@@ -142,7 +209,7 @@ sp {pick-up*apply*make-execute
 -->
    (<c> ^execute-trajectory <x>)
    (<x> ^set-id <sid>
-        ^trajectory-id <tid>) # set to 0 for no MAST
+        ^trajectory-id <tid>)
 }
 
 ############## GRASP SECOND ################

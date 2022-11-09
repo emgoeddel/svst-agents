@@ -25,18 +25,18 @@ sp {init-agent*elaborate*object-properties
               ^agent-name reach-test)
 -->
    (<s> ^known-objects <ko>)
-   (<ko> ^lamp <l>
-         ^dropoff-box <db>
-         ^vase <v>
-         ^cardboard-box <cb>)
+   (<ko> ^object <l>
+         ^object <db>
+         ^object <v>
+         ^object <cb>)
    (<l> ^model-name demo_lamp
-        ^property fragile)
+        ^property-name fragile)
    (<db> ^model-name demo_dropoff_box
-         ^property user-target)
+         ^property-name user-target)
    (<v> ^model-name demo_vase
-        ^property valuable)
+        ^property-name valuable)
    (<cb> ^model-name demo_cardboard_box
-         ^property hittable)
+         ^property-name hittable)
 }
 
 # Add the objective map data as an elaboration
@@ -45,8 +45,54 @@ sp {init-agent*elaborate*property-objectives
               ^agent-name reach-test)
 -->
    (<s> ^property-objective-map <pom>)
-   (<pom> ^fragile min-clear-subset
-          ^user-target time-over
-          ^valuable min-clearance
-          ^hittable execution-time)
+   (<pom> ^property <p1>
+          ^property <p2>
+          ^property <p3>
+          ^property <p4>)
+   (<p1> ^name fragile
+         ^objective min-clear-subset
+         ^direction max)
+   (<p2> ^name user-target
+         ^objective time-over
+         ^direction min)
+   (<p3> ^name valuable
+         ^objective min-clearance
+         ^direction max)
+   (<p4> ^name hittable
+         ^objective execution-time
+         ^direction min)
+}
+
+# Decide on objective based on object
+sp {init-agent*elaborate*selected-objective
+   (state <s> ^superstate nil
+              ^agent-name reach-test
+              ^svs.spatial-scene <scn>
+              ^known-objects <ko>
+              ^property-objective-map <po>)
+   (<scn> ^child.id <n>)
+   (<ko> ^object <ob>)
+   (<ob> ^model-name <n>
+         ^property-name <pn>)
+   (<po> ^property <p>)
+   (<p> ^name <pn>
+        ^objective <j>
+        ^direction <d>)
+-->
+   (<s> ^selected-objective <so>)
+   (<so> ^name <j>
+         ^target-object <n>
+         ^direction <d>)
+}
+
+# Or use no objective if it's the generic
+sp {init-agent*elaborate*no-selected-objective
+   (state <s> ^superstate nil
+              ^agent-name reach-test
+              ^svs.spatial-scene <scn>
+              ^known-objects <ko>
+              ^property-objective-map <po>)
+   (<scn> ^child.id demo_generic)
+-->
+   (<s> ^selected-objective none)
 }
