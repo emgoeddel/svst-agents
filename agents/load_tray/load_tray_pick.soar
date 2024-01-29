@@ -1,0 +1,14 @@
+# Propose to pick up an object to put on the tray
+sp {topstate*propose*pick-up
+   (state <s> ^superstate nil
+              ^agent-name load-tray
+              ^loadable-obj <id>)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name pick-up
+        ^object-id <id>)
+#        ^use-objective <j>)
+#   (<j> ^name occlusion-time
+#        ^target-object demo_generic
+#        ^direction min)
+}
