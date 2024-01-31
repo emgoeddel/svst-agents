@@ -51,6 +51,7 @@ sp {pick-up*apply*make-find-trajectories*mast
 -->
    (<cmd> ^find-trajectories <ft>)
    (<ft> ^target <t>
+         ^max-time 10
          ^max-number 30)
    (<t> ^center <c>
         ^orientation <or>
@@ -251,13 +252,36 @@ sp {pick-up*apply*get-final-grasp
         ^id <id>)
 }
 
+############## OPEN GRIPPER ################
+sp {pick-up*propose*open-gripper
+   (state <s> ^name pick-up
+              ^final-pose
+              ^topstate-svs.command <cmd>)
+   (<cmd> -^set-gripper)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name open-gripper)
+}
+
+sp {pick-up*apply*open-gripper
+   (state <s> ^name pick-up
+              ^topstate-svs.command <cmd>
+              ^operator.name open-gripper)
+-->
+   (<cmd> ^set-gripper <sg> )
+   (<sg> ^target 0.10) #open
+}
+
 ############## STRAIGHT LINE IN ################
 
 sp {pick-up*propose*do-straight-line-in
    (state <s> ^name pick-up
               ^final-pose
               ^topstate-svs.command <cmd>)
-   (<cmd> -^straight-line-motion)
+   (<cmd> ^set-gripper <sg>
+         -^straight-line-motion)
+   (<sg> ^target 0.10 #open
+         ^status finished)
 -->
    (<s> ^operator <o> +)
    (<o> ^name do-straight-line-in)
@@ -284,7 +308,7 @@ sp {pick-up*propose*close-gripper
    (state <s> ^name pick-up
               ^topstate-svs.command <cmd>)
    (<cmd> ^straight-line-motion <sl>
-         -^set-gripper)
+         -^set-gripper.target 0.0)
    (<sl> ^status finished)
 -->
    (<s> ^operator <o> +)
@@ -297,7 +321,7 @@ sp {pick-up*apply*close-gripper
               ^operator.name close-gripper)
 -->
    (<cmd> ^set-gripper <sg> )
-   (<sg> ^target 0.0)
+   (<sg> ^target 0.0) #closed
 }
 
 ############## STRAIGHT LINE OUT ################
@@ -306,7 +330,8 @@ sp {pick-up*propose*do-straight-line-out
               ^target-pose
               ^topstate-svs.command <cmd>)
    (<cmd> ^set-gripper <cg>)
-   (<cg> ^status finished)
+   (<cg> ^target 0.0 #closed
+         ^status finished)
 -->
    (<s> ^operator <o> +)
    (<o> ^name do-straight-line-out)

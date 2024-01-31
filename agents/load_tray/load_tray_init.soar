@@ -20,3 +20,22 @@ sp {init-agent*apply*add-name
 -->
    (<s> ^agent-name load-tray)
 }
+
+# Add the objects for loading as an elaboration
+sp {init-agent*elaborate*object-order
+   (state <s> ^superstate nil
+              ^agent-name load-tray)
+-->
+   (<s> ^object-list <ol>)
+   (<ol> ^first tea_box1
+         ^second can_coke1
+         ^third cup_blue1)
+}
+
+# Add a place to keep track of which objects have been loaded
+sp {init-agent*elaborate*done-loading
+   (state <s> ^superstate nil
+              ^agent-name load-tray)
+-->
+   (<s> ^done-loading <d>)
+}

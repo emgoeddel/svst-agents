@@ -2,13 +2,18 @@
 sp {topstate*propose*pick-up
    (state <s> ^superstate nil
               ^agent-name load-tray
-              ^loadable-obj <id>)
+              ^svs.spatial-scene <sc>
+              ^object-list <ol>
+              ^done-loading <d>)
+   (<ol> ^first <oid>)
+   (<d> -^object <oid>)
+   (<sc> ^child.id <oid>)
 -->
    (<s> ^operator <o> + =)
    (<o> ^name pick-up
-        ^object-id <id>)
-#        ^use-objective <j>)
-#   (<j> ^name occlusion-time
-#        ^target-object demo_generic
-#        ^direction min)
+        ^use-objective <j>
+        ^object-id <oid>)
+   (<j> ^name waypoints
+        ^target-object none
+        ^direction min)
 }
