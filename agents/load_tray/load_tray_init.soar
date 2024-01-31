@@ -27,7 +27,7 @@ sp {init-agent*elaborate*object-order
               ^agent-name load-tray)
 -->
    (<s> ^object-list <ol>)
-   (<ol> ^first tea_box1
+   (<ol> ^first cup_glass
          ^second can_coke1
          ^third cup_blue1)
 }
