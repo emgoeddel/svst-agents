@@ -1,0 +1,49 @@
+# Copy superstate operator info to substate
+sp {put-down*elaborate*state
+   (state <s> ^superstate <ss>
+              ^impasse no-change)
+   (<ss> ^operator <o>)
+   (<o> ^name put-down
+        ^object-id <id>
+        ^use-objective <obj>)
+-->
+   (<s> ^name put-down
+        ^target-object <id>
+        ^objective <obj>)
+}
+
+# Use topstate SVS so that commands can actually be executed
+sp {put-down*elaborate*svs
+   (state <s> ^superstate <ss>
+              ^name put-down)
+   (<ss> ^superstate nil
+         ^svs <v>)
+-->
+   (<s> ^topstate-svs <v>)
+}
+
+# Make the grasp target easy to find when it exists
+sp {put-down*elaborate*target-pose-result
+   (state <s> ^name put-down
+              ^topstate-svs.command <cmd>)
+   (<cmd> ^extract_once <eo>)
+   (<eo> ^result <r>
+         ^type grasp_first
+         ^status success)
+   (<r> ^record.value <v>)
+-->
+   (<s> ^target-pose <v>)
+}
+
+# Make the second grasp pose also easy to find
+sp {put-down*elaborate*final-pose-result
+   (state <s> ^name put-down
+              ^topstate-svs.command <cmd>)
+   (<cmd> ^extract_once <eo>)
+   (<eo> ^result <r>
+         ^type grasp_second
+         ^status success)
+   (<r> ^record.value <v>)
+-->
+   (<s> ^final-pose <v>)
+}

@@ -7,6 +7,9 @@ popd
 pushd pick_up
 source pick_up_main.soar
 popd
+pushd put_down
+source put_down_main.soar
+popd
 popd
 
 pushd agents

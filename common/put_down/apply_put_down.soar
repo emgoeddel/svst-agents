@@ -1,0 +1,354 @@
+# If the superstate has impassed on put-down, start the put-down process
+
+############## GRASP FIRST ################
+sp {put-down*propose*get-grasp-target
+   (state <s> ^name put-down
+              ^target-object
+              ^topstate-svs.command <cmd>)
+   (<cmd> -^extract_once.type grasp_first)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name get-grasp-target)
+}
+
+sp {put-down*apply*get-grasp-target
+   (state <s> ^name put-down
+              ^target-object <id>
+              ^topstate-svs.command <cmd>
+              ^operator.name get-grasp-target)
+-->
+   (<cmd> ^extract_once <eo> )
+   (<eo> ^type grasp_first
+         ^a <a>
+         ^frame self)
+   (<a> ^type node
+        ^id <id>)
+}
+
+############## FIND TRAJECTORIES ################
+sp {put-down*propose*make-find-trajectories
+   (state <s> ^name put-down
+              ^topstate-svs.command <cmd>
+              ^target-pose <t>)
+   (<cmd> -^find-trajectories)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name make-find-trajectories)
+}
+
+sp {put-down*apply*make-find-trajectories*mast
+   (state <s> ^name put-down
+              ^topstate-svs.command <cmd>
+              ^target-pose <tp>
+             -^objective none
+              ^operator.name make-find-trajectories)
+   (<tp> ^x <px>
+         ^y <py>
+         ^z <pz>
+         ^roll <rx>
+         ^pitch <ry>
+         ^yaw <rz>)
+-->
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^target <t>
+         ^max-time 10
+         ^max-number 30)
+   (<t> ^center <c>
+        ^orientation <or>
+        ^frame self)
+   (<c> ^x <px>
+        ^y <py>
+        ^z <pz>)
+   (<or> ^x <rx>
+         ^y <ry>
+         ^z <rz>)
+}
+
+sp {put-down*apply*make-find-trajectories*no-mast
+   (state <s> ^name put-down
+              ^topstate-svs.command <cmd>
+              ^target-pose <tp>
+              ^objective none
+              ^operator.name make-find-trajectories)
+   (<tp> ^x <px>
+         ^y <py>
+         ^z <pz>
+         ^roll <rx>
+         ^pitch <ry>
+         ^yaw <rz>)
+-->
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^target <t>
+         ^max-number 3)
+   (<t> ^center <c>
+        ^orientation <or>
+        ^frame self)
+   (<c> ^x <px>
+        ^y <py>
+        ^z <pz>)
+   (<or> ^x <rx>
+         ^y <ry>
+         ^z <rz>)
+}
+
+############## SELECT TRAJECTORY ################
+
+# Let the agent stop a command if needed before doing selection
+sp {put-down*prefer*stop-over-select
+   (state <s> ^name put-down
+              ^operator <op1> +
+              ^operator <op2> +)
+   (<op1> ^name stop-command)
+   (<op2> ^name make-select)
+-->
+   (<s> ^operator <op1> > <op2>)
+}
+
+sp {put-down*propose*make-select
+   (state <s> ^name put-down
+              ^topstate-svs <v>)
+   (<v> ^command <cmd>
+        ^motor.trajectories <t>)
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^id <sid>
+         ^status << stopped complete >> )
+   (<t> ^set <st>)
+   (<st> ^command-id <sid>
+        -^trajectory.selected-by <any>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name make-select
+        ^trajectory-set <sid>)
+}
+
+sp {put-down*apply*make-select
+   (state <s> ^name put-down
+              ^objective <obj> <> none
+              ^topstate-svs <v>
+              ^operator <op>)
+   (<op> ^name make-select
+         ^trajectory-set <sid>)
+   (<obj> ^name <on>
+          ^target-object <to>
+          ^direction <dir>)
+   (<v> ^command <c>)
+-->
+   (<c> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^type select
+           ^objective <on>
+           ^obstacle <to>
+           ^direction <dir>
+           ^number 1)
+}
+
+# This is only so that the evaluation function is called in SVS!
+sp {put-down*apply*make-select*no-mast
+   (state <s> ^name put-down
+              ^objective none
+              ^topstate-svs <v>
+              ^operator <op>)
+   (<op> ^name make-select
+         ^trajectory-set <sid>)
+   (<v> ^command <c>)
+-->
+   (<c> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^type select
+           ^objective waypoints
+           ^number 1)
+}
+
+############## EXEC TRAJECTORY ################
+sp {put-down*propose*make-execute
+   (state <s> ^name put-down
+             -^objective none
+              ^topstate-svs <svs>)
+   (<svs> ^motor.trajectories <t>
+          ^command <cmd>)
+   (<cmd> ^find-trajectories.id <sid>
+         -^execute-trajectory)
+   (<t> ^set <st>)
+   (<st> ^command-id <sid>
+         ^trajectory <tr>)
+   (<tr> ^id <tid>
+         ^selected-by <any>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name make-execute
+        ^trajectory-set <sid>
+        ^trajectory-id <tid>)
+}
+
+sp {put-down*propose*make-execute*no-mast
+   (state <s> ^name put-down
+              ^objective none
+              ^topstate-svs <svs>)
+   (<svs> ^motor.trajectories <t>
+          ^command <cmd>)
+   (<cmd> ^find-trajectories.id <sid>
+         -^execute-trajectory)
+   (<t> ^set <st>)
+   (<st> ^command-id <sid>
+         ^trajectory <tr>)
+   (<tr> ^selected-by waypoints) #Selection not used in this case!
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name make-execute
+        ^trajectory-set <sid>
+        ^trajectory-id 0)
+}
+
+sp {put-down*apply*make-execute
+   (state <s> ^name put-down
+              ^topstate-svs <v>
+              ^operator <op>)
+   (<op> ^name make-execute
+         ^trajectory-set <sid>
+         ^trajectory-id <tid>)
+   (<v> ^command <c>)
+-->
+   (<c> ^execute-trajectory <x>)
+   (<x> ^set-id <sid>
+        ^trajectory-id <tid>)
+}
+
+############## GRASP SECOND ################
+
+sp {put-down*reach-test*halt
+   (state <s> ^name put-down
+              ^superstate <ss>
+              ^topstate-svs.command <cmd>)
+   (<cmd> ^execute-trajectory <x>)
+   (<ss> ^agent-name reach-test)
+   (<x> ^status finished)
+-->
+   (halt)
+}
+
+sp {put-down*propose*get-final-grasp
+   (state <s> ^name put-down
+              ^target-object
+              ^topstate-svs.command <cmd>)
+   (<cmd> ^execute-trajectory <x>
+         -^extract_once.type grasp_second)
+   (<x> ^status finished)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name get-final-grasp)
+}
+
+sp {put-down*apply*get-final-grasp
+   (state <s> ^name put-down
+              ^target-object <id>
+              ^topstate-svs.command <cmd>
+              ^operator.name get-final-grasp)
+-->
+   (<cmd> ^extract_once <eo> )
+   (<eo> ^type grasp_second
+         ^a <a>
+         ^frame self)
+   (<a> ^type node
+        ^id <id>)
+}
+
+############## OPEN GRIPPER ################
+sp {put-down*propose*open-gripper
+   (state <s> ^name put-down
+              ^final-pose
+              ^topstate-svs.command <cmd>)
+   (<cmd> -^set-gripper)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name open-gripper)
+}
+
+sp {put-down*apply*open-gripper
+   (state <s> ^name put-down
+              ^topstate-svs.command <cmd>
+              ^operator.name open-gripper)
+-->
+   (<cmd> ^set-gripper <sg> )
+   (<sg> ^target 0.10) #open
+}
+
+############## STRAIGHT LINE IN ################
+
+sp {put-down*propose*do-straight-line-in
+   (state <s> ^name put-down
+              ^final-pose
+              ^topstate-svs.command <cmd>)
+   (<cmd> ^set-gripper <sg>
+         -^straight-line-motion)
+   (<sg> ^target 0.10 #open
+         ^status finished)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name do-straight-line-in)
+}
+
+sp {put-down*apply*do-straight-line-in
+   (state <s> ^name put-down
+              ^final-pose <p>
+              ^topstate-svs.command <cmd>
+              ^operator.name do-straight-line-in)
+   (<p> ^x <px>
+        ^y <py>
+        ^z <pz>)
+-->
+   (<cmd> ^straight-line-motion <sl> )
+   (<sl> ^target <xyz>)
+   (<xyz> ^x <px>
+          ^y <py>
+          ^z <pz>)
+}
+
+############## CLOSE GRIPPER ################
+sp {put-down*propose*close-gripper
+   (state <s> ^name put-down
+              ^topstate-svs.command <cmd>)
+   (<cmd> ^straight-line-motion <sl>
+         -^set-gripper.target 0.0)
+   (<sl> ^status finished)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name close-gripper)
+}
+
+sp {put-down*apply*close-gripper
+   (state <s> ^name put-down
+              ^topstate-svs.command <cmd>
+              ^operator.name close-gripper)
+-->
+   (<cmd> ^set-gripper <sg> )
+   (<sg> ^target 0.0) #closed
+}
+
+############## STRAIGHT LINE OUT ################
+sp {put-down*propose*do-straight-line-out
+   (state <s> ^name put-down
+              ^target-pose
+              ^topstate-svs.command <cmd>)
+   (<cmd> ^set-gripper <cg>)
+   (<cg> ^target 0.0 #closed
+         ^status finished)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name do-straight-line-out)
+}
+
+sp {put-down*apply*do-straight-line-out
+   (state <s> ^name put-down
+              ^target-pose <p>
+              ^topstate-svs.command <cmd>
+              ^operator.name do-straight-line-out)
+   (<p> ^x <px>
+        ^y <py>
+        ^z <pz>)
+-->
+   (<cmd> ^straight-line-motion <sl> )
+   (<sl> ^target <xyz>)
+   (<xyz> ^x <px>
+          ^y <py>
+          ^z <pz>)
+}

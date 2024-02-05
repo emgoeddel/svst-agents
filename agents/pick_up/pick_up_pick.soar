@@ -34,5 +34,9 @@ sp {topstate*propose*pick-up
    -->
    (<s> ^operator <o> + =)
    (<o> ^name pick-up
-        ^object-id <id>)
+        ^object-id <id>
+        ^use-objective <j>)
+   (<j> ^name occlusion-time
+        ^target-object demo_generic
+        ^direction min)
 }
