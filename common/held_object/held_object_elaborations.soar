@@ -1,0 +1,21 @@
+# Copy superstate operator info to substate
+sp {held-object*elaborate*state
+   (state <s> ^superstate <ss>
+              ^impasse no-change)
+   (<ss> ^operator <o>)
+   (<o> ^name update-held-object
+        ^possible-object <id>)
+-->
+   (<s> ^name held-object
+        ^possible-object <id>)
+}
+
+# Use topstate SVS for updated info
+sp {held-object*elaborate*svs
+   (state <ts> ^superstate nil
+               ^svs <v>)
+   (state <s> ^name held-object)
+-->
+   (<s> ^topstate <ts>
+        ^topstate-svs <v>)
+}

@@ -10,6 +10,9 @@ popd
 pushd put_down
 source put_down_main.soar
 popd
+pushd held_object
+source held_object_main.soar
+popd
 popd
 
 pushd agents

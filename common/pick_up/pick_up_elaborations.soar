@@ -47,3 +47,16 @@ sp {pick-up*elaborate*final-pose-result
 -->
    (<s> ^final-pose <v>)
 }
+
+# Logic for deciding when the pick-up should be done
+sp {pick-up*elaborate*finished-motions
+   (state <s> ^name pick-up
+              ^topstate-svs.command <cmd>)
+   (<cmd> ^straight-line-motion <slo>
+          ^set-gripper <sg>)
+   (<slo> ^status finished)
+   (<sg> ^target 0.0
+         ^status finished)
+-->
+   (<s> ^finished-moving true)
+}

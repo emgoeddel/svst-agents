@@ -1,0 +1,148 @@
+# Test that gripper isn't all the way closed
+#sp {held-obj*propose*test-gripper
+#   (state <s> ^name held-object
+#             -^gripper-closed
+#              ^topstate-svs.motor.joint-state.gripper)
+#-->
+#   (<s> ^operator <o> +)
+#   (<o> ^name test-gripper)
+#}
+#
+## Better test may be to check against object dimensions
+#sp {held-obj*apply*test-gripper*closed
+#   (state <s> ^name held-object
+#              ^operator.name test-gripper
+#              ^topstate-svs.motor.joint-state.gripper <g> < 0.001)
+#-->
+#   (<s> ^gripper-closed true)
+#}
+#
+#sp {held-obj*apply*test-gripper*open
+#   (state <s> ^name held-object
+#              ^operator.name test-gripper
+#              ^topstate-svs.motor.joint-state.gripper <g> >= 0.001)
+#-->
+#   (<s> ^gripper-closed false)
+#}
+
+# Test that object pose is plausible for being held
+sp {held-obj*propose*query-dist
+   (state <s> ^name held-object
+             -^queried-distances)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name query-dist)
+}
+
+sp {held-obj*apply*query-dist
+   (state <s> ^name held-object
+              ^possible-object <oid>
+              ^operator.name query-dist
+              ^topstate-svs.command <cmd>)
+-->
+   (<s> ^queried-distances true)
+   (<cmd> ^extract_once <eor>
+          ^extract_once <eol>)
+   (<eor> ^type distance
+          ^a <oar>
+          ^b <obr>)
+   (<oar> ^type node ^id r_gripper_finger_link)
+   (<obr> ^type node ^id <oid>)
+   (<eol> ^type distance
+          ^a <oal>
+          ^b <obl>)
+   (<oal> ^type node ^id l_gripper_finger_link)
+   (<obl> ^type node ^id <oid>)
+}
+
+sp {held-obj*propose*decide-dist
+   (state <s> ^name held-object
+             -^distance-plausible
+              ^queried-distances
+              ^topstate-svs.command <cmd>)
+   (<cmd> ^extract_once <eor> <> <eol>
+          ^extract_once <eol> <> <eor>)
+   (<eor> ^type distance
+          ^status success
+          ^a <rf>
+          ^result.record.value <dr>)
+   (<rf> ^id r_gripper_finger_link)
+   (<eol> ^type distance
+          ^status success
+          ^a <lf>
+          ^result.record.value <dl>)
+   (<lf> ^id l_gripper_finger_link)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name decide-dist
+        ^right-dist <dr>
+        ^left-dist <dl>
+        ^dist-diff (abs (- <dr> <dl>)))
+}
+
+sp {held-obj*apply*decide-dist*held
+   (state <s> ^name held-object
+              ^operator <o>)
+   (<o> ^name decide-dist
+        ^right-dist <dr> <= 0.1
+        ^left-dist <dl> <= 0.1
+        ^dist-diff <dd> <= 0.02)
+-->
+   (<s> ^distance-plausible true)
+}
+
+sp {held-obj*apply*decide-dist*not-held*right
+   (state <s> ^name held-object
+              ^operator <o>)
+   (<o> ^name decide-dist
+        ^right-dist <dr> > 0.1)
+-->
+   (<s> ^distance-plausible false)
+}
+
+sp {held-obj*apply*decide-dist*not-held*left
+   (state <s> ^name held-object
+              ^operator <o>)
+   (<o> ^name decide-dist
+        ^left-dist <dl> > 0.1)
+-->
+   (<s> ^distance-plausible false)
+}
+
+sp {held-obj*apply*decide-dist*not-held*uneven
+   (state <s> ^name held-object
+              ^operator <o>)
+   (<o> ^name decide-dist
+        ^dist-diff <dd> > 0.02)
+-->
+   (<s> ^distance-plausible false)
+}
+
+# Make result
+sp {held-object*propose*return-result
+   (state <s> ^name held-object
+              ^distance-plausible)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name return)
+}
+
+sp {held-object*apply*return-result*holding
+   (state <s> ^name held-object
+              ^topstate <ts>
+              ^possible-object <oid>
+              ^operator.name return
+              ^distance-plausible true)
+-->
+   (<ts> ^held-object <oid>)
+}
+
+sp {held-object*apply*return-result*not-holding
+   (state <s> ^name held-object
+              ^topstate <ts>
+              ^possible-object <oid>
+              ^operator.name return
+              ^distance-plausible false)
+-->
+   (<ts> ^held-object none)
+}

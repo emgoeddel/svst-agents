@@ -4,7 +4,8 @@ sp {topstate*propose*pick-up
               ^agent-name load-tray
               ^svs.spatial-scene <sc>
               ^object-list <ol>
-              ^done-loading <d>)
+              ^done-loading <d>
+             -^held-object)
    (<ol> ^first <oid>)
    (<d> -^object <oid>)
    (<sc> ^child.id <oid>)

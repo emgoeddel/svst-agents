@@ -279,7 +279,8 @@ sp {pick-up*propose*do-straight-line-in
               ^final-pose
               ^topstate-svs.command <cmd>)
    (<cmd> ^set-gripper <sg>
-         -^straight-line-motion)
+         -^straight-line-motion
+         -^set-gripper.target 0.0)
    (<sg> ^target 0.10 #open
          ^status finished)
 -->
@@ -319,8 +320,10 @@ sp {pick-up*apply*close-gripper
    (state <s> ^name pick-up
               ^topstate-svs.command <cmd>
               ^operator.name close-gripper)
+   (<cmd> ^straight-line-motion <sli>)
 -->
-   (<cmd> ^set-gripper <sg> )
+   (<cmd> ^set-gripper <sg>
+          ^straight-line-motion <sli> -)
    (<sg> ^target 0.0) #closed
 }
 
@@ -328,6 +331,7 @@ sp {pick-up*apply*close-gripper
 sp {pick-up*propose*do-straight-line-out
    (state <s> ^name pick-up
               ^target-pose
+             -^finished-moving
               ^topstate-svs.command <cmd>)
    (<cmd> ^set-gripper <cg>)
    (<cg> ^target 0.0 #closed
@@ -351,4 +355,16 @@ sp {pick-up*apply*do-straight-line-out
    (<xyz> ^x <px>
           ^y <py>
           ^z <pz>)
+}
+
+############## CHECK SUCCESS ################
+sp {pick-up*propose*update-held-object
+   (state <s> ^name pick-up
+              ^target-object <oid>
+              ^target-pose
+              ^finished-moving)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name update-held-object
+        ^possible-object <oid>)
 }
