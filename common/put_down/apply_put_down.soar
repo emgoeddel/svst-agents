@@ -49,11 +49,13 @@ sp {put-down*apply*make-find-trajectories*mast
    (state <s> ^name put-down
               ^topstate-svs.command <cmd>
               ^planning-target <pt>
+              ^held-object <oid>
              -^objective none
               ^operator.name make-find-trajectories)
 -->
    (<cmd> ^find-trajectories <ft>)
    (<ft> ^target <pt>
+         ^holding-object <oid>
          ^max-time 10
          ^max-number 30)
 }
@@ -62,11 +64,13 @@ sp {put-down*apply*make-find-trajectories*no-mast
    (state <s> ^name put-down
               ^topstate-svs.command <cmd>
               ^planning-target <pt>
+              ^held-object <oid>
               ^objective none
               ^operator.name make-find-trajectories)
 -->
    (<cmd> ^find-trajectories <ft>)
    (<ft> ^target <pt>
+         ^holding-object <oid>
          ^max-number 3)
 }
 
