@@ -20,7 +20,7 @@ sp {topstate*propose*pick-up
 }
 
 # Propose to clean up old commands once pick-up is over
-sp {topstate*propose*clean-up
+sp {topstate*propose*clean-up-pick
    (state <s> ^superstate nil
               ^agent-name load-tray
               ^commands-present

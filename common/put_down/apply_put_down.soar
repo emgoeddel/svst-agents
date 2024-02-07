@@ -196,51 +196,70 @@ sp {put-down*apply*make-execute
         ^trajectory-id <tid>)
 }
 
-############## GRASP SECOND ################
+############## DROP POSE ################
 
-sp {put-down*reach-test*halt
-   (state <s> ^name put-down
-              ^superstate <ss>
-              ^topstate-svs.command <cmd>)
-   (<cmd> ^execute-trajectory <x>)
-   (<ss> ^agent-name reach-test)
-   (<x> ^status finished)
--->
-   (halt)
-}
-
-sp {put-down*propose*get-final-grasp
+sp {put-down*propose*get-drop-pose
    (state <s> ^name put-down
               ^target-object
+             -^drop-movement
               ^topstate-svs.command <cmd>)
-   (<cmd> ^execute-trajectory <x>
-         -^extract_once.type grasp_second)
+   (<cmd> ^execute-trajectory <x>)
    (<x> ^status finished)
 -->
    (<s> ^operator <o> +)
-   (<o> ^name get-final-grasp)
+   (<o> ^name get-drop-pose)
 }
 
-sp {put-down*apply*get-final-grasp
+# hard-coded target for initial tray test!
+sp {put-down*apply*get-drop-pose
    (state <s> ^name put-down
               ^target-object <id>
               ^topstate-svs.command <cmd>
-              ^operator.name get-final-grasp)
+              ^operator.name get-drop-pose)
 -->
-   (<cmd> ^extract_once <eo> )
-   (<eo> ^type grasp_second
-         ^a <a>
-         ^frame self)
-   (<a> ^type node
-        ^id <id>)
+   (<s> ^drop-movement <t>)
+   (<t> ^x 0.0
+        ^y 0.0
+        ^z -0.05)
+}
+
+############## STRAIGHT LINE IN ################
+
+sp {put-down*propose*do-straight-line-in
+   (state <s> ^name put-down
+              ^drop-movement
+              ^topstate-svs.command <cmd>)
+   (<cmd> -^straight-line-motion
+          -^set-gripper)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name do-straight-line-in)
+}
+
+sp {put-down*apply*do-straight-line-in
+   (state <s> ^name put-down
+              ^drop-movement <t>
+              ^topstate-svs.command <cmd>
+              ^operator.name do-straight-line-in)
+   (<t> ^x <px>
+        ^y <py>
+        ^z <pz>)
+-->
+   (<cmd> ^straight-line-motion <sl> )
+   (<sl> ^target <xyz>
+         ^type relative)
+   (<xyz> ^x <px>
+          ^y <py>
+          ^z <pz>)
 }
 
 ############## OPEN GRIPPER ################
 sp {put-down*propose*open-gripper
    (state <s> ^name put-down
-              ^final-pose
               ^topstate-svs.command <cmd>)
-   (<cmd> -^set-gripper)
+   (<cmd> ^straight-line-motion <sli>
+         -^set-gripper)
+   (<sli> ^status finished)
 -->
    (<s> ^operator <o> +)
    (<o> ^name open-gripper)
@@ -250,49 +269,55 @@ sp {put-down*apply*open-gripper
    (state <s> ^name put-down
               ^topstate-svs.command <cmd>
               ^operator.name open-gripper)
+   (<cmd> ^straight-line-motion <sli>)
 -->
-   (<cmd> ^set-gripper <sg> )
+   (<cmd> ^set-gripper <sg>
+          ^straight-line-motion <sli> -)
    (<sg> ^target 0.10) #open
 }
 
-############## STRAIGHT LINE IN ################
-
-sp {put-down*propose*do-straight-line-in
+############## STRAIGHT LINE OUT ################
+sp {put-down*propose*do-straight-line-out
    (state <s> ^name put-down
-              ^final-pose
+              ^drop-movement
               ^topstate-svs.command <cmd>)
-   (<cmd> ^set-gripper <sg>
+   (<cmd> ^set-gripper <cg>
          -^straight-line-motion)
-   (<sg> ^target 0.10 #open
+   (<cg> ^target 0.10 #open
          ^status finished)
 -->
    (<s> ^operator <o> +)
-   (<o> ^name do-straight-line-in)
+   (<o> ^name do-straight-line-out)
 }
 
-sp {put-down*apply*do-straight-line-in
+sp {put-down*apply*do-straight-line-out
    (state <s> ^name put-down
-              ^final-pose <p>
+              ^drop-movement <dm>
               ^topstate-svs.command <cmd>
-              ^operator.name do-straight-line-in)
-   (<p> ^x <px>
-        ^y <py>
-        ^z <pz>)
+              ^operator.name do-straight-line-out)
+   (<dm> ^x <px>
+         ^y <py>
+         ^z <pz>)
 -->
    (<cmd> ^straight-line-motion <sl> )
-   (<sl> ^target <xyz>)
+   (<sl> ^target <xyz>
+         ^type relative)
    (<xyz> ^x <px>
           ^y <py>
-          ^z <pz>)
+          ^z (+ 0.02 (- <pz>)))
 }
 
 ############## CLOSE GRIPPER ################
 sp {put-down*propose*close-gripper
    (state <s> ^name put-down
+             -^finished-moving
               ^topstate-svs.command <cmd>)
    (<cmd> ^straight-line-motion <sl>
+          ^set-gripper <og>
          -^set-gripper.target 0.0)
    (<sl> ^status finished)
+   (<og> ^target 0.10
+         ^status finished)
 -->
    (<s> ^operator <o> +)
    (<o> ^name close-gripper)
@@ -307,31 +332,13 @@ sp {put-down*apply*close-gripper
    (<sg> ^target 0.0) #closed
 }
 
-############## STRAIGHT LINE OUT ################
-sp {put-down*propose*do-straight-line-out
+############## UPDATE HELD ################
+sp {put-down*propose*update-held-object
    (state <s> ^name put-down
-              ^target-pose
-              ^topstate-svs.command <cmd>)
-   (<cmd> ^set-gripper <cg>)
-   (<cg> ^target 0.0 #closed
-         ^status finished)
+              ^held-object <oid>
+              ^finished-moving)
 -->
    (<s> ^operator <o> +)
-   (<o> ^name do-straight-line-out)
-}
-
-sp {put-down*apply*do-straight-line-out
-   (state <s> ^name put-down
-              ^target-pose <p>
-              ^topstate-svs.command <cmd>
-              ^operator.name do-straight-line-out)
-   (<p> ^x <px>
-        ^y <py>
-        ^z <pz>)
--->
-   (<cmd> ^straight-line-motion <sl> )
-   (<sl> ^target <xyz>)
-   (<xyz> ^x <px>
-          ^y <py>
-          ^z <pz>)
+   (<o> ^name update-held-object
+        ^possible-object <oid>)
 }

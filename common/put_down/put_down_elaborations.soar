@@ -23,3 +23,16 @@ sp {put-down*elaborate*svs
 -->
    (<s> ^topstate-svs <v>)
 }
+
+# Logic for deciding when the pick-up should be done
+sp {put-down*elaborate*finished-motions
+   (state <s> ^name put-down
+              ^topstate-svs.command <cmd>)
+   (<cmd> ^straight-line-motion <slo>
+          ^set-gripper <sg>)
+   (<slo> ^status finished)
+   (<sg> ^target 0.0
+         ^status finished)
+-->
+   (<s> ^finished-moving true)
+}
