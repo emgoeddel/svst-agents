@@ -4,11 +4,13 @@ sp {put-down*elaborate*state
               ^impasse no-change)
    (<ss> ^operator <o>)
    (<o> ^name put-down
-        ^object-id <id>
+        ^object-id <oid>
+        ^target-id <tid>
         ^use-objective <obj>)
 -->
    (<s> ^name put-down
-        ^target-object <id>
+        ^held-object <oid>
+        ^target-object <tid>
         ^objective <obj>)
 }
 
@@ -20,30 +22,4 @@ sp {put-down*elaborate*svs
          ^svs <v>)
 -->
    (<s> ^topstate-svs <v>)
-}
-
-# Make the grasp target easy to find when it exists
-sp {put-down*elaborate*target-pose-result
-   (state <s> ^name put-down
-              ^topstate-svs.command <cmd>)
-   (<cmd> ^extract_once <eo>)
-   (<eo> ^result <r>
-         ^type grasp_first
-         ^status success)
-   (<r> ^record.value <v>)
--->
-   (<s> ^target-pose <v>)
-}
-
-# Make the second grasp pose also easy to find
-sp {put-down*elaborate*final-pose-result
-   (state <s> ^name put-down
-              ^topstate-svs.command <cmd>)
-   (<cmd> ^extract_once <eo>)
-   (<eo> ^result <r>
-         ^type grasp_second
-         ^status success)
-   (<r> ^record.value <v>)
--->
-   (<s> ^final-pose <v>)
 }

@@ -1,4 +1,4 @@
-# Test that gripper isn't all the way closed
+# Test that gripper isn't all the way closed - does NOT work
 #sp {held-obj*propose*test-gripper
 #   (state <s> ^name held-object
 #             -^gripper-closed

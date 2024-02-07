@@ -19,3 +19,5 @@ pushd agents
 pushd load_tray
 source load_tray_init.soar
 source load_tray_pick.soar
+source load_tray_put.soar
+source load_tray_apply_cleanup.soar

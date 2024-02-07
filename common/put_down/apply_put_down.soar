@@ -1,35 +1,44 @@
 # If the superstate has impassed on put-down, start the put-down process
 
-############## GRASP FIRST ################
-sp {put-down*propose*get-grasp-target
+############## TARGET ################
+sp {put-down*propose*query-target-center
    (state <s> ^name put-down
               ^target-object
+             -^planning-target
               ^topstate-svs.command <cmd>)
-   (<cmd> -^extract_once.type grasp_first)
 -->
    (<s> ^operator <o> +)
-   (<o> ^name get-grasp-target)
+   (<o> ^name get-target-center)
 }
 
-sp {put-down*apply*get-grasp-target
+# hard-coded target for initial tray test!
+sp {put-down*apply*query-target-center
    (state <s> ^name put-down
               ^target-object <id>
               ^topstate-svs.command <cmd>
-              ^operator.name get-grasp-target)
+              ^operator.name get-target-center)
 -->
-   (<cmd> ^extract_once <eo> )
-   (<eo> ^type grasp_first
-         ^a <a>
-         ^frame self)
-   (<a> ^type node
-        ^id <id>)
+   (<s> ^planning-target <t>)
+   (<t> ^center <c>
+        ^size <sz>
+        ^orientation <rpy>
+        ^frame world)
+   (<c> ^x 0.755
+        ^y 0.05
+        ^z 0.88)
+   (<sz> ^x 0.22
+         ^y 0.32
+         ^z 0.01)
+   (<rpy> ^x 0
+          ^y 1.5708
+          ^z 0)
 }
 
 ############## FIND TRAJECTORIES ################
 sp {put-down*propose*make-find-trajectories
    (state <s> ^name put-down
               ^topstate-svs.command <cmd>
-              ^target-pose <t>)
+              ^planning-target)
    (<cmd> -^find-trajectories)
 -->
    (<s> ^operator <o> +)
@@ -39,56 +48,26 @@ sp {put-down*propose*make-find-trajectories
 sp {put-down*apply*make-find-trajectories*mast
    (state <s> ^name put-down
               ^topstate-svs.command <cmd>
-              ^target-pose <tp>
+              ^planning-target <pt>
              -^objective none
               ^operator.name make-find-trajectories)
-   (<tp> ^x <px>
-         ^y <py>
-         ^z <pz>
-         ^roll <rx>
-         ^pitch <ry>
-         ^yaw <rz>)
 -->
    (<cmd> ^find-trajectories <ft>)
-   (<ft> ^target <t>
+   (<ft> ^target <pt>
          ^max-time 10
          ^max-number 30)
-   (<t> ^center <c>
-        ^orientation <or>
-        ^frame self)
-   (<c> ^x <px>
-        ^y <py>
-        ^z <pz>)
-   (<or> ^x <rx>
-         ^y <ry>
-         ^z <rz>)
 }
 
 sp {put-down*apply*make-find-trajectories*no-mast
    (state <s> ^name put-down
               ^topstate-svs.command <cmd>
-              ^target-pose <tp>
+              ^planning-target <pt>
               ^objective none
               ^operator.name make-find-trajectories)
-   (<tp> ^x <px>
-         ^y <py>
-         ^z <pz>
-         ^roll <rx>
-         ^pitch <ry>
-         ^yaw <rz>)
 -->
    (<cmd> ^find-trajectories <ft>)
-   (<ft> ^target <t>
+   (<ft> ^target <pt>
          ^max-number 3)
-   (<t> ^center <c>
-        ^orientation <or>
-        ^frame self)
-   (<c> ^x <px>
-        ^y <py>
-        ^z <pz>)
-   (<or> ^x <rx>
-         ^y <ry>
-         ^z <rz>)
 }
 
 ############## SELECT TRAJECTORY ################

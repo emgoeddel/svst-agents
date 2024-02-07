@@ -1,0 +1,22 @@
+# Propose to move the held-object to the tray
+sp {topstate*propose*put-down
+   (state <s> ^superstate nil
+              ^agent-name load-tray
+              ^svs <v>
+              ^object-list <ol>
+              ^done-loading <d>
+              ^held-object <oid>
+              ^pickup-complete <oid>)
+   (<ol> ^first <oid>)
+   (<d> -^object <oid>)
+   (<v> ^spatial-scene.child.id <oid>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name put-down
+        ^use-objective <j>
+        ^object-id <oid>
+        ^target-id grey_tray1)
+   (<j> ^name waypoints
+        ^target-object none
+        ^direction min)
+}
