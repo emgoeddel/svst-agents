@@ -24,6 +24,45 @@ sp {put-down*elaborate*svs
    (<s> ^topstate-svs <v>)
 }
 
+# Make the target area easy to find
+sp {put-down*elaborate*target-area-result
+   (state <s> ^name put-down
+              ^topstate-svs.command <cmd>)
+   (<cmd> ^extract_once <eog>
+          ^extract_once <eot>)
+   (<eog> ^result <gr>
+          ^type grasp_first
+          ^status success)
+   (<eot> ^result <tr>
+          ^type put_down_area
+          ^status success)
+   (<gr> ^record.value <gv>)
+   (<gv> ^roll <gro>
+         ^pitch <gpi>
+         ^yaw <gya>)
+   (<tr> ^record.value <tv>)
+   (<tv> ^x <cx>
+         ^y <cy>
+         ^z <cz>
+         ^roll <ax>
+         ^pitch <ay>
+         ^yaw <az>) # see note in filter about big hack!
+-->
+   (<s> ^target-area <ta>)
+   (<ta> ^center <c>
+         ^dimensions <d>
+         ^gripper-orientation <g>)
+   (<c> ^x <cx>
+        ^y <cy>
+        ^z <cz>)
+   (<d> ^x <ax>
+        ^y <ay>
+        ^z <az>)
+   (<g> ^roll <gro>
+        ^pitch <gpi>
+        ^yaw <gya>)
+}
+
 # Logic for deciding when the pick-up should be done
 sp {put-down*elaborate*finished-motions
    (state <s> ^name put-down

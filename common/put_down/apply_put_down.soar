@@ -1,44 +1,54 @@
 # If the superstate has impassed on put-down, start the put-down process
 
 ############## TARGET ################
-sp {put-down*propose*query-target-center
+sp {put-down*propose*get-put-down-target
    (state <s> ^name put-down
               ^target-object
-             -^planning-target
+             -^target-area
               ^topstate-svs.command <cmd>)
 -->
    (<s> ^operator <o> +)
-   (<o> ^name get-target-center)
+   (<o> ^name get-put-down-target)
 }
 
-# hard-coded target for initial tray test!
-sp {put-down*apply*query-target-center
+sp {put-down*apply*get-put-down-target*orientation
    (state <s> ^name put-down
-              ^target-object <id>
+              ^held-object <h>
+              ^target-object <t>
               ^topstate-svs.command <cmd>
-              ^operator.name get-target-center)
+              ^operator.name get-put-down-target)
 -->
-   (<s> ^planning-target <t>)
-   (<t> ^center <c>
-        ^size <sz>
-        ^orientation <rpy>
-        ^frame world)
-   (<c> ^x 0.755
-        ^y 0.05
-        ^z 0.88)
-   (<sz> ^x 0.22
-         ^y 0.32
-         ^z 0.01)
-   (<rpy> ^x 0
-          ^y 1.5708
-          ^z 0)
+   (<cmd> ^extract_once <eo>)
+   (<eo> ^type grasp_first
+         ^a <a>
+         ^frame self)
+   (<a> ^type node
+        ^id <h>)
+}
+
+sp {put-down*apply*get-put-down-target*area
+   (state <s> ^name put-down
+              ^held-object <h>
+              ^target-object <t>
+              ^topstate-svs.command <cmd>
+              ^operator.name get-put-down-target)
+-->
+   (<cmd> ^extract_once <eo>)
+   (<eo> ^type put_down_area
+         ^holding <hn>
+         ^target <tn>
+         ^frame self)
+   (<hn> ^type node
+         ^id <h>)
+   (<tn> ^type node
+         ^id <t>)
 }
 
 ############## FIND TRAJECTORIES ################
 sp {put-down*propose*make-find-trajectories
    (state <s> ^name put-down
               ^topstate-svs.command <cmd>
-              ^planning-target)
+              ^target-area)
    (<cmd> -^find-trajectories)
 -->
    (<s> ^operator <o> +)
@@ -48,16 +58,29 @@ sp {put-down*propose*make-find-trajectories
 sp {put-down*apply*make-find-trajectories*mast
    (state <s> ^name put-down
               ^topstate-svs.command <cmd>
-              ^planning-target <pt>
+              ^target-area <ta>
               ^held-object <oid>
              -^objective none
               ^operator.name make-find-trajectories)
+   (<ta> ^center <c>
+         ^dimensions <d>
+         ^gripper-orientation <go>)
+   (<go> ^roll <gro>
+         ^pitch <gpi>
+         ^yaw <gya>)
 -->
    (<cmd> ^find-trajectories <ft>)
    (<ft> ^target <pt>
          ^holding-object <oid>
          ^max-time 10
          ^max-number 30)
+   (<pt> ^center <c>
+         ^size <d>
+         ^orientation <or>
+         ^frame self)
+   (<or> ^x <gro>
+         ^y <gpi>
+         ^z <gya>)
 }
 
 sp {put-down*apply*make-find-trajectories*no-mast
@@ -111,7 +134,7 @@ sp {put-down*apply*make-select
               ^operator <op>)
    (<op> ^name make-select
          ^trajectory-set <sid>)
-   (<obj> ^name <on>
+   (<obj> ^name <on> <> centrality
           ^target-object <to>
           ^direction <dir>)
    (<v> ^command <c>)
@@ -121,6 +144,30 @@ sp {put-down*apply*make-select
            ^type select
            ^objective <on>
            ^obstacle <to>
+           ^direction <dir>
+           ^number 1)
+}
+
+sp {put-down*apply*make-select*centrality
+   (state <s> ^name put-down
+              ^objective <obj>
+              ^topstate-svs <v>
+              ^target-area <ta>
+              ^operator <op>)
+   (<op> ^name make-select
+         ^trajectory-set <sid>)
+   (<obj> ^name centrality
+          ^direction <dir>)
+   (<ta> ^center <tc>
+         ^dimensions <td>)
+   (<v> ^command <c>)
+-->
+   (<c> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^type select
+           ^objective centrality
+           ^area-center <tc>
+           ^area-dimensions <td>
            ^direction <dir>
            ^number 1)
 }
