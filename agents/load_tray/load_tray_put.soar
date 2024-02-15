@@ -1,5 +1,5 @@
-# Propose to move the held-object to the tray
-sp {topstate*propose*put-down
+# Propose to move the first held-object to the tray
+sp {topstate*propose*put-down*first
    (state <s> ^superstate nil
               ^agent-name load-tray
               ^svs <v>
@@ -16,7 +16,65 @@ sp {topstate*propose*put-down
         ^use-objective <j>
         ^object-id <oid>
         ^target-id grey_tray1)
-   (<j> ^name waypoints
+#    (<j> ^name waypoints
+#         ^target-object none
+#         ^direction min)
+   (<j> ^name centrality
         ^target-object none
-        ^direction min)
+        ^direction max)
+}
+
+# Propose to move the second held-object to the tray
+sp {topstate*propose*put-down*second
+   (state <s> ^superstate nil
+              ^agent-name load-tray
+              ^svs <v>
+              ^object-list <ol>
+              ^done-loading <d>
+              ^held-object <oid>
+              ^pickup-complete <oid>)
+   (<ol> ^second <oid>
+         ^first <fo>)
+   (<d> -^object <oid>
+         ^object <fo>)
+   (<v> ^spatial-scene.child.id <oid>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name put-down
+        ^use-objective <j>
+        ^object-id <oid>
+        ^target-id grey_tray1)
+    (<j> ^name waypoints
+         ^target-object none
+         ^direction min)
+#   (<j> ^name centrality
+#        ^target-object none
+#        ^direction max)
+}
+
+# Propose to clean up old commands once put-down is over
+sp {topstate*propose*clean-up-put
+   (state <s> ^superstate nil
+              ^agent-name load-tray
+              ^commands-present
+              ^done-loading <d>
+              ^pickup-complete <oid>
+              ^held-object none)
+   (<d> -^object <oid>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name clean-up)
+}
+
+# Use this to also note that loading the object is finished
+sp {topstate*apply*clean-up*putdown-complete
+   (state <s> ^superstate nil
+              ^agent-name load-tray
+              ^pickup-complete <oid>
+              ^done-loading <d>
+              ^held-object none
+              ^operator.name clean-up)
+-->
+   (<s> ^pickup-complete <oid> -)
+   (<d> ^object <oid>)
 }

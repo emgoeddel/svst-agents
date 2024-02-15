@@ -257,17 +257,17 @@ sp {put-down*propose*get-drop-pose
    (<o> ^name get-drop-pose)
 }
 
-# hard-coded target for initial tray test!
 sp {put-down*apply*get-drop-pose
    (state <s> ^name put-down
-              ^target-object <id>
+              ^held-object <id>
               ^topstate-svs.command <cmd>
               ^operator.name get-drop-pose)
 -->
-   (<s> ^drop-movement <t>)
-   (<t> ^x 0.0
-        ^y 0.0
-        ^z -0.05)
+    (<cmd> ^extract_once <eo>)
+    (<eo> ^type grasp_vector
+          ^a <a>)
+    (<a> ^type node
+         ^id <id>)
 }
 
 ############## STRAIGHT LINE IN ################
@@ -351,7 +351,7 @@ sp {put-down*apply*do-straight-line-out
          ^type relative)
    (<xyz> ^x <px>
           ^y <py>
-          ^z (+ 0.02 (- <pz>)))
+          ^z (+ 0.01 (- <pz>)))
 }
 
 ############## CLOSE GRIPPER ################

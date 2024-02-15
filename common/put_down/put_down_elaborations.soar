@@ -63,6 +63,19 @@ sp {put-down*elaborate*target-area-result
         ^yaw <gya>)
 }
 
+# Make the first-to-second vector easy to find
+sp {put-down*elaborate*vector-result
+   (state <s> ^name put-down
+              ^topstate-svs.command <cmd>)
+   (<cmd> ^extract_once <eo>)
+   (<eo> ^result <r>
+         ^type grasp_vector
+         ^status success)
+   (<r> ^record.value <v>)
+-->
+   (<s> ^drop-movement <v>)
+}
+
 # Logic for deciding when the pick-up should be done
 sp {put-down*elaborate*finished-motions
    (state <s> ^name put-down

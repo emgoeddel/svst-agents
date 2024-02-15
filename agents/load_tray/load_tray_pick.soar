@@ -1,5 +1,5 @@
-# Propose to pick up an object to put on the tray
-sp {topstate*propose*pick-up
+# Propose to pick up the first object to put on the tray
+sp {topstate*propose*pick-up*first
    (state <s> ^superstate nil
               ^agent-name load-tray
               ^svs.spatial-scene <sc>
@@ -15,7 +15,30 @@ sp {topstate*propose*pick-up
         ^use-objective <j>
         ^object-id <oid>)
    (<j> ^name waypoints
-        ^target-object none
+        ^target-object <oid>
+        ^direction min)
+}
+
+# Propose to pick up the second object to put on the tray
+sp {topstate*propose*pick-up*second
+   (state <s> ^superstate nil
+              ^agent-name load-tray
+              ^svs.spatial-scene <sc>
+              ^object-list <ol>
+              ^done-loading <d>
+              ^held-object none)
+   (<ol> ^second <oid>
+         ^first <fo>)
+   (<d> -^object <oid>
+         ^object <fo>)
+   (<sc> ^child.id <oid>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name pick-up
+        ^use-objective <j>
+        ^object-id <oid>)
+   (<j> ^name waypoints
+        ^target-object <oid>
         ^direction min)
 }
 
@@ -24,10 +47,8 @@ sp {topstate*propose*clean-up-pick
    (state <s> ^superstate nil
               ^agent-name load-tray
               ^commands-present
-              ^object-list <ol>
               ^done-loading <d>
-              ^held-object <oid>)
-   (<ol> ^first <oid>)
+              ^held-object <oid> { <oid> <> none })
    (<d> -^object <oid>)
 -->
    (<s> ^operator <o> +)
@@ -38,7 +59,7 @@ sp {topstate*propose*clean-up-pick
 sp {topstate*apply*clean-up*pickup-complete
    (state <s> ^superstate nil
               ^agent-name load-tray
-              ^held-object <oid>
+              ^held-object <oid> { <oid> <> none }
               ^operator.name clean-up)
 -->
    (<s> ^pickup-complete <oid>)

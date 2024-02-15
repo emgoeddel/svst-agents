@@ -60,8 +60,8 @@ sp {held-obj*propose*decide-dist
              -^distance-plausible
               ^queried-distances
               ^topstate-svs.command <cmd>)
-   (<cmd> ^extract_once <eor> <> <eol>
-          ^extract_once <eol> <> <eor>)
+   (<cmd> ^extract_once <eor>
+          ^extract_once <eol>)
    (<eor> ^type distance
           ^status success
           ^a <rf>
@@ -84,9 +84,9 @@ sp {held-obj*apply*decide-dist*held
    (state <s> ^name held-object
               ^operator <o>)
    (<o> ^name decide-dist
-        ^right-dist <dr> <= 0.1
-        ^left-dist <dl> <= 0.1
-        ^dist-diff <dd> <= 0.02)
+        ^right-dist { <dr> <= 0.1 }
+        ^left-dist { <dl> <= 0.1 }
+        ^dist-diff { <dd> <= 0.02 })
 -->
    (<s> ^distance-plausible true)
 }
@@ -95,7 +95,7 @@ sp {held-obj*apply*decide-dist*not-held*right
    (state <s> ^name held-object
               ^operator <o>)
    (<o> ^name decide-dist
-        ^right-dist <dr> > 0.1)
+        ^right-dist { <dr> > 0.1})
 -->
    (<s> ^distance-plausible false)
 }
@@ -137,6 +137,17 @@ sp {held-object*apply*return-result*holding
    (<ts> ^held-object <oid>)
 }
 
+sp {held-object*apply*return-result*remove-none
+   (state <s> ^name held-object
+              ^topstate <ts>
+              ^possible-object <oid>
+              ^operator.name return
+              ^distance-plausible true)
+   (<ts> ^held-object none)
+-->
+   (<ts> ^held-object none -)
+}
+
 sp {held-object*apply*return-result*not-holding
    (state <s> ^name held-object
               ^topstate <ts>
@@ -145,4 +156,16 @@ sp {held-object*apply*return-result*not-holding
               ^distance-plausible false)
 -->
    (<ts> ^held-object none)
+}
+
+# also remove previous held-object if there was one
+sp {held-object*apply*return-result*remove-old
+   (state <s> ^name held-object
+              ^topstate <ts>
+              ^possible-object <oid>
+              ^operator.name return
+              ^distance-plausible false)
+   (<ts> ^held-object <pr>)
+-->
+   (<ts> ^held-object <pr> -)
 }
