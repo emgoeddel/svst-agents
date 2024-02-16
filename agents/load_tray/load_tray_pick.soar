@@ -26,10 +26,37 @@ sp {topstate*propose*pick-up*second
               ^svs.spatial-scene <sc>
               ^object-list <ol>
               ^done-loading <d>
-              ^held-object none)
+              ^held-object none
+             -^pickup-complete <oid>)
    (<ol> ^second <oid>
          ^first <fo>)
    (<d> -^object <oid>
+         ^object <fo>)
+   (<sc> ^child.id <oid>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name pick-up
+        ^use-objective <j>
+        ^object-id <oid>)
+   (<j> ^name waypoints
+        ^target-object <oid>
+        ^direction min)
+}
+
+# Propose to pick up the third object to put on the tray
+sp {topstate*propose*pick-up*third
+   (state <s> ^superstate nil
+              ^agent-name load-tray
+              ^svs.spatial-scene <sc>
+              ^object-list <ol>
+              ^done-loading <d>
+              ^held-object none
+             -^pickup-complete <oid>)
+   (<ol> ^third <oid>
+         ^second <so>
+         ^first <fo>)
+   (<d> -^object <oid>
+         ^object <so>
          ^object <fo>)
    (<sc> ^child.id <oid>)
 -->
