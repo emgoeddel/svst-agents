@@ -19,7 +19,7 @@ sp {topstate*propose*put-down*first
 #    (<j> ^name waypoints
 #         ^target-object none
 #         ^direction min)
-   (<j> ^name centrality
+   (<j> ^name endpoint-centrality
         ^target-object none
         ^direction min)
 }
@@ -47,9 +47,9 @@ sp {topstate*propose*put-down*second
 #    (<j> ^name waypoints
 #        ^target-object none
 #         ^direction min)
-   (<j> ^name centrality
-        ^target-object none
-        ^direction min)
+   (<j> ^name endpoint-distance
+        ^target-object tea_box1
+        ^direction max)
 }
 
 # Propose to move the third held-object to the tray
@@ -77,7 +77,7 @@ sp {topstate*propose*put-down*third
 #    (<j> ^name waypoints
 #         ^target-object none
 #         ^direction min)
-    (<j> ^name centrality
+    (<j> ^name endpoint-centrality
          ^target-object none
          ^direction max)
 }

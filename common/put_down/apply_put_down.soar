@@ -134,7 +134,7 @@ sp {put-down*apply*make-select
               ^operator <op>)
    (<op> ^name make-select
          ^trajectory-set <sid>)
-   (<obj> ^name <on> <> centrality
+   (<obj> ^name <on> <> endpoint-centrality
           ^target-object <to>
           ^direction <dir>)
    (<v> ^command <c>)
@@ -156,7 +156,7 @@ sp {put-down*apply*make-select*centrality
               ^operator <op>)
    (<op> ^name make-select
          ^trajectory-set <sid>)
-   (<obj> ^name centrality
+   (<obj> ^name endpoint-centrality
           ^direction <dir>)
    (<ta> ^center <tc>
          ^dimensions <td>)
@@ -165,7 +165,7 @@ sp {put-down*apply*make-select*centrality
    (<c> ^evaluate-trajectories <eval>)
    (<eval> ^set-id <sid>
            ^type select
-           ^objective centrality
+           ^objective endpoint-centrality
            ^area-center <tc>
            ^area-dimensions <td>
            ^direction <dir>
