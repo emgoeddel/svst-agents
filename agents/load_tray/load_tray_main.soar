@@ -13,6 +13,9 @@ popd
 pushd held_object
 source held_object_main.soar
 popd
+pushd selection
+source selection_main.soar
+popd
 popd
 
 pushd agents

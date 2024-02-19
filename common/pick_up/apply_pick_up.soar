@@ -104,75 +104,59 @@ sp {pick-up*prefer*stop-over-select
    (<s> ^operator <op1> > <op2>)
 }
 
-sp {pick-up*propose*make-select
+sp {pick-up*propose*do-selection
    (state <s> ^name pick-up
+             -^selection-result.set-id <sid>
+              ^objective { <obj> <> none }
               ^topstate-svs <v>)
    (<v> ^command <cmd>
         ^motor.trajectories <t>)
    (<cmd> ^find-trajectories <ft>)
    (<ft> ^id <sid>
          ^status << stopped complete >> )
-   (<t> ^set <st>)
-   (<st> ^command-id <sid>
-        -^trajectory.selected-by <any>)
--->
-   (<s> ^operator <o> +)
-   (<o> ^name make-select
-        ^trajectory-set <sid>)
-}
-
-sp {pick-up*apply*make-select
-   (state <s> ^name pick-up
-              ^objective <obj> <> none
-              ^topstate-svs <v>
-              ^operator <op>)
-   (<op> ^name make-select
-         ^trajectory-set <sid>)
    (<obj> ^name <on>
           ^target-object <to>
           ^direction <dir>)
-   (<v> ^command <c>)
 -->
-   (<c> ^evaluate-trajectories <eval>)
-   (<eval> ^set-id <sid>
-           ^type select
-           ^objective <on>
-           ^obstacle <to>
-           ^direction <dir>
-           ^number 1)
+   (<s> ^operator <o> +)
+   (<o> ^name do-selection
+        ^trajectory-set <sid>
+        ^objectives <obs>)
+   (<obs> ^first <ob>)
+   (<ob> ^name <on>
+         ^parameters <pms>)
+   (<pms> ^obstacle <to>
+          ^direction <dir>)
 }
 
-# This is only so that the evaluation function is called in SVS!
-sp {pick-up*apply*make-select*no-mast
+# Note not used for actually selecting a trajectory, just output
+sp {pick-up*propose*do-selection*no-mast
    (state <s> ^name pick-up
+             -^selection-result.set-id <sid>
               ^objective none
-              ^topstate-svs <v>
-              ^operator <op>)
-   (<op> ^name make-select
-         ^trajectory-set <sid>)
-   (<v> ^command <c>)
+              ^topstate-svs <v>)
+   (<v> ^command <cmd>
+        ^motor.trajectories <t>)
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^id <sid>
+         ^status << stopped complete >> )
 -->
-   (<c> ^evaluate-trajectories <eval>)
-   (<eval> ^set-id <sid>
-           ^type select
-           ^objective waypoints
-           ^number 1)
+   (<s> ^operator <o> +)
+   (<o> ^name do-selection
+        ^trajectory-set <sid>
+        ^objectives none)
 }
 
 ############## EXEC TRAJECTORY ################
 sp {pick-up*propose*make-execute
    (state <s> ^name pick-up
+              ^selection-result <sr>
              -^objective none
-              ^topstate-svs <svs>)
-   (<svs> ^motor.trajectories <t>
-          ^command <cmd>)
+              ^topstate-svs.command <cmd>)
    (<cmd> ^find-trajectories.id <sid>
          -^execute-trajectory)
-   (<t> ^set <st>)
-   (<st> ^command-id <sid>
-         ^trajectory <tr>)
-   (<tr> ^id <tid>
-         ^selected-by <any>)
+   (<sr> ^trajectory-id <tid>
+         ^set-id <sid>)
 -->
    (<s> ^operator <o> +)
    (<o> ^name make-execute
@@ -182,16 +166,12 @@ sp {pick-up*propose*make-execute
 
 sp {pick-up*propose*make-execute*no-mast
    (state <s> ^name pick-up
+              ^selection-result <sr>
               ^objective none
-              ^topstate-svs <svs>)
-   (<svs> ^motor.trajectories <t>
-          ^command <cmd>)
+              ^topstate-svs.command <cmd>)
    (<cmd> ^find-trajectories.id <sid>
          -^execute-trajectory)
-   (<t> ^set <st>)
-   (<st> ^command-id <sid>
-         ^trajectory <tr>)
-   (<tr> ^selected-by waypoints) #Selection not used in this case!
+   (<sr> ^set-id <sid>) # Selection result not used in this case!
 -->
    (<s> ^operator <o> +)
    (<o> ^name make-execute

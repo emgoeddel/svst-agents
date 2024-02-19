@@ -1,0 +1,23 @@
+# Copy superstate operator info to substate
+sp {selection*elaborate*state
+   (state <s> ^superstate <ss>
+              ^impasse no-change)
+   (<ss> ^operator <o>)
+   (<o> ^name do-selection
+        ^trajectory-set <sid>
+        ^objectives <obs>)
+-->
+   (<s> ^name selection
+        ^objectives <obs>
+        ^trajectory-set <sid>)
+}
+
+# Use topstate SVS
+sp {selection*elaborate*svs
+   (state <s> ^superstate <ss>
+              ^name selection)
+   (<ss> ^superstate nil
+         ^svs <v>)
+-->
+   (<s> ^topstate-svs <v>)
+}

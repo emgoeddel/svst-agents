@@ -1,0 +1,172 @@
+# Avoid substate if only one objective is given
+# Always use ^type select and ^number 1 when calling evaluate-trajectories
+#
+# Need to handle different sets of parameters that can be given
+# Note that these cases do not yet handle: subsets of obstacles
+#                                          spherical target areas
+
+# When objective has only ^direction (ie length)
+sp {selection*apply*single*make-select*direction-only
+   (state <s> ^name << pick-up put-down >>
+              ^operator <op>
+              ^topstate-svs.command <cmd>)
+   (<op> ^name do-selection
+         ^trajectory-set <sid>
+         ^objectives <obs>)
+   (<obs> ^first <obj>
+         -^second)
+   (<obj> ^name <on>
+          ^parameters <pms>)
+   (<pms> ^direction <dir>
+         -^obstacle
+         -^area-center
+         -^area-dimensions)
+-->
+   (<cmd> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^objective <on>
+           ^type select
+           ^direction <dir>
+           ^number 1)
+}
+
+# When objective has only ^obstacle (assumes maximizing)
+sp {selection*apply*single*make-select*obstacle-only
+   (state <s> ^name << pick-up put-down >>
+              ^operator <op>
+              ^topstate-svs.command <cmd>)
+   (<op> ^name do-selection
+         ^trajectory-set <sid>
+         ^objectives <obs>)
+   (<obs> ^first <obj>
+         -^second)
+   (<obj> ^name <on>
+          ^parameters <pms>)
+   (<pms> ^obstacle <otc>
+         -^direction
+         -^area-center
+         -^area-dimensions)
+-->
+   (<cmd> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^objective <on>
+           ^type select
+           ^obstacle <otc>
+           ^number 1)
+}
+
+# When objective has ^obstacle and ^direction
+sp {selection*apply*single*make-select*obstacle-direction
+   (state <s> ^name << pick-up put-down >>
+              ^operator <op>
+              ^topstate-svs.command <cmd>)
+   (<op> ^name do-selection
+         ^trajectory-set <sid>
+         ^objectives <obs>)
+   (<obs> ^first <obj>
+         -^second)
+   (<obj> ^name <on>
+          ^parameters <pms>)
+   (<pms> ^obstacle <otc>
+          ^direction <dir>
+         -^area-center
+         -^area-dimensions)
+-->
+   (<cmd> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^objective <on>
+           ^type select
+           ^obstacle <otc>
+           ^direction <dir>
+           ^number 1)
+}
+
+# When objective has ^area-center and ^area-dimensions (for centrality, assume max)
+sp {selection*apply*single*make-select*centrality
+   (state <s> ^name << pick-up put-down >>
+              ^operator <op>
+              ^topstate-svs.command <cmd>)
+   (<op> ^name do-selection
+         ^trajectory-set <sid>
+         ^objectives <obs>)
+   (<obs> ^first <obj>
+         -^second)
+   (<obj> ^name <on>
+          ^parameters <pms>)
+   (<pms> ^area-center <ac>
+          ^area-dimensions <ad>
+         -^obstacle
+         -^direction)
+-->
+   (<cmd> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^objective <on>
+           ^type select
+           ^area-center <ac>
+           ^area-dimensions <ad>
+           ^number 1)
+}
+
+# When objective has ^area-center and ^area-dimensions AND direction
+sp {selection*apply*single*make-select*centrality-direction
+   (state <s> ^name << pick-up put-down >>
+              ^operator <op>
+              ^topstate-svs.command <cmd>)
+   (<op> ^name do-selection
+         ^trajectory-set <sid>
+         ^objectives <obs>)
+   (<obs> ^first <obj>
+         -^second)
+   (<obj> ^name <on>
+          ^parameters <pms>)
+   (<pms> ^area-center <ac>
+          ^area-dimensions <ad>
+          ^direction <dir>
+         -^obstacle)
+-->
+   (<cmd> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^objective <on>
+           ^type select
+           ^area-center <ac>
+           ^area-dimensions <ad>
+           ^direction <dir>
+           ^number 1)
+}
+
+# Still run the evaluation command if not doing MAST...
+# This is only so that output still gets written to file if enabled!
+sp {selection*apply*single*make-select*no-mast
+   (state <s> ^name << pick-up put-down >>
+              ^topstate-svs <v>
+              ^operator <op>)
+   (<op> ^name do-selection
+         ^trajectory-set <sid>
+         ^objectives none)
+   (<v> ^command <cmd>)
+-->
+   (<cmd> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^type value
+           ^objective waypoints)
+}
+
+# Once the command has processed, make the result more visible
+sp {selection*apply*elaborate-result
+   (state <s> ^name << pick-up put-down >>
+              ^topstate-svs <svs>)
+   (<svs> ^command <c>
+          ^motor.trajectories <t>)
+   (<c> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^status success)
+   (<t> ^set <tset>)
+   (<tset> ^command-id <sid>
+           ^trajectory <sel>)
+   (<sel> ^id <tid>
+          ^selected-by)
+-->
+   (<s> ^selection-result <r>)
+   (<r> ^set-id <sid>
+        ^trajectory-id <tid>)
+}
