@@ -14,10 +14,33 @@ sp {selection*elaborate*state
 
 # Use topstate SVS
 sp {selection*elaborate*svs
-   (state <s> ^superstate <ss>
-              ^name selection)
-   (<ss> ^superstate nil
-         ^svs <v>)
+   (state <s> ^name selection)
+   (state <ts> ^superstate nil
+               ^svs <v>)
 -->
    (<s> ^topstate-svs <v>)
+}
+
+
+# Once the final command has processed, make result more visible
+sp {selection*apply*elaborate-result
+   (state <s> ^name << pick-up put-down >>
+              ^topstate-svs <svs>)
+   (<svs> ^command <c>
+          ^motor.trajectories <t>)
+   (<c> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^type select
+           ^objective <on>
+           ^number 1
+           ^status success)
+   (<t> ^set <tset>)
+   (<tset> ^command-id <sid>
+           ^trajectory <sel>)
+   (<sel> ^id <tid>
+          ^selected-by <on>)
+-->
+   (<s> ^selection-result <r>)
+   (<r> ^set-id <sid>
+        ^trajectory-id <tid>)
 }

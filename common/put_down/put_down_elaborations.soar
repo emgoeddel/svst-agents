@@ -6,12 +6,12 @@ sp {put-down*elaborate*state
    (<o> ^name put-down
         ^object-id <oid>
         ^target-id <tid>
-        ^use-objective <obj>)
+        ^objectives <objs>)
 -->
    (<s> ^name put-down
         ^held-object <oid>
         ^target-object <tid>
-        ^objective <obj>)
+        ^objectives <objs>)
 }
 
 # Use topstate SVS so that commands can actually be executed
@@ -61,6 +61,65 @@ sp {put-down*elaborate*target-area-result
    (<g> ^roll <gro>
         ^pitch <gpi>
         ^yaw <gya>)
+}
+
+# Also elaborate target area onto relevant objectives
+sp {put-down*elaborate*target-area*centrality-objective*first
+   (state <s> ^name put-down
+              ^objectives <objs>
+              ^topstate-svs.command <cmd>)
+   (<objs> ^first <fo>)
+   (<fo> ^name endpoint-centrality
+         ^parameters <obp>)
+   (<cmd> ^extract_once <eot>)
+   (<eot> ^result <tr>
+          ^type put_down_area
+          ^status success)
+   (<tr> ^record.value <tv>)
+   (<tv> ^x <cx>
+         ^y <cy>
+         ^z <cz>
+         ^roll <ax>
+         ^pitch <ay>
+         ^yaw <az>) # see note in filter about big hack!
+-->
+   (<obp> ^area-center <c>
+          ^area-dimensions <d>)
+   (<c> ^x <cx>
+        ^y <cy>
+        ^z <cz>)
+   (<d> ^x <ax>
+        ^y <ay>
+        ^z <az>)
+}
+
+sp {put-down*elaborate*target-area*centrality-objective*second
+   (state <s> ^name put-down
+              ^objectives <objs>
+              ^topstate-svs.command <cmd>)
+   (<objs> ^second <so>)
+   (<so> ^name endpoint-centrality
+         ^parameters <obp>)
+   (<cmd> ^extract_once <eot>)
+   (<eot> ^result <tr>
+          ^type put_down_area
+          ^status success)
+   (<tr> ^record.value <tv>)
+   (<tv> ^x <cx>
+         ^y <cy>
+         ^z <cz>
+         ^roll <ax>
+         ^pitch <ay>
+         ^yaw <az>) # see note in filter about big hack!
+-->
+   (<obp> ^area-center <c>
+          ^area-dimensions <d>)
+   (<c> ^x <cx>
+        ^y <cy>
+        ^z <cz>)
+   (<d> ^x <ax>
+        ^y <ay>
+        ^z <az>)
 }
 
 # Make the first-to-second vector easy to find

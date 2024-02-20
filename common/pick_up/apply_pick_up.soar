@@ -107,33 +107,25 @@ sp {pick-up*prefer*stop-over-select
 sp {pick-up*propose*do-selection
    (state <s> ^name pick-up
              -^selection-result.set-id <sid>
-              ^objective { <obj> <> none }
+              ^objectives { <objs> <> none }
               ^topstate-svs <v>)
    (<v> ^command <cmd>
         ^motor.trajectories <t>)
    (<cmd> ^find-trajectories <ft>)
    (<ft> ^id <sid>
          ^status << stopped complete >> )
-   (<obj> ^name <on>
-          ^target-object <to>
-          ^direction <dir>)
 -->
    (<s> ^operator <o> +)
    (<o> ^name do-selection
         ^trajectory-set <sid>
-        ^objectives <obs>)
-   (<obs> ^first <ob>)
-   (<ob> ^name <on>
-         ^parameters <pms>)
-   (<pms> ^obstacle <to>
-          ^direction <dir>)
+        ^objectives <objs>)
 }
 
 # Note not used for actually selecting a trajectory, just output
 sp {pick-up*propose*do-selection*no-mast
    (state <s> ^name pick-up
              -^selection-result.set-id <sid>
-              ^objective none
+              ^objectives none
               ^topstate-svs <v>)
    (<v> ^command <cmd>
         ^motor.trajectories <t>)

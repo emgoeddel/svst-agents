@@ -5,11 +5,11 @@ sp {pick-up*elaborate*state
    (<ss> ^operator <o>)
    (<o> ^name pick-up
         ^object-id <id>
-        ^use-objective <obj>)
+        ^objectives <obj>)
 -->
    (<s> ^name pick-up
         ^target-object <id>
-        ^objective <obj>)
+        ^objectives <obj>)
 }
 
 # Use topstate SVS so that commands can actually be executed

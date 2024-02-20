@@ -13,15 +13,17 @@ sp {topstate*propose*put-down*first
 -->
    (<s> ^operator <o> +)
    (<o> ^name put-down
-        ^use-objective <j>
+        ^objectives <objs>
         ^object-id <oid>
         ^target-id grey_tray1)
-#    (<j> ^name waypoints
-#         ^target-object none
-#         ^direction min)
-   (<j> ^name endpoint-centrality
-        ^target-object none
-        ^direction min)
+   (<objs> ^first <obf>
+           ^second <obs>)
+   (<obf> ^name end-effector-length
+          ^parameters <pmsf>)
+   (<pmsf> ^direction min)
+   (<obs> ^name endpoint-centrality
+          ^parameters <pmss>)
+   (<pmss> ^direction min)
 }
 
 # Propose to move the second held-object to the tray
@@ -41,15 +43,18 @@ sp {topstate*propose*put-down*second
 -->
    (<s> ^operator <o> +)
    (<o> ^name put-down
-        ^use-objective <j>
+        ^objectives <objs>
         ^object-id <oid>
         ^target-id grey_tray1)
-#    (<j> ^name waypoints
-#        ^target-object none
-#         ^direction min)
-   (<j> ^name endpoint-distance
-        ^target-object tea_box1
-        ^direction max)
+   (<objs> ^first <obf>
+           ^second <obs>)
+   (<obf> ^name min-clearance
+          ^parameters <pmsf>)
+   (<pmsf> ^direction max)
+   (<obs> ^name endpoint-distance
+          ^parameters <pmss>)
+   (<pmss> ^obstacle tea_box1
+           ^direction max)
 }
 
 # Propose to move the third held-object to the tray
@@ -71,15 +76,18 @@ sp {topstate*propose*put-down*third
 -->
    (<s> ^operator <o> +)
    (<o> ^name put-down
-        ^use-objective <j>
+        ^objectives <objs>
         ^object-id <oid>
         ^target-id grey_tray1)
-#    (<j> ^name waypoints
-#         ^target-object none
-#         ^direction min)
-    (<j> ^name endpoint-centrality
-         ^target-object none
-         ^direction max)
+   (<objs> ^first <obf>
+           ^second <obs>)
+   (<obf> ^name min-clear-subset
+          ^parameters <pmsf>)
+   (<pmsf> ^direction max
+           ^obstacle grey_tray1)
+   (<obs> ^name endpoint-centrality
+          ^parameters <pmss>)
+   (<pmss> ^direction max)
 }
 
 # Propose to clean up old commands once put-down is over
