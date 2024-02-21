@@ -48,9 +48,9 @@ sp {topstate*propose*put-down*second
         ^target-id grey_tray1)
    (<objs> ^first <obf>
            ^second <obs>)
-   (<obf> ^name min-clearance
+   (<obf> ^name end-effector-length
           ^parameters <pmsf>)
-   (<pmsf> ^direction max)
+   (<pmsf> ^direction min)
    (<obs> ^name endpoint-distance
           ^parameters <pmss>)
    (<pmss> ^obstacle tea_box1
@@ -81,10 +81,9 @@ sp {topstate*propose*put-down*third
         ^target-id grey_tray1)
    (<objs> ^first <obf>
            ^second <obs>)
-   (<obf> ^name min-clear-subset
+   (<obf> ^name end-effector-length
           ^parameters <pmsf>)
-   (<pmsf> ^direction max
-           ^obstacle grey_tray1)
+   (<pmsf> ^direction min)
    (<obs> ^name endpoint-centrality
           ^parameters <pmss>)
    (<pmss> ^direction max)

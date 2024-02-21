@@ -14,15 +14,14 @@ sp {topstate*propose*pick-up*first
    (<o> ^name pick-up
         ^objectives <objs>
         ^object-id <oid>)
-   (<objs> ^first <obf>
-           ^second <obs>)
+   (<objs> ^first <obf>)
+#           ^second <obs>)
    (<obf> ^name execution-time
           ^parameters <pmsf>)
    (<pmsf> ^direction min)
-   (<obs> ^name avg-occlusion
-          ^parameters <pmss>)
-   (<pmss> ^direction min
-           ^obstacle grey_tray1)
+#   (<obs> ^name execution-time
+#          ^parameters <pmss>)
+#   (<pmss> ^direction min)
 }
 
 # Propose to pick up the second object to put on the tray
@@ -44,15 +43,15 @@ sp {topstate*propose*pick-up*second
    (<o> ^name pick-up
         ^objectives <objs>
         ^object-id <oid>)
-   (<objs> ^first <obf>
-           ^second <obs>)
-   (<obf> ^name total-joint-movement
+   (<objs> ^first <obf>)
+#           ^second <obs>)
+   (<obf> ^name execution-time
           ^parameters <pmsf>)
    (<pmsf> ^direction min)
-   (<obs> ^name time-over
-          ^parameters <pmss>)
-   (<pmss> ^direction min
-           ^obstacle grey_tray1)
+#   (<obs> ^name time-over
+#          ^parameters <pmss>)
+#   (<pmss> ^direction min
+#           ^obstacle grey_tray1)
 }
 
 # Propose to pick up the third object to put on the tray
@@ -76,15 +75,14 @@ sp {topstate*propose*pick-up*third
    (<o> ^name pick-up
         ^objectives <objs>
         ^object-id <oid>)
-   (<objs> ^first <obf>
-           ^second <obs>)
-   (<obf> ^name proportion-occluded
+   (<objs> ^first <obf>)
+#           ^second <obs>)
+   (<obf> ^name execution-time
           ^parameters <pmsf>)
-   (<pmsf> ^direction min
-           ^obstacle grey_tray1)
-   (<obs> ^name weighted-avg-clearance
-          ^parameters <pmss>)
-   (<pmss> ^direction min)
+   (<pmsf> ^direction min)
+#   (<obs> ^name weighted-avg-clearance
+#          ^parameters <pmss>)
+#   (<pmss> ^direction min)
 }
 
 # Propose to clean up old commands once pick-up is over
