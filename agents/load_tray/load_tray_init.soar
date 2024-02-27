@@ -2,11 +2,12 @@
 svs --enable
 svs ros.enable all
 
-# Give the agent a name
+# Give the agent a name once fetch is loaded in scene
 sp {init-agent*propose*add-name
    (state <s> ^superstate nil
-             -^agent-name
-   )
+              ^svs.spatial-scene <sc>
+             -^agent-name)
+   (<sc> ^child.id fetch)
 -->
    (<s> ^operator <o> +)
    (<o> ^name add-name)
