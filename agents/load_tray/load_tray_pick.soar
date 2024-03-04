@@ -107,3 +107,18 @@ sp {topstate*apply*clean-up*pickup-complete
 -->
    (<s> ^pickup-complete <oid>)
 }
+
+sp {topstate*halt-when-done
+   (state <s> ^superstate nil
+              ^agent-name load-tray
+              ^object-list <ol>
+              ^done-loading <d>)
+   (<ol> ^first <fo>
+         ^second <so>
+         ^third <to>)
+   (<d> ^object <fo>
+        ^object <so>
+        ^object <to>)
+-->
+   (halt)
+}
