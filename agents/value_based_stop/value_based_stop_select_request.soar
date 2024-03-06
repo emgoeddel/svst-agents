@@ -40,6 +40,6 @@ sp {select-request*apply*make-eval
    (<eval> ^set-id <sid>
            ^type value
            ^update true
-           ^objective waypoints
+           ^objective execution-time
            ^number 1)
 }

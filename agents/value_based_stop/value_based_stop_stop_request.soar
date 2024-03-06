@@ -15,7 +15,7 @@ sp {stop-request*propose*record-best*first
    (<set> ^command-id <cid>
           ^trajectory <r>)
    (<r> ^id <tid>
-        ^waypoints <wv>)
+        ^execution-time <wv>)
 -->
    (<s> ^operator <o> + =)
    (<o> ^name record-best-first
@@ -62,9 +62,9 @@ sp {stop-request*propose*record-best*update
           ^trajectory <curr>
           ^trajectory <comp>)
    (<curr> ^id <tid>
-           ^waypoints <bv>)
+           ^execution-time <bv>)
    (<comp> ^id <alt>
-           ^waypoints <wv> < <bv>)
+           ^execution-time <wv> < <bv>)
 -->
    (<s> ^operator <o> + =)
    (<o> ^name record-best-update
@@ -175,7 +175,7 @@ sp {stop-request*propose*stop-command
               ^agent-name value-based-stop
               ^svs <v>
               ^target <t>
-              ^dc-since-update <ct> > 5000)
+              ^dc-since-update <ct> > 100)
    (<v> ^command <cmd>
         ^motor.trajectories <traj>)
    (<cmd> ^find-trajectories <ft>)
@@ -185,7 +185,7 @@ sp {stop-request*propose*stop-command
    (<traj> ^set <set>)
    (<set> ^command-id <cid>
           ^trajectory <r>)
-   (<r> ^waypoints <wv>)
+   (<r> ^execution-time <wv>)
 -->
    (<s> ^operator <o> + =)
    (<o> ^name stop-command)

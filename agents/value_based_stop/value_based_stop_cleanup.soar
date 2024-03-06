@@ -32,7 +32,7 @@ sp {cleanup*propose*cleanup-previous*planning-failure
    (<svs> ^command <cmd>
           ^motor.trajectories <t>)
    (<cmd> ^find-trajectories <ft>)
-   (<ft> ^status stopped
+   (<ft> ^status << stopped complete >>
          ^failures.planning-failure > 10)
 -->
    (<s> ^operator <o> +)
@@ -46,7 +46,7 @@ sp {cleanup*propose*cleanup-previous*goal-failure
    (<svs> ^command <cmd>
           ^motor.trajectories <t>)
    (<cmd> ^find-trajectories <ft>)
-   (<ft> ^status stopped
+   (<ft> ^status << stopped complete >>
          ^failures.goal-invalid > 10)
 -->
    (<s> ^operator <o> +)
