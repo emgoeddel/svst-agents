@@ -1,25 +1,26 @@
-# Use substate to resolve 2+ objectives
+# Use substate to resolve 2 objectives
 
 ###################### FIRST OBJECTIVE #########################
 
-sp {selection*apply*multi*propose*first-subset
+sp {selection*apply*two*propose*first-subset
    (state <s> ^name selection
               ^objectives <obs>
              -^subset-selected)
    (<obs> ^first
-          ^second)
+          ^second
+         -^third)
 -->
    (<s> ^operator <o> +)
-   (<o> ^name subset-first)
+   (<o> ^name subset-first-of-two)
 }
 
 # Need to handle different sets of parameters that can be given
 # Note that these cases do not yet handle: subsets of obstacles
 #                                          spherical target areas
 
-sp {selection*apply*multi*apply*first-subset*direction-only
+sp {selection*apply*two*apply*first-subset*direction-only
    (state <s> ^name selection
-              ^operator.name subset-first
+              ^operator.name subset-first-of-two
               ^topstate-svs.command <cmd>
               ^trajectory-set <sid>
               ^objectives <obs>)
@@ -39,9 +40,9 @@ sp {selection*apply*multi*apply*first-subset*direction-only
            ^number 10)
 }
 
-sp {selection*apply*multi*apply*first-subset*obstacle-only
+sp {selection*apply*two*apply*first-subset*obstacle-only
    (state <s> ^name selection
-              ^operator.name subset-first
+              ^operator.name subset-first-of-two
               ^topstate-svs.command <cmd>
               ^trajectory-set <sid>
               ^objectives <obs>)
@@ -61,9 +62,9 @@ sp {selection*apply*multi*apply*first-subset*obstacle-only
            ^number 10)
 }
 
-sp {selection*apply*multi*apply*first-subset*obstacle-direction
+sp {selection*apply*two*apply*first-subset*obstacle-direction
    (state <s> ^name selection
-              ^operator.name subset-first
+              ^operator.name subset-first-of-two
               ^topstate-svs.command <cmd>
               ^trajectory-set <sid>
               ^objectives <obs>)
@@ -84,9 +85,9 @@ sp {selection*apply*multi*apply*first-subset*obstacle-direction
            ^number 10)
 }
 
-sp {selection*apply*multi*apply*first-subset*centrality
+sp {selection*apply*two*apply*first-subset*centrality
    (state <s> ^name selection
-              ^operator.name subset-first
+              ^operator.name subset-first-of-two
               ^topstate-svs.command <cmd>
               ^trajectory-set <sid>
               ^objectives <obs>)
@@ -107,9 +108,9 @@ sp {selection*apply*multi*apply*first-subset*centrality
            ^number 10)
 }
 
-sp {selection*apply*multi*apply*first-subset*centrality-direction
+sp {selection*apply*two*apply*first-subset*centrality-direction
    (state <s> ^name selection
-              ^operator.name subset-first
+              ^operator.name subset-first-of-two
               ^topstate-svs.command <cmd>
               ^trajectory-set <sid>
               ^objectives <obs>)
@@ -132,7 +133,7 @@ sp {selection*apply*multi*apply*first-subset*centrality-direction
 }
 
 # Once the command has processed, note success
-sp {selection*apply*elaborate-first-command
+sp {selection*apply*two*elaborate-first-command
    (state <s> ^name selection
               ^objectives <obs>
               ^topstate-svs.command <c>)
@@ -148,24 +149,25 @@ sp {selection*apply*elaborate-first-command
 
 ###################### SECOND OBJECTIVE #########################
 
-sp {selection*apply*multi*propose*second-select
+sp {selection*apply*two*propose*second-select
    (state <s> ^name selection
               ^objectives <obs>
               ^subset-selected)
    (<obs> ^first
-          ^second)
+          ^second
+         -^third)
 -->
    (<s> ^operator <o> +)
-   (<o> ^name second-select)
+   (<o> ^name second-of-two-select)
 }
 
 # Need to handle different sets of parameters that can be given
 # Note that these cases do not yet handle: subsets of obstacles
 #                                          spherical target areas
 
-sp {selection*apply*multi*apply*second-select*direction-only
+sp {selection*apply*two*apply*second-select*direction-only
    (state <s> ^name selection
-              ^operator.name second-select
+              ^operator.name second-of-two-select
               ^topstate-svs.command <cmd>
               ^trajectory-set <sid>
               ^objectives <obs>)
@@ -187,9 +189,9 @@ sp {selection*apply*multi*apply*second-select*direction-only
            ^number 1)
 }
 
-sp {selection*apply*multi*apply*second-select*obstacle-only
+sp {selection*apply*two*apply*second-select*obstacle-only
    (state <s> ^name selection
-              ^operator.name second-select
+              ^operator.name second-of-two-select
               ^topstate-svs.command <cmd>
               ^trajectory-set <sid>
               ^objectives <obs>)
@@ -211,9 +213,9 @@ sp {selection*apply*multi*apply*second-select*obstacle-only
            ^number 1)
 }
 
-sp {selection*apply*multi*apply*second-select*obstacle-direction
+sp {selection*apply*two*apply*second-select*obstacle-direction
    (state <s> ^name selection
-              ^operator.name second-select
+              ^operator.name second-of-two-select
               ^topstate-svs.command <cmd>
               ^trajectory-set <sid>
               ^objectives <obs>)
@@ -236,9 +238,9 @@ sp {selection*apply*multi*apply*second-select*obstacle-direction
            ^number 1)
 }
 
-sp {selection*apply*multi*apply*second-select*centrality
+sp {selection*apply*two*apply*second-select*centrality
    (state <s> ^name selection
-              ^operator.name second-select
+              ^operator.name second-of-two-select
               ^topstate-svs.command <cmd>
               ^trajectory-set <sid>
               ^objectives <obs>)
@@ -261,9 +263,9 @@ sp {selection*apply*multi*apply*second-select*centrality
            ^number 1)
 }
 
-sp {selection*apply*multi*apply*second-select*centrality-direction
+sp {selection*apply*two*apply*second-select*centrality-direction
    (state <s> ^name selection
-              ^operator.name second-select
+              ^operator.name second-of-two-select
               ^topstate-svs.command <cmd>
               ^trajectory-set <sid>
               ^objectives <obs>)

@@ -122,6 +122,35 @@ sp {put-down*elaborate*target-area*centrality-objective*second
         ^z <az>)
 }
 
+sp {put-down*elaborate*target-area*centrality-objective*third
+   (state <s> ^name put-down
+              ^objectives <objs>
+              ^topstate-svs.command <cmd>)
+   (<objs> ^third <to>)
+   (<to> ^name endpoint-centrality
+         ^parameters <obp>)
+   (<cmd> ^extract_once <eot>)
+   (<eot> ^result <tr>
+          ^type put_down_area
+          ^status success)
+   (<tr> ^record.value <tv>)
+   (<tv> ^x <cx>
+         ^y <cy>
+         ^z <cz>
+         ^roll <ax>
+         ^pitch <ay>
+         ^yaw <az>) # see note in filter about big hack!
+-->
+   (<obp> ^area-center <c>
+          ^area-dimensions <d>)
+   (<c> ^x <cx>
+        ^y <cy>
+        ^z <cz>)
+   (<d> ^x <ax>
+        ^y <ay>
+        ^z <az>)
+}
+
 # Make the first-to-second vector easy to find
 sp {put-down*elaborate*vector-result
    (state <s> ^name put-down

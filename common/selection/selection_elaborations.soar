@@ -31,14 +31,60 @@ sp {selection*apply*elaborate-result
    (<c> ^evaluate-trajectories <eval>)
    (<eval> ^set-id <sid>
            ^type select
-           ^objective <on>
+           ^objective { <on> <> endpoint-distance }
            ^number 1
            ^status success)
    (<t> ^set <tset>)
    (<tset> ^command-id <sid>
            ^trajectory <sel>)
    (<sel> ^id <tid>
-          ^selected-by <on>)
+          ^selected-by <on> )
+-->
+   (<s> ^selection-result <r>)
+   (<r> ^set-id <sid>
+        ^trajectory-id <tid>)
+}
+
+# Hack for using endpoint-distance twice (ie two different objects)
+sp {selection*apply*elaborate-result*endpoint-distance*once
+   (state <s> ^name << pick-up put-down >>
+              ^topstate-svs <svs>)
+   (<svs> ^command <c>
+          ^motor.trajectories <t>)
+   (<c> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^type select
+           ^objective endpoint-distance
+           ^number 1
+           ^status success)
+   (<t> ^set <tset>)
+   (<tset> ^command-id <sid>
+           ^trajectory <sel>
+          -^trajectory.selected-by endpoint-distance-d)
+   (<sel> ^id <tid>
+          ^selected-by endpoint-distance)
+-->
+   (<s> ^selection-result <r>)
+   (<r> ^set-id <sid>
+        ^trajectory-id <tid>)
+}
+
+sp {selection*apply*elaborate-result*endpoint-distance*duplicate
+   (state <s> ^name << pick-up put-down >>
+              ^topstate-svs <svs>)
+   (<svs> ^command <c>
+          ^motor.trajectories <t>)
+   (<c> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^type select
+           ^objective endpoint-distance
+           ^number 1
+           ^status success)
+   (<t> ^set <tset>)
+   (<tset> ^command-id <sid>
+           ^trajectory <sel>)
+   (<sel> ^id <tid>
+          ^selected-by endpoint-distance-d)
 -->
    (<s> ^selection-result <r>)
    (<r> ^set-id <sid>

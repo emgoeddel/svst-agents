@@ -47,14 +47,18 @@ sp {topstate*propose*put-down*second
         ^object-id <oid>
         ^target-id grey_tray1)
    (<objs> ^first <obf>
-           ^second <obs>)
+           ^second <obs>
+           ^third <obt>)
    (<obf> ^name end-effector-length
           ^parameters <pmsf>)
    (<pmsf> ^direction min)
-   (<obs> ^name endpoint-distance
+   (<obs> ^name end-effector-rotation
           ^parameters <pmss>)
-   (<pmss> ^obstacle tea_box1
-           ^direction max)
+   (<pmss> ^direction min)
+   (<obt> ^name endpoint-distance
+          ^parameters <pmst>)
+   (<pmst> ^direction max
+           ^obstacle <fo>)
 }
 
 # Propose to move the third held-object to the tray
@@ -80,13 +84,19 @@ sp {topstate*propose*put-down*third
         ^object-id <oid>
         ^target-id grey_tray1)
    (<objs> ^first <obf>
-           ^second <obs>)
+           ^second <obs>
+           ^third <obt>)
    (<obf> ^name end-effector-length
           ^parameters <pmsf>)
    (<pmsf> ^direction min)
-   (<obs> ^name endpoint-centrality
+   (<obs> ^name endpoint-distance
           ^parameters <pmss>)
-   (<pmss> ^direction max)
+   (<pmss> ^direction max
+           ^obstacle <so>)
+   (<obt> ^name endpoint-distance
+          ^parameters <pmst>)
+   (<pmst> ^direction max
+           ^obstacle <fo>)
 }
 
 # Propose to clean up old commands once put-down is over

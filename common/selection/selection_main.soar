@@ -1,3 +1,4 @@
 source selection_elaborations.soar
 source apply_single_objective.soar
-source apply_multi_objectives.soar
+source apply_two_objectives.soar
+source apply_three_objectives.soar
