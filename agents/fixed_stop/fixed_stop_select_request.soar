@@ -9,7 +9,7 @@ sp {select-request*propose*make-select
          ^status complete)
    (<t> ^set <st>)
    (<st> ^command-id <sid>
-        -^trajectory.selected-by waypoints)
+        -^trajectory.selected-by <any>)
 -->
    (<s> ^operator <o> +)
    (<o> ^name make-select
@@ -28,6 +28,7 @@ sp {select-request*apply*make-select
    (<c> ^evaluate-trajectories <eval>)
    (<eval> ^set-id <sid>
            ^type select
-           ^objective waypoints
+           ^objective execution-time
+           ^direction min
            ^number 1)
 }

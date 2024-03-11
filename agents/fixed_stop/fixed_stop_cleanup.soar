@@ -25,16 +25,33 @@ sp {cleanup*propose*cleanup-previous*execute-failure
    (<o> ^name cleanup-previous)
 }
 
-sp {cleanup*propose*cleanup-previous*planning-failure
+sp {cleanup*propose*cleanup-previous*planning-failure*no-trajectories
    (state <s> ^superstate nil
               ^agent-name fixed-stop
               ^svs <svs>)
    (<svs> ^command <cmd>
           ^motor.trajectories <t>)
    (<cmd> ^find-trajectories <ft>)
-   (<ft> ^status stopped
+   (<ft> ^status << stopped complete >>
          ^id <id>)
-   (<t> -^set.id <id>)
+   (<t> ^set <set>)
+   (<set> ^id <id>
+          ^trajectory-count 0)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name cleanup-previous)
+}
+
+sp {cleanup*propose*cleanup-previous*planning-failure*no-set
+   (state <s> ^superstate nil
+              ^agent-name fixed-stop
+              ^svs <svs>)
+   (<svs> ^command <cmd>
+          ^motor.trajectories <t>)
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^status << stopped complete >>
+         ^id <id>)
+   (<t> -^set.command-id <id>)
 -->
    (<s> ^operator <o> +)
    (<o> ^name cleanup-previous)

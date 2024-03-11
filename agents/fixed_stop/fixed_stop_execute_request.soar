@@ -1,12 +1,18 @@
 sp {execute-request*propose*make-execute
    (state <s> ^superstate nil
               ^agent-name fixed-stop
-              ^svs.motor.trajectories <t>)
+              ^svs <v>)
+   (<v> ^motor.trajectories <t>
+        ^command <cmd>)
    (<t> ^set <st>)
    (<st> ^command-id <sid>
          ^trajectory <tr>)
    (<tr> ^id <tid>
-         ^selected-by waypoints)
+         ^selected-by <any>)
+   (<cmd> ^evaluate-trajectories <et>
+         -^execute-trajectory)
+   (<et> ^set-id <sid>
+         ^status success)
 -->
    (<s> ^operator <o> +)
    (<o> ^name make-execute

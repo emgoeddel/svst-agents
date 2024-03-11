@@ -47,7 +47,6 @@ sp {set-request*apply*make-command
    (<cmd> ^find-trajectories <ft>)
    (<ft> ^target <t>
          ^min-number 2
-         ^max-number 5
-         ^max-time 5
-         ^target-samples 2)
+         ^max-number 20
+         ^max-time 10)
 }
