@@ -6,24 +6,17 @@ sp {topstate*propose*put-down*first
               ^object-list <ol>
               ^done-loading <d>
               ^held-object <oid>
-              ^pickup-complete <oid>)
+              ^pickup-complete <oid>
+              ^first-put-objectives <fpo>)
    (<ol> ^first <oid>)
    (<d> -^object <oid>)
    (<v> ^spatial-scene.child.id <oid>)
 -->
    (<s> ^operator <o> +)
    (<o> ^name put-down
-        ^objectives <objs>
+        ^objectives <fpo>
         ^object-id <oid>
         ^target-id grey_tray1)
-   (<objs> ^first <obf>
-           ^second <obs>)
-   (<obf> ^name end-effector-length
-          ^parameters <pmsf>)
-   (<pmsf> ^direction min)
-   (<obs> ^name endpoint-centrality
-          ^parameters <pmss>)
-   (<pmss> ^direction min)
 }
 
 # Propose to move the second held-object to the tray
@@ -34,7 +27,8 @@ sp {topstate*propose*put-down*second
               ^object-list <ol>
               ^done-loading <d>
               ^held-object <oid>
-              ^pickup-complete <oid>)
+              ^pickup-complete <oid>
+              ^second-put-objectives <spo>)
    (<ol> ^second <oid>
          ^first <fo>)
    (<d> -^object <oid>
@@ -43,22 +37,9 @@ sp {topstate*propose*put-down*second
 -->
    (<s> ^operator <o> +)
    (<o> ^name put-down
-        ^objectives <objs>
+        ^objectives <spo>
         ^object-id <oid>
         ^target-id grey_tray1)
-   (<objs> ^first <obf>
-           ^second <obs>
-           ^third <obt>)
-   (<obf> ^name end-effector-length
-          ^parameters <pmsf>)
-   (<pmsf> ^direction min)
-   (<obs> ^name end-effector-rotation
-          ^parameters <pmss>)
-   (<pmss> ^direction min)
-   (<obt> ^name endpoint-distance
-          ^parameters <pmst>)
-   (<pmst> ^direction max
-           ^obstacle <fo>)
 }
 
 # Propose to move the third held-object to the tray
@@ -69,7 +50,8 @@ sp {topstate*propose*put-down*third
               ^object-list <ol>
               ^done-loading <d>
               ^held-object <oid>
-              ^pickup-complete <oid>)
+              ^pickup-complete <oid>
+              ^third-put-objectives <tpo>)
    (<ol> ^third <oid>
          ^second <so>
          ^first <fo>)
@@ -80,23 +62,9 @@ sp {topstate*propose*put-down*third
 -->
    (<s> ^operator <o> +)
    (<o> ^name put-down
-        ^objectives <objs>
+        ^objectives <tpo>
         ^object-id <oid>
         ^target-id grey_tray1)
-   (<objs> ^first <obf>
-           ^second <obs>
-           ^third <obt>)
-   (<obf> ^name end-effector-length
-          ^parameters <pmsf>)
-   (<pmsf> ^direction min)
-   (<obs> ^name endpoint-distance
-          ^parameters <pmss>)
-   (<pmss> ^direction max
-           ^obstacle <so>)
-   (<obt> ^name endpoint-distance
-          ^parameters <pmst>)
-   (<pmst> ^direction max
-           ^obstacle <fo>)
 }
 
 # Propose to clean up old commands once put-down is over

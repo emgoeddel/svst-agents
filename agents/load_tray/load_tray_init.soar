@@ -40,3 +40,96 @@ sp {init-agent*elaborate*done-loading
 -->
    (<s> ^done-loading <d>)
 }
+
+# Add information about which HELD OBJECTS imply which objectives
+sp {init-agent*elaborate*held-objectives
+   (state <s> ^superstate nil
+              ^agent-name load-tray)
+-->
+   (<s> ^known-held <kh>)
+   (<kh> ^object <tb>
+         ^object <cc>
+         ^object <bm>)
+   (<tb> ^name tea_box1 # TEA BOX HAS NO PREFERENCES
+         ^objectives none)
+   (<cc> ^name can_coke1 # CAN IMPLIES EE LENGTH AND ROTATION
+         ^objectives <cco>)
+   (<cco> ^first <fcco>
+          ^second <scco>)
+   (<fcco> ^name end-effector-length
+           ^parameters <fccopms>)
+   (<fccopms> ^direction min)
+   (<scco> ^name end-effector-rotation
+           ^parameters <sccopms>)
+   (<sccopms> ^direction min)
+   (<bm> ^name cup_blue1 # MUG IMPLIES HELD OBJECT CLEARANCE
+         ^objectives <bmo>)
+   (<bmo> ^first <fbmo>)
+   (<fbmo> ^name held-obj-clearance
+           ^parameters <fbmopms>)
+   (<fbmopms> ^direction max)
+}
+
+# Add information about which OBSTACLES imply which objectives
+sp {init-agent*elaborate*obstacle-objectives
+   (state <s> ^superstate nil
+              ^agent-name load-tray)
+-->
+   (<s> ^known-obstacles <ko>)
+   (<ko> ^object <l>
+         ^object <c>)
+   (<l> ^name demo_lamp # LAMP IMPLIES CLEARANCE FROM ITSELF
+        ^objectives <lo>)
+   (<lo> ^first <flo>)
+   (<flo> ^name min-clear-subset
+          ^parameters <lopms>)
+   (<lopms> ^obstacle demo_lamp
+            ^direction max)
+   (<c> ^name cup_blue1 # MUG IMPLIES CLEARANCE FROM ITSELF
+        ^objectives <co>)
+   (<co> ^first <fco>)
+   (<fco> ^name min-clear-subset
+          ^parameters <copms>)
+   (<copms> ^obstacle cup_blue1
+            ^direction max)
+}
+
+# Add information about MOVEMENT ORDER implying objectives
+sp {init-agent*elaborate*order-objectives
+   (state <s> ^superstate nil
+              ^agent-name load-tray
+              ^object-list <ol>)
+   (<ol> ^first <fn>
+         ^second <sn>
+         ^third <tn>)
+-->
+   (<s> ^known-order <ko>)
+   (<ko> ^object <fo>
+         ^object <so>
+         ^object <to>)
+   (<fo> ^name <fn> # FIRST OBJECT IMPLIES EDGE OF TRAY
+         ^objectives <foo>)
+   (<foo> ^first <ffoo>)
+   (<ffoo> ^name endpoint-centrality
+           ^parameters <ffoopms>)
+   (<ffoopms> ^direction min)
+   (<so> ^name <sn> # SECOND OBJECT IMPLIES DISTANCE FROM FIRST
+         ^objectives <soo>)
+   (<soo> ^first <fsoo>)
+   (<fsoo> ^name endpoint-distance
+           ^parameters <fsoopms>)
+   (<fsoopms> ^obstacle <fn>
+              ^direction max)
+   (<to> ^name <tn> # SECOND OBJECT IMPLIES DISTANCE FROM BOTH
+         ^objectives <too>)
+   (<too> ^first <ftoo>
+          ^second <stoo>)
+   (<ftoo> ^name endpoint-distance
+           ^parameters <ftoopms>)
+   (<ftoopms> ^obstacle <fn>
+              ^direction max)
+   (<stoo> ^name endpoint-distance
+           ^parameters <stoopms>)
+   (<stoopms> ^obstacle <sn>
+              ^direction max)
+}

@@ -5,23 +5,16 @@ sp {topstate*propose*pick-up*first
               ^svs.spatial-scene <sc>
               ^object-list <ol>
               ^done-loading <d>
-             -^held-object)
+             -^held-object
+              ^first-pick-objectives <fpo>)
    (<ol> ^first <oid>)
    (<d> -^object <oid>)
    (<sc> ^child.id <oid>)
 -->
    (<s> ^operator <o> +)
    (<o> ^name pick-up
-        ^objectives <objs>
+        ^objectives <fpo>
         ^object-id <oid>)
-   (<objs> ^first <obf>)
-#           ^second <obs>)
-   (<obf> ^name execution-time
-          ^parameters <pmsf>)
-   (<pmsf> ^direction min)
-#   (<obs> ^name execution-time
-#          ^parameters <pmss>)
-#   (<pmss> ^direction min)
 }
 
 # Propose to pick up the second object to put on the tray
@@ -32,7 +25,8 @@ sp {topstate*propose*pick-up*second
               ^object-list <ol>
               ^done-loading <d>
               ^held-object none
-             -^pickup-complete <oid>)
+             -^pickup-complete <oid>
+              ^second-pick-objectives <spo>)
    (<ol> ^second <oid>
          ^first <fo>)
    (<d> -^object <oid>
@@ -41,17 +35,8 @@ sp {topstate*propose*pick-up*second
 -->
    (<s> ^operator <o> +)
    (<o> ^name pick-up
-        ^objectives <objs>
+        ^objectives <spo>
         ^object-id <oid>)
-   (<objs> ^first <obf>)
-#           ^second <obs>)
-   (<obf> ^name execution-time
-          ^parameters <pmsf>)
-   (<pmsf> ^direction min)
-#   (<obs> ^name time-over
-#          ^parameters <pmss>)
-#   (<pmss> ^direction min
-#           ^obstacle grey_tray1)
 }
 
 # Propose to pick up the third object to put on the tray
@@ -62,7 +47,8 @@ sp {topstate*propose*pick-up*third
               ^object-list <ol>
               ^done-loading <d>
               ^held-object none
-             -^pickup-complete <oid>)
+             -^pickup-complete <oid>
+              ^third-pick-objectives <tpo>)
    (<ol> ^third <oid>
          ^second <so>
          ^first <fo>)
@@ -73,16 +59,8 @@ sp {topstate*propose*pick-up*third
 -->
    (<s> ^operator <o> +)
    (<o> ^name pick-up
-        ^objectives <objs>
+        ^objectives <tpo>
         ^object-id <oid>)
-   (<objs> ^first <obf>)
-#           ^second <obs>)
-   (<obf> ^name execution-time
-          ^parameters <pmsf>)
-   (<pmsf> ^direction min)
-#   (<obs> ^name weighted-avg-clearance
-#          ^parameters <pmss>)
-#   (<pmss> ^direction min)
 }
 
 # Propose to clean up old commands once pick-up is over

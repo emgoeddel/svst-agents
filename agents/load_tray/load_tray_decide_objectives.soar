@@ -1,0 +1,536 @@
+# Propose to make an objective list for each movement
+sp {topstate*propose*decide-objectives*first-pick
+   (state <s> ^superstate nil
+              ^agent-name load-tray
+              ^svs.spatial-scene <sc>
+              ^object-list <ol>
+              ^done-loading <d>
+             -^held-object
+             -^first-pick-objectives)
+   (<ol> ^first <oid>)
+   (<d> -^object <oid>)
+   (<sc> ^child.id <oid>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name decide-objectives
+        ^held-object none
+        ^target-object <oid>
+        ^object-order first)
+}
+
+sp {topstate*propose*decide-objectives*first-put
+   (state <s> ^superstate nil
+              ^agent-name load-tray
+              ^svs.spatial-scene <sc>
+              ^object-list <ol>
+              ^done-loading <d>
+              ^pickup-complete <oid>
+             -^first-put-objectives)
+   (<ol> ^first <oid>)
+   (<d> -^object <oid>)
+   (<sc> ^child.id <oid>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name decide-objectives
+        ^held-object <oid>
+        ^target-object grey_tray1
+        ^object-order first)
+}
+
+sp {topstate*propose*decide-objectives*second-pick
+   (state <s> ^superstate nil
+              ^agent-name load-tray
+              ^svs.spatial-scene <sc>
+              ^object-list <ol>
+              ^done-loading <d>
+              ^held-object none
+             -^second-pick-objectives)
+   (<ol> ^first <fo>
+         ^second <oid>)
+   (<d> ^object <fo>
+       -^object <oid>)
+   (<sc> ^child.id <oid>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name decide-objectives
+        ^held-object none
+        ^target-object <oid>
+        ^object-order second)
+}
+
+sp {topstate*propose*decide-objectives*second-put
+   (state <s> ^superstate nil
+              ^agent-name load-tray
+              ^svs.spatial-scene <sc>
+              ^object-list <ol>
+              ^done-loading <d>
+              ^pickup-complete <oid>
+             -^second-put-objectives)
+   (<ol> ^first <fo>
+         ^second <oid>)
+   (<d> ^object <fo>
+       -^object <oid>)
+   (<sc> ^child.id <oid>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name decide-objectives
+        ^held-object <oid>
+        ^target-object grey_tray1
+        ^object-order second)
+}
+
+sp {topstate*propose*decide-objectives*third-pick
+   (state <s> ^superstate nil
+              ^agent-name load-tray
+              ^svs.spatial-scene <sc>
+              ^object-list <ol>
+              ^done-loading <d>
+              ^held-object none
+             -^third-pick-objectives)
+   (<ol> ^first <fo>
+         ^second <so>
+         ^third <oid>)
+   (<d> ^object <fo>
+        ^object <so>
+       -^object <oid>)
+   (<sc> ^child.id <oid>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name decide-objectives
+        ^held-object none
+        ^target-object <oid>
+        ^object-order third)
+}
+
+sp {topstate*propose*decide-objectives*third-put
+   (state <s> ^superstate nil
+              ^agent-name load-tray
+              ^svs.spatial-scene <sc>
+              ^object-list <ol>
+              ^done-loading <d>
+              ^pickup-complete <oid>
+             -^third-put-objectives)
+   (<ol> ^first <fo>
+         ^second <so>
+         ^third <oid>)
+   (<d> ^object <fo>
+        ^object <so>
+       -^object <oid>)
+   (<sc> ^child.id <oid>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name decide-objectives
+        ^held-object <oid>
+        ^target-object grey_tray1
+        ^object-order third)
+}
+
+################### APPLY #####################
+
+### STATE ELABORATIONS ###
+# Copy superstate operator info to substate
+sp {decide-objectives*elaborate*state
+   (state <s> ^superstate <ss>
+              ^impasse no-change)
+   (<ss> ^operator <o>)
+   (<o> ^name decide-objectives
+        ^held-object <ho>
+        ^target-object <to>
+        ^object-order <oo>)
+-->
+   (<s> ^name decide-objectives
+        ^held-object <ho>
+        ^target-object <to>
+        ^object-order <oo>)
+}
+
+# Use topstate SVS
+sp {decide-objectives*elaborate*svs
+   (state <s> ^name decide-objectives)
+   (state <ts> ^superstate nil
+               ^svs <v>)
+-->
+   (<s> ^topstate-svs <v>)
+}
+
+### SUBSTATE OPERATORS ###
+
+# First calculate distances for start and endpoint to any fragile items
+sp {decide-objectives*propose*query-dist
+   (state <s> ^name decide-objectives
+             -^queried-distances)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name query-dist)
+}
+
+sp {decide-objectives*apply*query-dist
+   (state <s> ^name decide-objectives
+              ^target-object <to>
+              ^superstate.known-obstacles <ko>
+              ^operator.name query-dist
+              ^topstate-svs <v>)
+   (<v> ^command <cmd>
+        ^spatial-scene <sc>)
+   (<ko> ^object.name <fo>)
+   (<sc> ^child.id <fo>)
+-->
+   (<s> ^queried-distances true)
+   (<cmd> ^extract_once <eog>
+          ^extract_once <eot>)
+   (<eog> ^type distance
+          ^a <oag>
+          ^b <obg>)
+   (<oag> ^type node ^id wrist_roll_link)
+   (<obg> ^type node ^id <fo>)
+   (<eot> ^type distance
+          ^a <oat>
+          ^b <obt>)
+   (<oat> ^type node ^id <to>)
+   (<obt> ^type node ^id <fo>)
+}
+
+# Make first objective choice(s) based on held object
+sp {decide-objectives*propose*decide-held
+   (state <s> ^name decide-objectives
+             -^pending-objectives
+              ^queried-distances true)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name decide-held)
+}
+
+sp {decide-objectives*apply*decide-held*yes-held
+   (state <s> ^name decide-objectives
+              ^held-object { <ho> <> none }
+              ^superstate.known-held <kh>
+              ^operator.name decide-held)
+   (<kh> ^object <kho>)
+   (<kho> ^name <ho>
+          ^objectives <obl>)
+-->
+   (<s> ^pending-objectives <obl>)
+}
+
+sp {decide-objectives*apply*decide-held*no-held
+   (state <s> ^name decide-objectives
+              ^held-object  none
+              ^operator.name decide-held)
+-->
+   (<s> ^pending-objectives <po>)
+}
+
+# Make next objective choice based on obstacles
+sp {decide-objectives*propose*add-obstacles
+   (state <s> ^name decide-objectives
+              ^queried-distances true
+             -^added-obstacle <on>
+             -^finished
+              ^pending-objectives
+              ^topstate-svs.command <cmd>)
+   (<cmd> ^extract_once <eo>)
+   (<eo> ^type distance
+         ^status success
+         ^b <bo>
+         ^result.record.value { <dist> < 0.1 } )
+   (<bo> ^id <on>)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name add-obstacles
+        ^obstacle <on>)
+}
+
+sp {decide-objectives*apply*add-obstacles*first
+   (state <s> ^name decide-objectives
+              ^superstate.known-obstacles <ko>
+              ^pending-objectives <po>
+              ^operator <o>)
+   (<o> ^name add-obstacles
+        ^obstacle <on>)
+   (<ko> ^object <koo>)
+   (<koo> ^name <on>
+          ^objectives.first <kof>)
+   (<po> -^first)
+-->
+   (<s> ^added-obstacle <on>)
+   (<po> ^first <kof>)
+}
+
+sp {decide-objectives*apply*add-obstacles*second
+   (state <s> ^name decide-objectives
+              ^superstate.known-obstacles <ko>
+              ^pending-objectives <po>
+              ^operator <o>)
+   (<o> ^name add-obstacles
+        ^obstacle <on>)
+   (<ko> ^object <koo>)
+   (<koo> ^name <on>
+          ^objectives.first <kof>)
+   (<po> ^first
+        -^second)
+-->
+   (<s> ^added-obstacle <on>)
+   (<po> ^second <kof>)
+}
+
+sp {decide-objectives*apply*add-obstacles*third
+   (state <s> ^name decide-objectives
+              ^superstate.known-obstacles <ko>
+              ^pending-objectives <po>
+              ^operator <o>)
+   (<o> ^name add-obstacles
+        ^obstacle <on>)
+   (<ko> ^object <koo>)
+   (<koo> ^name <on>
+          ^objectives.first <kof>)
+   (<po> ^first
+         ^second
+        -^third)
+-->
+   (<s> ^finished true)
+   (<po> ^third <kof>)
+}
+
+# Make next objective choice based on object task order
+sp {decide-objectives*propose*add-order
+   (state <s> ^name decide-objectives
+              ^pending-objectives
+              ^held-object { <ho> <> none }
+             -^added-order
+             -^finished)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name add-order)
+}
+
+sp {decide-objectives*prefer*obstacles-over-order
+   (state <s> ^name decide-objectives
+              ^operator <o1> +
+              ^operator <o2> +)
+   (<o1> ^name << decide-held add-obstacles >> )
+   (<o2> ^name add-order)
+-->
+   (<s> ^operator <o1> > <o2>)
+}
+
+sp {decide-objectives*apply*add-order*first
+   (state <s> ^operator.name add-order
+              ^held-object <on>
+              ^pending-objectives <po>
+              ^superstate.known-order <ko>)
+   (<ko> ^object <koo>)
+   (<koo> ^name <on>
+          ^objectives <kool>)
+   (<po> -^first)
+-->
+   (<s> ^pending-objectives <po> -
+        ^pending-objectives <kool>
+        ^added-order true)
+}
+
+sp {decide-objectives*apply*add-order*second-first
+   (state <s> ^operator.name add-order
+              ^held-object <on>
+              ^pending-objectives <po>
+              ^superstate.known-order <ko>)
+   (<ko> ^object <koo>)
+   (<koo> ^name <on>
+          ^objectives <kool>)
+   (<kool> ^first <kof>)
+   (<po> ^first
+        -^second)
+-->
+   (<s> ^added-order true)
+   (<po> ^second <kof>)
+}
+
+sp {decide-objectives*apply*add-order*second-second
+   (state <s> ^operator.name add-order
+              ^held-object <on>
+              ^pending-objectives <po>
+              ^superstate.known-order <ko>)
+   (<ko> ^object <koo>)
+   (<koo> ^name <on>
+          ^objectives <kool>)
+   (<kool> ^second <kos>)
+   (<po> ^first
+        -^second)
+-->
+   (<s> ^finished true)
+   (<po> ^third <kos>)
+}
+
+sp {decide-objectives*apply*add-order*third
+   (state <s> ^operator.name add-order
+              ^held-object <on>
+              ^pending-objectives <po>
+              ^superstate.known-order <ko>)
+   (<ko> ^object <koo>)
+   (<koo> ^name <on>
+          ^objectives <kool>)
+   (<kool> ^first <kof>)
+   (<po> ^first
+         ^second
+        -^third)
+-->
+   (<s> ^finished true)
+   (<po> ^third <kof>)
+}
+
+# Add default objective if relevant and space for it
+sp {decide-objectives*propose*default*no-held
+   (state <s> ^name decide-objectives
+             -^finished
+              ^held-object none
+              ^pending-objectives <po>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name add-default)
+}
+
+sp {decide-objectives*propose*default*held-no-objective
+   (state <s> ^name decide-objectives
+             -^finished
+              ^held-object <ho>
+              ^pending-objectives <po>
+              ^superstate.known-held <kh>)
+   (<kh> ^object <kho>)
+   (<kho> ^name <ho>
+          ^objectives none)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name add-default)
+}
+
+sp {decide-objectives*prefer*not-default
+   (state <s> ^name decide-objectives
+              ^operator <o1> +
+              ^operator <o2> +)
+   (<o1> ^name << decide-held add-obstacles add-order >> )
+   (<o2> ^name add-default)
+-->
+   (<s> ^operator <o1> > <o2>)
+}
+
+sp {decide-objectives*apply*add-default*first
+   (state <s> ^name decide-objectives
+              ^pending-objectives <po>
+              ^operator <o>)
+   (<o> ^name add-default)
+   (<po> -^first)
+-->
+   (<s> ^finished true)
+   (<po> ^first <dob>)
+   (<dob> ^name execution-time
+          ^parameters <dpms>)
+   (<dpms> ^direction min)
+}
+
+sp {decide-objectives*apply*add-default*second
+   (state <s> ^name decide-objectives
+              ^pending-objectives <po>
+              ^operator <o>)
+   (<o> ^name add-default)
+   (<po> ^first
+        -^second)
+-->
+   (<s> ^finished true)
+   (<po> ^second <dob>)
+   (<dob> ^name execution-time
+          ^parameters <dpms>)
+   (<dpms> ^direction min)
+}
+
+sp {decide-objectives*apply*add-default*third
+   (state <s> ^name decide-objectives
+              ^pending-objectives <po>
+              ^operator <o>)
+   (<o> ^name add-default)
+   (<po> ^first
+         ^second
+        -^third)
+-->
+   (<s> ^finished true)
+   (<po> ^third <dob>)
+   (<dob> ^name execution-time
+          ^parameters <dpms>)
+   (<dpms> ^direction min)
+}
+
+# When the list is complete copy it up
+sp {decide-objectives*propose*return-list
+   (state <s> ^name decide-objectives
+              ^finished)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name return-list)
+}
+
+sp {decide-objectives*apply*return-list*first-pick
+   (state <s> ^name decide-objectives
+              ^superstate <ss>
+              ^operator.name return-list
+              ^object-order first
+              ^held-object none
+              ^pending-objectives <po>)
+-->
+   (<ss> ^first-pick-objectives <po>)
+}
+
+sp {decide-objectives*apply*return-list*first-put
+   (state <s> ^name decide-objectives
+              ^superstate <ss>
+              ^operator.name return-list
+              ^object-order first
+              ^held-object <ho>
+              ^pending-objectives <po>)
+   (<ss> ^object-list.first <ho>)
+-->
+   (<ss> ^first-put-objectives <po>)
+}
+
+sp {decide-objectives*apply*return-list*second-pick
+   (state <s> ^name decide-objectives
+              ^superstate <ss>
+              ^operator.name return-list
+              ^object-order second
+              ^held-object none
+              ^pending-objectives <po>)
+-->
+   (<ss> ^second-pick-objectives <po>)
+}
+
+sp {decide-objectives*apply*return-list*second-put
+   (state <s> ^name decide-objectives
+              ^superstate <ss>
+              ^operator.name return-list
+              ^object-order second
+              ^held-object <ho>
+              ^pending-objectives <po>)
+   (<ss> ^object-list.second <ho>)
+-->
+   (<ss> ^second-put-objectives <po>)
+}
+
+sp {decide-objectives*apply*return-list*third-pick
+   (state <s> ^name decide-objectives
+              ^superstate <ss>
+              ^operator.name return-list
+              ^object-order third
+              ^held-object none
+              ^pending-objectives <po>)
+-->
+   (<ss> ^third-pick-objectives <po>)
+}
+
+sp {decide-objectives*apply*return-list*third-put
+   (state <s> ^name decide-objectives
+              ^superstate <ss>
+              ^operator.name return-list
+              ^object-order third
+              ^held-object <ho>
+              ^pending-objectives <po>)
+   (<ss> ^object-list.third <ho>)
+-->
+   (<ss> ^third-put-objectives <po>)
+}
