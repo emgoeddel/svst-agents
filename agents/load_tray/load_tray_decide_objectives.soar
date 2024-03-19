@@ -179,11 +179,13 @@ sp {decide-objectives*apply*query-dist
    (<cmd> ^extract_once <eog>
           ^extract_once <eot>)
    (<eog> ^type distance
+          ^distance_type box
           ^a <oag>
           ^b <obg>)
    (<oag> ^type node ^id wrist_roll_link)
    (<obg> ^type node ^id <fo>)
    (<eot> ^type distance
+          ^distance_type box
           ^a <oat>
           ^b <obt>)
    (<oat> ^type node ^id <to>)
@@ -225,15 +227,18 @@ sp {decide-objectives*propose*add-obstacles
    (state <s> ^name decide-objectives
               ^queried-distances true
              -^added-obstacle <on>
+             -^held-object <on>
              -^finished
               ^pending-objectives
               ^topstate-svs.command <cmd>)
    (<cmd> ^extract_once <eo>)
    (<eo> ^type distance
          ^status success
+         ^a <ao>
          ^b <bo>
          ^result.record.value { <dist> < 0.1 } )
    (<bo> ^id <on>)
+   (<ao> ^id { <tn> <> grey_tray1} )
 -->
    (<s> ^operator <o> + =)
    (<o> ^name add-obstacles
