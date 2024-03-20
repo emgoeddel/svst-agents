@@ -2,10 +2,18 @@
 sp {topstate*propose*pick-up
    (state <s> ^superstate nil
               ^agent-name reach-test
-              ^selected-objective <j>)
+              ^selected-objectives <j>)
 -->
    (<s> ^operator <o> + =)
    (<o> ^name pick-up
-        ^object-id blue_cube5cm
-        ^use-objective <j>)
+        ^objectives <j>
+        ^object-id target_cube)
+}
+
+sp {topstate*reach-test*halt
+   (state <s> ^superstate nil
+              ^agent-name reach-test
+              ^held-object target_cube)
+-->
+   (halt)
 }

@@ -28,7 +28,8 @@ sp {init-agent*elaborate*object-properties
    (<ko> ^object <l>
          ^object <db>
          ^object <v>
-         ^object <cb>)
+         ^object <cb>
+         ^object <cs>)
    (<l> ^model-name demo_lamp
         ^property-name fragile)
    (<db> ^model-name demo_dropoff_box
@@ -37,6 +38,8 @@ sp {init-agent*elaborate*object-properties
         ^property-name valuable)
    (<cb> ^model-name demo_cardboard_box
          ^property-name hittable)
+   (<cb> ^model-name demo_cat
+         ^property-name moving)
 }
 
 # Add the objective map data as an elaboration
@@ -48,22 +51,41 @@ sp {init-agent*elaborate*property-objectives
    (<pom> ^property <p1>
           ^property <p2>
           ^property <p3>
-          ^property <p4>)
+          ^property <p4>
+          ^property <p5>)
    (<p1> ^name fragile
-         ^objective min-clear-subset
-         ^direction max)
+         ^objectives <obj1>)
+   (<obj1> ^first <o1o1>)
+   (<o1o1> ^name min-clear-subset
+           ^parameters <o1o1p>)
+   (<o1o1p> ^direction max)
    (<p2> ^name user-target
-         ^objective time-over
-         ^direction min)
+         ^objectives <obj2>)
+   (<obj2> ^first <o2o1>)
+   (<o2o1> ^name time-over
+           ^parameters <o2o1p>)
+   (<o2o1p> ^direction min)
    (<p3> ^name valuable
-         ^objective min-clearance
-         ^direction max)
+         ^objectives <obj3>)
+   (<obj3> ^first <o3o1>)
+   (<o3o1> ^name min-clearance
+           ^parameters <o3o1p>)
+   (<o3o1p> ^direction max)
    (<p4> ^name hittable
-         ^objective execution-time
-         ^direction min)
+         ^objectives <obj4>)
+   (<obj4> ^first <o4o1>)
+   (<o4o1> ^name execution-time
+           ^parameters <o4o1p>)
+   (<o4o1p> ^direction min)
+   (<p5> ^name hittable
+         ^objectives <obj5>)
+   (<obj5> ^first <o5o1>)
+   (<o5o1> ^name occlusion-time
+           ^parameters <o5o1p>)
+   (<o5o1p> ^direction min)
 }
 
-# Decide on objective based on object
+# Decide on objective based on object and add object as target of objective
 sp {init-agent*elaborate*selected-objective
    (state <s> ^superstate nil
               ^agent-name reach-test
@@ -76,13 +98,12 @@ sp {init-agent*elaborate*selected-objective
          ^property-name <pn>)
    (<po> ^property <p>)
    (<p> ^name <pn>
-        ^objective <j>
-        ^direction <d>)
+        ^objectives <j>)
+   (<j> ^first <j1>)
+   (<j1> ^parameters <j1p>)
 -->
-   (<s> ^selected-objective <so>)
-   (<so> ^name <j>
-         ^target-object <n>
-         ^direction <d>)
+   (<s> ^selected-objectives <j>)
+   (<j1p> ^obstacle <n>)
 }
 
 # Or use no objective if it's the generic

@@ -187,17 +187,6 @@ sp {pick-up*apply*make-execute
 
 ############## GRASP SECOND ################
 
-sp {pick-up*reach-test*halt
-   (state <s> ^name pick-up
-              ^superstate <ss>
-              ^topstate-svs.command <cmd>)
-   (<cmd> ^execute-trajectory <x>)
-   (<ss> ^agent-name reach-test)
-   (<x> ^status finished)
--->
-   (halt)
-}
-
 sp {pick-up*propose*get-final-grasp
    (state <s> ^name pick-up
               ^target-object
