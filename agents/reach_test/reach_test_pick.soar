@@ -2,6 +2,7 @@
 sp {topstate*propose*pick-up
    (state <s> ^superstate nil
               ^agent-name reach-test
+             -^held-object target_cube
               ^selected-objectives <j>)
 -->
    (<s> ^operator <o> + =)
@@ -10,10 +11,51 @@ sp {topstate*propose*pick-up
         ^object-id target_cube)
 }
 
+sp {topstate*propose*evaluate-all
+   (state <s> ^superstate nil
+              ^agent-name reach-test
+              ^held-object target_cube
+             -^finished-evaluation)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name evaluate-all)
+}
+
+sp {topstate*apply*evaluate-all
+   (state <s> ^superstate nil
+              ^property-objective-map <pom>
+              ^known-objects <ko>
+              ^held-object target_cube
+              ^svs <v>)
+   (<v> ^spatial-scene.child.id <oid>
+        ^motor.trajectories.set.command-id <sid>
+        ^command <cmd>)
+   (<ko> ^object.model-name <oid>)
+   (<pom> ^property.objectives <objs>)
+   (<objs> ^first.name <on>)
+-->
+   (<cmd> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^objective <on>
+           ^type value
+           ^obstacle <oid>)
+}
+
+sp {topstate*elaborate*finished_evaluation
+   (state <s> ^superstate nil
+              ^svs.command <cmd>)
+   (<cmd> ^evaluate-trajectories <eval>)
+   (<eval> ^type value
+           ^status success)
+-->
+   (<s> ^finished-evaluation true)
+}
+
 sp {topstate*reach-test*halt
    (state <s> ^superstate nil
               ^agent-name reach-test
-              ^held-object target_cube)
+              ^held-object target_cube
+              ^finished-evaluation true)
 -->
    (halt)
 }
