@@ -29,7 +29,8 @@ sp {init-agent*elaborate*object-properties
          ^object <db>
          ^object <v>
          ^object <cb>
-         ^object <cs>)
+         ^object <cs>
+         ^object.model-name demo_generic) #no properties
    (<l> ^model-name demo_lamp
         ^property-name fragile)
    (<db> ^model-name demo_dropoff_box
@@ -38,7 +39,7 @@ sp {init-agent*elaborate*object-properties
         ^property-name valuable)
    (<cb> ^model-name demo_cardboard_box
          ^property-name hittable)
-   (<cb> ^model-name demo_cat
+   (<cs> ^model-name demo_cat
          ^property-name moving)
 }
 
@@ -77,7 +78,7 @@ sp {init-agent*elaborate*property-objectives
    (<o4o1> ^name execution-time
            ^parameters <o4o1p>)
    (<o4o1p> ^direction min)
-   (<p5> ^name hittable
+   (<p5> ^name moving
          ^objectives <obj5>)
    (<obj5> ^first <o5o1>)
    (<o5o1> ^name occlusion-time
@@ -94,7 +95,7 @@ sp {init-agent*elaborate*selected-objective
               ^property-objective-map <po>)
    (<scn> ^child.id <n>)
    (<ko> ^object <ob>)
-   (<ob> ^model-name <n>
+   (<ob> ^model-name { <n> <> demo_generic }
          ^property-name <pn>)
    (<po> ^property <p>)
    (<p> ^name <pn>
@@ -115,5 +116,5 @@ sp {init-agent*elaborate*no-selected-objective
               ^property-objective-map <po>)
    (<scn> ^child.id demo_generic)
 -->
-   (<s> ^selected-objective none)
+   (<s> ^selected-objectives none)
 }
