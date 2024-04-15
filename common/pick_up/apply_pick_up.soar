@@ -121,6 +121,30 @@ sp {pick-up*propose*do-selection
         ^objectives <objs>)
 }
 
+# To get output for the reach test, calls selection for waypoints
+# BUT DOES NOT USE THE RESULT
+sp {pick-up*propose*do-selection*no-mast
+   (state <s> ^name pick-up
+             -^selection-result.set-id <sid>
+              ^objectives none
+              ^topstate-svs <v>)
+   (<v> ^command <cmd>
+        ^motor.trajectories <t>)
+   (<cmd> ^find-trajectories <ft>)
+   (<ft> ^id <sid>
+         ^status << stopped complete >> )
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name do-selection
+        ^trajectory-set <sid>
+        ^objectives <objs>)
+   (<objs> ^first <fo>)
+   (<fo> ^name waypoints
+         ^parameters <pms>)
+   (<pms> ^direction min
+          ^obstacle demo_generic)
+}
+
 ############## EXEC TRAJECTORY ################
 sp {pick-up*propose*make-execute
    (state <s> ^name pick-up
@@ -140,6 +164,7 @@ sp {pick-up*propose*make-execute
 
 sp {pick-up*propose*make-execute*no-mast
    (state <s> ^name pick-up
+              ^selection-result <sr>
               ^objectives none
               ^topstate-svs <v>)
    (<v> ^command <cmd>
@@ -152,7 +177,7 @@ sp {pick-up*propose*make-execute*no-mast
    (<s> ^operator <o> + =)
    (<o> ^name make-execute
         ^trajectory-set <sid>
-        ^trajectory-id <tid>) # NO SELECTION, just uses random trajectory
+        ^trajectory-id 0) # NO SELECTION, just uses first trajectory
 }
 
 sp {pick-up*apply*make-execute
@@ -170,6 +195,19 @@ sp {pick-up*apply*make-execute
 }
 
 ############## GRASP SECOND ################
+
+# Comment out to have the reaching agent actually pick up!
+sp {pick-up*reach-test-only*halt
+   (state <s> ^name pick-up
+              ^superstate <ss>
+              ^topstate-svs.command <cmd>)
+   (<ss> ^agent-name reach-test)
+   (<cmd> ^execute-trajectory <x>
+         -^extract_once.type grasp_second)
+   (<x> ^status finished)
+-->
+   (halt)
+}
 
 sp {pick-up*propose*get-final-grasp
    (state <s> ^name pick-up
