@@ -194,20 +194,20 @@ sp {pick-up*apply*make-execute
         ^trajectory-id <tid>)
 }
 
-############## GRASP SECOND ################
-
-# Comment out to have the reaching agent actually pick up!
+# Comment out to have the reaching agent actually execute!
 sp {pick-up*reach-test-only*halt
    (state <s> ^name pick-up
               ^superstate <ss>
               ^topstate-svs.command <cmd>)
    (<ss> ^agent-name reach-test)
-   (<cmd> ^execute-trajectory <x>
-         -^extract_once.type grasp_second)
-   (<x> ^status finished)
+   (<cmd> ^execute-trajectory <x>)
+   (<x> ^status running)
 -->
    (halt)
 }
+
+
+############## GRASP SECOND ################
 
 sp {pick-up*propose*get-final-grasp
    (state <s> ^name pick-up
