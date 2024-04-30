@@ -1,0 +1,149 @@
+# First calculate distances to any relevant objects
+sp {topstate*propose*query-dist
+   (state <s> ^superstate nil
+              ^agent-name reach-test
+             -^queried-distances)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name query-dist)
+}
+
+sp {topstate*apply*query-dist
+   (state <s> ^superstate nil
+              ^operator.name query-dist
+              ^agent-name reach-test
+              ^known-objects <ko>
+              ^svs <v>)
+   (<v> ^command <cmd>
+        ^spatial-scene <sc>)
+   (<ko> ^object.model-name <on>)
+   (<sc> ^child.id <on>)
+-->
+   (<cmd> ^extract_once <eo>)
+   (<eo> ^type distance
+         ^distance_type box
+         ^a <oa>
+         ^b <ob>)
+   (<oa> ^type node ^id <on>)
+   (<ob> ^type node ^id torso_lift_link)
+}
+
+sp {topstate*elaborate*object-order
+   (state <s> ^superstate nil
+              ^agent-name reach-test
+              ^svs.command <cmd>)
+   (<cmd> ^extract_once <eo1>
+          ^extract_once <eo2>)
+   (<eo1> ^type distance
+          ^status success
+          ^a <ao1>
+          ^b <bo1>
+          ^result <res1>)
+   (<res1> ^record <rec1>)
+   (<rec1> ^value <dist1>)
+   (<eo2> ^type distance
+          ^status success
+          ^a <ao2>
+          ^b <bo2>
+          ^result <res2>)
+   (<res2> ^record <rec2>)
+   (<rec2> ^value { > <dist1> <dist2> } )
+   (<ao1> ^id <onp>)
+   (<ao2> ^id <ons>)
+   (<bo1> ^id torso_lift_link)
+   (<bo2> ^id torso_lift_link)
+-->
+   (<s> ^queried-distances true)
+   (<s> ^primary-object <onp>
+        ^secondary-object <ons>)
+}
+
+sp {topstate*elaborate*objectives
+   (state <s> ^superstate nil
+              ^agent-name reach-test
+              ^known-objects <ko>
+              ^property-objective-map <pom>
+              ^primary-object <op>
+              ^secondary-object <os>)
+   (<ko> ^object <kop>
+         ^object <kos>)
+   (<kop> ^model-name <op>
+          ^property-name <pp>)
+   (<kos> ^model-name <os>
+          ^property-name <ps>)
+   (<pom> ^property <pmp>
+          ^property <pms>)
+   (<pmp> ^name <pp>
+          ^objectives <ol>)
+   (<ol> ^first.parameters <fop>)
+   (<pms> ^name <ps>
+          ^objectives.first <soo>)
+   (<soo> ^parameters <sop>)
+-->
+    (<s> ^selected-objectives <ol>)
+    (<fop> ^obstacle <op>)
+    (<ol> ^second <soo>)
+    (<sop> ^obstacle <os>)
+}
+
+# Propose to pick up the target object for tests
+sp {topstate*propose*pick-up
+   (state <s> ^superstate nil
+              ^agent-name reach-test
+             -^held-object target_cube
+              ^selected-objectives <j>)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name pick-up
+        ^objectives <j>
+        ^object-id target_cube)
+}
+
+# sp {topstate*propose*evaluate-all
+#    (state <s> ^superstate nil
+#               ^agent-name reach-test
+#               ^held-object target_cube
+#              -^finished-evaluation)
+# -->
+#    (<s> ^operator <o> +)
+#    (<o> ^name evaluate-all)
+# }
+#
+# sp {topstate*apply*evaluate-all
+#    (state <s> ^superstate nil
+#               ^property-objective-map <pom>
+#               ^known-objects <ko>
+#               ^held-object target_cube
+#               ^svs <v>)
+#    (<v> ^spatial-scene.child.id <oid>
+#         ^motor.trajectories.set.command-id <sid>
+#         ^command <cmd>)
+#    (<ko> ^object.model-name <oid>)
+#    (<pom> ^property.objectives <objs>)
+#    (<objs> ^first.name <on>)
+# -->
+#    (<cmd> ^evaluate-trajectories <eval>)
+#    (<eval> ^set-id <sid>
+#            ^objective <on>
+#            ^type value
+#            ^obstacle <oid>)
+# }
+#
+# sp {topstate*elaborate*finished_evaluation
+#    (state <s> ^superstate nil
+#               ^svs.command <cmd>)
+#    (<cmd> ^evaluate-trajectories <eval>)
+#    (<eval> ^type value
+#            ^status success)
+# -->
+#    (<s> ^finished-evaluation true)
+# }
+#
+# sp {topstate*reach-test*halt
+#    (state <s> ^superstate nil
+#               ^agent-name reach-test
+#               ^held-object target_cube
+#               ^finished-evaluation true)
+# -->
+#    (halt)
+# }
