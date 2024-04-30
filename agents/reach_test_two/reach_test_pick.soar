@@ -58,7 +58,7 @@ sp {topstate*elaborate*object-order
         ^secondary-object <ons>)
 }
 
-sp {topstate*elaborate*objectives
+sp {topstate*elaborate*objectives*two-objectives
    (state <s> ^superstate nil
               ^agent-name reach-test
               ^known-objects <ko>
@@ -69,7 +69,7 @@ sp {topstate*elaborate*objectives
          ^object <kos>)
    (<kop> ^model-name <op>
           ^property-name <pp>)
-   (<kos> ^model-name <os>
+   (<kos> ^model-name { <> <os> demo_generic }
           ^property-name <ps>)
    (<pom> ^property <pmp>
           ^property <pms>)
@@ -84,6 +84,28 @@ sp {topstate*elaborate*objectives
     (<fop> ^obstacle <op>)
     (<ol> ^second <soo>)
     (<sop> ^obstacle <os>)
+}
+
+sp {topstate*elaborate*objectives*one-objective
+   (state <s> ^superstate nil
+              ^agent-name reach-test
+              ^known-objects <ko>
+              ^property-objective-map <pom>
+              ^primary-object <op>
+              ^secondary-object <os>)
+   (<ko> ^object <kop>
+         ^object <kos>)
+   (<kop> ^model-name <op>
+          ^property-name <pp>)
+   (<kos> ^model-name demo_generic)
+   (<pom> ^property <pmp>
+          ^property <pms>)
+   (<pmp> ^name <pp>
+          ^objectives <ol>)
+   (<ol> ^first.parameters <fop>)
+-->
+    (<s> ^selected-objectives <ol>)
+    (<fop> ^obstacle <op>)
 }
 
 # Propose to pick up the target object for tests
