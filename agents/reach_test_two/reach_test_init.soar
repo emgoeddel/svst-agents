@@ -31,17 +31,24 @@ sp {init-agent*elaborate*object-properties
          ^object <v>
          ^object <cb>
          ^object <cs>
-         ^object.model-name demo_generic) #no properties
+         ^object <gen>)
    (<l> ^model-name demo_lamp
+        ^model-name demo_lamp_2
         ^property-name fragile)
    (<db> ^model-name demo_dropoff_box
+         ^model-name demo_dropoff_box_2
          ^property-name user-target)
    (<v> ^model-name demo_vase
+        ^model-name demo_vase_2
         ^property-name valuable)
    (<cb> ^model-name demo_cardboard_box
+         ^model-name demo_cardboard_box_2
          ^property-name hittable)
    (<cs> ^model-name demo_cat
+         ^model-name demo_cat_2
          ^property-name moving)
+   (<gen> ^model-name demo_generic
+          ^model-name demo_generic_2) # no properties
 }
 
 # Add the objective map data as an elaboration

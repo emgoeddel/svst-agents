@@ -64,12 +64,12 @@ sp {topstate*elaborate*objectives*two-objectives
               ^known-objects <ko>
               ^property-objective-map <pom>
               ^primary-object <op>
-              ^secondary-object <os>)
+              ^secondary-object { <> demo_generic <os> })
    (<ko> ^object <kop>
          ^object <kos>)
    (<kop> ^model-name <op>
           ^property-name <pp>)
-   (<kos> ^model-name { <> <os> demo_generic }
+   (<kos> ^model-name <os>
           ^property-name <ps>)
    (<pom> ^property <pmp>
           ^property <pms>)
@@ -78,29 +78,70 @@ sp {topstate*elaborate*objectives*two-objectives
    (<ol> ^first.parameters <fop>)
    (<pms> ^name <ps>
           ^objectives.first <soo>)
-   (<soo> ^parameters <sop>)
+   (<soo> ^name <son>
+          ^parameters <sop>)
+   (<sop> ^direction <sod>)
 -->
     (<s> ^selected-objectives <ol>)
     (<fop> ^obstacle <op>)
-    (<ol> ^second <soo>)
-    (<sop> ^obstacle <os>)
+    (<ol> ^second <cso>)
+    (<cso> ^name <son>
+           ^parameters <csop>)
+    (<csop> ^direction <sod>
+            ^obstacle <os>)
 }
 
-sp {topstate*elaborate*objectives*one-objective
+sp {topstate*elaborate*objectives*one-objective*primary
+   (state <s> ^superstate nil
+              ^agent-name reach-test
+              ^known-objects <ko>
+              ^property-objective-map <pom>
+              ^primary-object <op>
+              ^secondary-object demo_generic)
+   (<ko> ^object <kop>)
+   (<kop> ^model-name <op>
+          ^property-name <pp>)
+   (<pom> ^property <pmp>)
+   (<pmp> ^name <pp>
+          ^objectives <ol>)
+   (<ol> ^first.parameters <fop>)
+-->
+    (<s> ^selected-objectives <ol>)
+    (<fop> ^obstacle <op>)
+}
+
+sp {topstate*elaborate*objectives*one-objective*secondary
+   (state <s> ^superstate nil
+              ^agent-name reach-test
+              ^known-objects <ko>
+              ^property-objective-map <pom>
+              ^primary-object demo_generic
+              ^secondary-object <os>)
+   (<ko> ^object <kop>)
+   (<kop> ^model-name <os>
+          ^property-name <ps>)
+   (<pom> ^property <pms>)
+   (<pms> ^name <ps>
+          ^objectives <ol>)
+   (<ol> ^first.parameters <fop>)
+-->
+    (<s> ^selected-objectives <ol>)
+    (<fop> ^obstacle <os>)
+}
+
+sp {topstate*elaborate*objectives*one-objective*both-aet
    (state <s> ^superstate nil
               ^agent-name reach-test
               ^known-objects <ko>
               ^property-objective-map <pom>
               ^primary-object <op>
               ^secondary-object <os>)
-   (<ko> ^object <kop>
-         ^object <kos>)
+   (<ko> ^object <kop>)
    (<kop> ^model-name <op>
-          ^property-name <pp>)
-   (<kos> ^model-name demo_generic)
-   (<pom> ^property <pmp>
-          ^property <pms>)
-   (<pmp> ^name <pp>
+          ^model-name <os>
+          ^property-name hittable)
+   (<pom> ^property <pmp>)
+   (<pmp> ^name hittable
           ^objectives <ol>)
    (<ol> ^first.parameters <fop>)
 -->

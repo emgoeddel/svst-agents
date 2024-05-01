@@ -31,7 +31,7 @@ sp {selection*apply*elaborate-result
    (<c> ^evaluate-trajectories <eval>)
    (<eval> ^set-id <sid>
            ^type select
-           ^objective { <on> <> endpoint-distance }
+          -^objective << endpoint-distance min-clear-subset occlusion-time time-over >>
            ^number 1
            ^status success)
    (<t> ^set <tset>)
@@ -85,6 +85,144 @@ sp {selection*apply*elaborate-result*endpoint-distance*duplicate
            ^trajectory <sel>)
    (<sel> ^id <tid>
           ^selected-by endpoint-distance-d)
+-->
+   (<s> ^selection-result <r>)
+   (<r> ^set-id <sid>
+        ^trajectory-id <tid>)
+}
+
+# Hack for using min-clear-subset twice (ie two different objects)
+sp {selection*apply*elaborate-result*min-clear-subset*once
+   (state <s> ^name << pick-up put-down >>
+              ^topstate-svs <svs>)
+   (<svs> ^command <c>
+          ^motor.trajectories <t>)
+   (<c> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^type select
+           ^objective min-clear-subset
+           ^number 1
+           ^status success)
+   (<t> ^set <tset>)
+   (<tset> ^command-id <sid>
+           ^trajectory <sel>
+          -^trajectory.selected-by min-clear-subset-d)
+   (<sel> ^id <tid>
+          ^selected-by min-clear-subset)
+-->
+   (<s> ^selection-result <r>)
+   (<r> ^set-id <sid>
+        ^trajectory-id <tid>)
+}
+
+sp {selection*apply*elaborate-result*min-clear-subset*duplicate
+   (state <s> ^name << pick-up put-down >>
+              ^topstate-svs <svs>)
+   (<svs> ^command <c>
+          ^motor.trajectories <t>)
+   (<c> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^type select
+           ^objective min-clear-subset
+           ^number 1
+           ^status success)
+   (<t> ^set <tset>)
+   (<tset> ^command-id <sid>
+           ^trajectory <sel>)
+   (<sel> ^id <tid>
+          ^selected-by min-clear-subset-d)
+-->
+   (<s> ^selection-result <r>)
+   (<r> ^set-id <sid>
+        ^trajectory-id <tid>)
+}
+
+# Hack for using occlusion-time twice (ie two different objects)
+sp {selection*apply*elaborate-result*occlusion-time*once
+   (state <s> ^name << pick-up put-down >>
+              ^topstate-svs <svs>)
+   (<svs> ^command <c>
+          ^motor.trajectories <t>)
+   (<c> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^type select
+           ^objective occlusion-time
+           ^number 1
+           ^status success)
+   (<t> ^set <tset>)
+   (<tset> ^command-id <sid>
+           ^trajectory <sel>
+          -^trajectory.selected-by occlusion-time-d)
+   (<sel> ^id <tid>
+          ^selected-by occlusion-time)
+-->
+   (<s> ^selection-result <r>)
+   (<r> ^set-id <sid>
+        ^trajectory-id <tid>)
+}
+
+sp {selection*apply*elaborate-result*occlusion-time*duplicate
+   (state <s> ^name << pick-up put-down >>
+              ^topstate-svs <svs>)
+   (<svs> ^command <c>
+          ^motor.trajectories <t>)
+   (<c> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^type select
+           ^objective occlusion-time
+           ^number 1
+           ^status success)
+   (<t> ^set <tset>)
+   (<tset> ^command-id <sid>
+           ^trajectory <sel>)
+   (<sel> ^id <tid>
+          ^selected-by occlusion-time-d)
+-->
+   (<s> ^selection-result <r>)
+   (<r> ^set-id <sid>
+        ^trajectory-id <tid>)
+}
+
+# Hack for using time-over twice (ie two different objects)
+sp {selection*apply*elaborate-result*time-over*once
+   (state <s> ^name << pick-up put-down >>
+              ^topstate-svs <svs>)
+   (<svs> ^command <c>
+          ^motor.trajectories <t>)
+   (<c> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^type select
+           ^objective time-over
+           ^number 1
+           ^status success)
+   (<t> ^set <tset>)
+   (<tset> ^command-id <sid>
+           ^trajectory <sel>
+          -^trajectory.selected-by time-over-d)
+   (<sel> ^id <tid>
+          ^selected-by time-over)
+-->
+   (<s> ^selection-result <r>)
+   (<r> ^set-id <sid>
+        ^trajectory-id <tid>)
+}
+
+sp {selection*apply*elaborate-result*time-over*duplicate
+   (state <s> ^name << pick-up put-down >>
+              ^topstate-svs <svs>)
+   (<svs> ^command <c>
+          ^motor.trajectories <t>)
+   (<c> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^type select
+           ^objective time-over
+           ^number 1
+           ^status success)
+   (<t> ^set <tset>)
+   (<tset> ^command-id <sid>
+           ^trajectory <sel>)
+   (<sel> ^id <tid>
+          ^selected-by time-over-d)
 -->
    (<s> ^selection-result <r>)
    (<r> ^set-id <sid>
