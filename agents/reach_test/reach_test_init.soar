@@ -6,7 +6,9 @@ svs objective_output on
 # Give the agent a name
 sp {init-agent*propose*add-name
    (state <s> ^superstate nil
+              ^svs.spatial-scene <sc>
              -^agent-name)
+   (<sc> ^child.id fetch)
 -->
    (<s> ^operator <o> +)
    (<o> ^name add-name)
