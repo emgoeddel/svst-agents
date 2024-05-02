@@ -32,6 +32,7 @@ sp {selection*apply*elaborate-result
    (<eval> ^set-id <sid>
            ^type select
           -^objective << endpoint-distance min-clear-subset occlusion-time time-over >>
+           ^objective <on>
            ^number 1
            ^status success)
    (<t> ^set <tset>)
