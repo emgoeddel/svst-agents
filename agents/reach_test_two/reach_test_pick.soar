@@ -75,11 +75,15 @@ sp {topstate*elaborate*objectives*two-objectives
           ^property <pms>)
    (<pmp> ^name <pp>
           ^objectives <ol>)
-   (<ol> ^first.parameters <fop>)
+   (<ol> ^first <foo>)
+   (<foo> ^name <fon>
+          ^parameters <fop>)
    (<pms> ^name <ps>
           ^objectives.first <soo>)
    (<soo> ^name <son>
           ^parameters <sop>)
+ -{(<soo> ^name <fon>
+          ^name execution-time)}
    (<sop> ^direction <sod>)
 -->
     (<s> ^selected-objectives <ol>)
@@ -147,6 +151,15 @@ sp {topstate*elaborate*objectives*one-objective*both-aet
 -->
     (<s> ^selected-objectives <ol>)
     (<fop> ^obstacle <op>)
+}
+
+sp {topstate*elaborate*objectives*no-objectives
+   (state <s> ^superstate nil
+              ^agent-name reach-test
+              ^primary-object << demo_generic demo_generic_2 >>
+              ^secondary-object << demo_generic demo_generic_2 >>)
+-->
+    (<s> ^selected-objectives none)
 }
 
 # Propose to pick up the target object for tests
