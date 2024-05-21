@@ -63,6 +63,67 @@ sp {put-down*elaborate*target-area-result
         ^yaw <gya>)
 }
 
+# Elaborate target area onto all objectives if place-test
+sp {put-down*elaborate*target-area*place-test*first
+   (state <s> ^name put-down
+              ^superstate.agent-name place-test
+              ^objectives <objs>
+              ^topstate-svs.command <cmd>)
+   (<objs> ^first <fo>)
+   (<fo> ^parameters <obp>)
+   (<cmd> ^extract_once <eot>)
+   (<eot> ^result <tr>
+          ^type put_down_area
+          ^status success)
+   (<tr> ^record.value <tv>)
+   (<tv> ^x <cx>
+         ^y <cy>
+         ^z <cz>
+         ^roll <ax>
+         ^pitch <ay>
+         ^yaw <az>) # see note in filter about big hack!
+-->
+   (<obp> ^area-center <c>
+          ^area-dimensions <d>
+          ^obstacle demo_generic)
+   (<c> ^x <cx>
+        ^y <cy>
+        ^z <cz>)
+   (<d> ^x <ax>
+        ^y <ay>
+        ^z <az>)
+}
+
+sp {put-down*elaborate*target-area*place-test*second
+   (state <s> ^name put-down
+              ^superstate.agent-name place-test
+              ^objectives <objs>
+              ^topstate-svs.command <cmd>)
+   (<objs> ^second <fo>)
+   (<fo> ^parameters <obp>)
+   (<cmd> ^extract_once <eot>)
+   (<eot> ^result <tr>
+          ^type put_down_area
+          ^status success)
+   (<tr> ^record.value <tv>)
+   (<tv> ^x <cx>
+         ^y <cy>
+         ^z <cz>
+         ^roll <ax>
+         ^pitch <ay>
+         ^yaw <az>) # see note in filter about big hack!
+-->
+   (<obp> ^area-center <c>
+          ^area-dimensions <d>
+          ^obstacle demo_generic)
+   (<c> ^x <cx>
+        ^y <cy>
+        ^z <cz>)
+   (<d> ^x <ax>
+        ^y <ay>
+        ^z <az>)
+}
+
 # Also elaborate target area onto relevant objectives
 sp {put-down*elaborate*target-area*centrality-objective*first
    (state <s> ^name put-down

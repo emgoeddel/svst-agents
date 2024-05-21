@@ -125,6 +125,7 @@ sp {pick-up*propose*do-selection
 # BUT DOES NOT USE THE RESULT
 sp {pick-up*propose*do-selection*no-mast
    (state <s> ^name pick-up
+              ^superstate.agent-name reach-test
              -^selection-result.set-id <sid>
               ^objectives none
               ^topstate-svs <v>)
@@ -162,8 +163,29 @@ sp {pick-up*propose*make-execute
         ^trajectory-id <tid>)
 }
 
+sp {pick-up*propose*make-execute*skip-selection*no-mast
+   (state <s> ^name pick-up
+             -^superstate.agent-name reach-test
+             -^selection-result.set-id <sid>
+              ^objectives none
+              ^topstate-svs <v>)
+   (<v> ^command <cmd>
+        ^motor.trajectories <t>)
+   (<cmd> ^find-trajectories <ft>
+         -^execute-trajectory)
+   (<ft> ^id <sid>
+         ^status << stopped complete >> )
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name make-execute
+        ^trajectory-set <sid>
+        ^trajectory-id 0) # NO SELECTION, just uses first trajectory
+
+}
+
 sp {pick-up*propose*make-execute*no-mast
    (state <s> ^name pick-up
+              ^superstate.agent-name reach-test
               ^selection-result <sr>
               ^objectives none
               ^topstate-svs <v>)

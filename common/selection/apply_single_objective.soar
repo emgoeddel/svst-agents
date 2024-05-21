@@ -134,6 +134,34 @@ sp {selection*apply*single*make-select*centrality-direction
            ^number 1)
 }
 
+# When objective has ^area-center and ^area-dimensions AND direction AND object
+sp {selection*apply*single*make-select*everything
+   (state <s> ^name << pick-up put-down >>
+              ^operator <op>
+              ^topstate-svs.command <cmd>)
+   (<op> ^name do-selection
+         ^trajectory-set <sid>
+         ^objectives <obs>)
+   (<obs> ^first <obj>
+         -^second)
+   (<obj> ^name <on>
+          ^parameters <pms>)
+   (<pms> ^area-center <ac>
+          ^area-dimensions <ad>
+          ^direction <dir>
+          ^obstacle <o>)
+-->
+   (<cmd> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^objective <on>
+           ^type select
+           ^area-center <ac>
+           ^area-dimensions <ad>
+           ^direction <dir>
+           ^obstacle <o>
+           ^number 1)
+}
+
 # Still run the evaluation command if not doing MAST...
 # This is only so that output still gets written to file if enabled!
 sp {selection*apply*single*make-select*no-mast

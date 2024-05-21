@@ -132,6 +132,31 @@ sp {selection*apply*two*apply*first-subset*centrality-direction
            ^number 10)
 }
 
+sp {selection*apply*two*apply*first-subset*everything
+   (state <s> ^name selection
+              ^operator.name subset-first-of-two
+              ^topstate-svs.command <cmd>
+              ^trajectory-set <sid>
+              ^objectives <obs>)
+   (<obs> ^first <fo>)
+   (<fo> ^name <on>
+         ^parameters <pms>)
+   (<pms> ^area-center <ac>
+          ^area-dimensions <ad>
+          ^direction <dir>
+          ^obstacle <o>)
+-->
+   (<cmd> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^objective <on>
+           ^type select
+           ^area-center <ac>
+           ^area-dimensions <ad>
+           ^obstacle <o>
+           ^direction <dir>
+           ^number 10)
+}
+
 # Once the command has processed, note success
 sp {selection*apply*two*elaborate-first-command
    (state <s> ^name selection
@@ -285,6 +310,33 @@ sp {selection*apply*two*apply*second-select*centrality-direction
            ^type select
            ^area-center <ac>
            ^area-dimensions <ad>
+           ^direction <dir>
+           ^number 1)
+}
+
+sp {selection*apply*two*apply*second-select*everything
+   (state <s> ^name selection
+              ^operator.name second-of-two-select
+              ^topstate-svs.command <cmd>
+              ^trajectory-set <sid>
+              ^objectives <obs>)
+   (<obs> ^first.name <pro>
+          ^second <so>)
+   (<so> ^name <on>
+         ^parameters <pms>)
+   (<pms> ^area-center <ac>
+          ^area-dimensions <ad>
+          ^direction <dir>
+          ^obstacle <o>)
+-->
+   (<cmd> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^previous-selection <pro>
+           ^objective <on>
+           ^type select
+           ^area-center <ac>
+           ^area-dimensions <ad>
+           ^obstacle <o>
            ^direction <dir>
            ^number 1)
 }

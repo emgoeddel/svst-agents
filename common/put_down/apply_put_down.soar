@@ -72,7 +72,6 @@ sp {put-down*apply*make-find-trajectories*mast
    (<cmd> ^find-trajectories <ft>)
    (<ft> ^target <pt>
          ^holding-object <oid>
-         ^max-time 10
          ^max-number 30)
    (<pt> ^center <c>
          ^size <d>
@@ -131,7 +130,7 @@ sp {put-down*propose*do-selection
 sp {put-down*propose*do-selection*no-mast
    (state <s> ^name put-down
              -^selection-result.set-id <sid>
-              ^objective none
+              ^objectives none
               ^topstate-svs <v>)
    (<v> ^command <cmd>
         ^motor.trajectories <t>)
@@ -142,14 +141,19 @@ sp {put-down*propose*do-selection*no-mast
    (<s> ^operator <o> +)
    (<o> ^name do-selection
         ^trajectory-set <sid>
-        ^objectives none)
+        ^objectives <objs>)
+   (<objs> ^first <fo>)
+   (<fo> ^name waypoints
+         ^parameters <pms>)
+   (<pms> ^direction min
+          ^obstacle demo_generic)
 }
 
 ############## EXEC TRAJECTORY ################
 sp {put-down*propose*make-execute
    (state <s> ^name put-down
               ^selection-result <sr>
-             -^objective none
+             -^objectives none
               ^topstate-svs.command <cmd>)
    (<cmd> ^find-trajectories.id <sid>
          -^execute-trajectory)
@@ -165,16 +169,19 @@ sp {put-down*propose*make-execute
 sp {put-down*propose*make-execute*no-mast
    (state <s> ^name put-down
               ^selection-result <sr>
-              ^objective none
-              ^topstate-svs.command <cmd>)
+              ^objectives none
+              ^topstate-svs <v>)
+   (<v> ^command <cmd>
+        ^motor.trajectories.set <st>)
    (<cmd> ^find-trajectories.id <sid>
          -^execute-trajectory)
-   (<sr> ^set-id <sid>) # Selection result not used in this case!
+   (<st> ^command-id <sid>
+         ^trajectory.id <tid>)
 -->
-   (<s> ^operator <o> +)
+   (<s> ^operator <o> + =)
    (<o> ^name make-execute
         ^trajectory-set <sid>
-        ^trajectory-id 0)
+        ^trajectory-id 0) # NO SELECTION, just uses first trajectory
 }
 
 sp {put-down*apply*make-execute
@@ -189,6 +196,18 @@ sp {put-down*apply*make-execute
    (<c> ^execute-trajectory <x>)
    (<x> ^set-id <sid>
         ^trajectory-id <tid>)
+}
+
+# Comment out to have the placing agent actually execute put-down!
+sp {pick-up*place-test-only*halt
+   (state <s> ^name put-down
+              ^superstate <ss>
+              ^topstate-svs.command <cmd>)
+   (<ss> ^agent-name place-test)
+   (<cmd> ^execute-trajectory <x>)
+   (<x> ^status running)
+-->
+   (halt)
 }
 
 ############## DROP POSE ################

@@ -2,7 +2,7 @@ sp {put-down*errors*propose*stop-command*planning-failure
    (state <s> ^name put-down
               ^topstate-svs.command <cmd>)
    (<cmd> ^find-trajectories <ft>)
-   (<ft> ^failures.planning-failure > 10
+   (<ft> ^failures.planning-failure > 1000
         -^stop)
 -->
    (<s> ^operator <o> + =)
@@ -13,7 +13,7 @@ sp {put-down*errors*propose*stop-command*goal-failure
    (state <s> ^name put-down
               ^topstate-svs.command <cmd>)
    (<cmd> ^find-trajectories <ft>)
-   (<ft> ^failures.goal-invalid > 10
+   (<ft> ^failures.goal-invalid > 1000
         -^stop)
 -->
    (<s> ^operator <o> + =)
@@ -24,7 +24,7 @@ sp {put-down*errors*propose*stop-command*other-failure
    (state <s> ^name put-down
               ^topstate-svs.command <cmd>)
    (<cmd> ^find-trajectories <ft>)
-   (<ft> ^failures.other-error > 10
+   (<ft> ^failures.other-error > 1000
         -^stop)
 -->
    (<s> ^operator <o> + =)
@@ -35,7 +35,7 @@ sp {put-down*errors*propose*stop-command*start-failure
    (state <s> ^name put-down
               ^topstate-svs.command <cmd>)
    (<cmd> ^find-trajectories <ft>)
-   (<ft> ^failures.start-invalid > 10
+   (<ft> ^failures.start-invalid > 1000
         -^stop)
 -->
    (<s> ^operator <o> + =)
