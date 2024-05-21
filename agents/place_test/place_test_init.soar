@@ -1,0 +1,95 @@
+# Turn on SVS
+svs --enable
+svs ros.enable all
+svs objective_output on
+
+# Give the agent a name once fetch is loaded in scene
+sp {init-agent*propose*add-name
+   (state <s> ^superstate nil
+              ^svs.spatial-scene <sc>
+             -^agent-name)
+   (<sc> ^child.id fetch)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name add-name)
+}
+
+sp {init-agent*apply*add-name
+   (state <s> ^superstate nil
+             -^agent-name
+              ^operator.name add-name
+   )
+-->
+   (<s> ^agent-name place-test)
+}
+
+# Add the object for loading as an elaboration
+sp {init-agent*elaborate*target-object
+   (state <s> ^superstate nil
+              ^agent-name place-test
+              ^svs.spatial-scene <sc>)
+   (<sc> ^child.id <lid> << tea_box tea_box2 can_coke can_sprite cup_blue >> )
+-->
+   (<s> ^load-object <lid>)
+}
+
+# Elaborate objective info from object
+sp {init-agent*elaborate*objectives
+   (state <s> ^superstate nil
+              ^agent-name place-test
+              ^known-held <kh>
+              ^load-object <lid>)
+   (<kh> ^object <ko>)
+   (<ko> ^name <lid>
+         ^objectives <ol>)
+-->
+   (<s> ^put-objectives <ol>)
+   (<s> ^pick-objectives none)
+}
+
+# Add information about which HELD OBJECTS imply which objectives
+sp {init-agent*elaborate*held-objectives
+   (state <s> ^superstate nil
+              ^agent-name place-test)
+-->
+   (<s> ^known-held <kh>)
+   (<kh> ^object <tb>
+         ^object <tba>
+         ^object <cc>
+         ^object <cs>
+         ^object <bm>)
+   (<tb> ^name tea_box # TEA BOX IMPLIES DISTANCE FROM OBSTACLE
+         ^objectives <tbo>)
+   (<tbo> ^first <ftbo>)
+   (<ftbo> ^name endpoint-distance
+           ^parameters <ftbopms>)
+   (<ftbopms> ^direction max)
+   (<tba> ^name tea_box2 # ALTERNATE TEA BOX IMPLIES CENTRALITY
+          ^objectives <tbao>)
+   (<tbao> ^first <ftbao>)
+   (<ftbao> ^name endpoint-centrality
+            ^parameters <ftbaopms>)
+   (<ftbaopms> ^direction max)
+   (<cc> ^name can_coke # CAN IMPLIES EE LENGTH AND ROTATION
+         ^objectives <cco>)
+   (<cco> ^first <fcco>
+          ^second <scco>)
+   (<fcco> ^name end-effector-length
+           ^parameters <fccopms>)
+   (<fccopms> ^direction min)
+   (<scco> ^name end-effector-rotation
+           ^parameters <sccopms>)
+   (<sccopms> ^direction min)
+   (<cs> ^name can_sprite # ALTERNATE CAN IMPLIES CRL
+         ^objectives <cso>)
+   (<cso> ^first <fcso>)
+   (<fcso> ^name end-effector-combo
+           ^parameters <fcsopms>)
+   (<fcsopms> ^direction min)
+   (<bm> ^name cup_blue # MUG IMPLIES HELD OBJECT CLEARANCE
+         ^objectives <bmo>)
+   (<bmo> ^first <fbmo>)
+   (<fbmo> ^name held-obj-clearance
+           ^parameters <fbmopms>)
+   (<fbmopms> ^direction max)
+}

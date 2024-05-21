@@ -1,0 +1,27 @@
+# Propose to move the held-object to the tray
+sp {topstate*propose*put-down
+   (state <s> ^superstate nil
+              ^agent-name place-test
+              ^svs <v>
+              ^load-object <lid>
+              ^held-object <lid>
+              ^pickup-complete <lid>
+              ^put-objectives <po>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name put-down
+        ^objectives <po>
+        ^object-id <lid>
+        ^target-id grey_tray1)
+}
+
+# Propose to clean up old commands once put-down is over
+sp {topstate*propose*clean-up-put
+   (state <s> ^superstate nil
+              ^agent-name place-test
+              ^commands-present
+              ^held-object none)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name clean-up)
+}

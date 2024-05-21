@@ -1,0 +1,121 @@
+sp {place-test*prefer*actions-over-cleanup
+   (state <s> ^operator <a> +
+              ^operator <c> +)
+   (<c> ^name clean-up)
+-->
+   (<s> ^operator <a> > <c>)
+}
+
+sp {place-test*elaborate*commands-present*extract
+   (state <s> ^superstate nil
+              ^svs.command <cmd>
+              ^agent-name place-test)
+   (<cmd> ^extract_once)
+-->
+   (<s> ^commands-present true)
+}
+
+sp {place-test*apply*cleanup*extracts
+   (state <s> ^superstate nil
+              ^svs.command <cmd>
+              ^agent-name place-test
+              ^operator.name clean-up)
+   (<cmd> ^extract_once <eo>)
+-->
+   (<cmd> ^extract_once <eo> -)
+}
+
+sp {place-test*elaborate*commands-present*find-trajectories
+   (state <s> ^superstate nil
+              ^svs.command <cmd>
+              ^agent-name place-test)
+   (<cmd> ^find-trajectories)
+-->
+   (<s> ^commands-present true)
+}
+
+sp {place-test*apply*cleanup*find-trajectories
+   (state <s> ^superstate nil
+              ^svs.command <cmd>
+              ^agent-name place-test
+              ^operator.name clean-up)
+   (<cmd> ^find-trajectories <ft>)
+-->
+   (<cmd> ^find-trajectories <ft> -)
+}
+
+sp {place-test*elaborate*commands-present*evaluate-trajectories
+   (state <s> ^superstate nil
+              ^svs.command <cmd>
+              ^agent-name place-test)
+   (<cmd> ^evaluate-trajectories)
+-->
+   (<s> ^commands-present true)
+}
+
+sp {place-test*apply*cleanup*evaluate-trajectories
+   (state <s> ^superstate nil
+              ^svs.command <cmd>
+              ^agent-name place-test
+              ^operator.name clean-up)
+   (<cmd> ^evaluate-trajectories <et>)
+-->
+   (<cmd> ^evaluate-trajectories <et> -)
+}
+
+sp {place-test*elaborate*commands-present*execute-trajectory
+   (state <s> ^superstate nil
+              ^svs.command <cmd>
+              ^agent-name place-test)
+   (<cmd> ^execute-trajectory)
+-->
+   (<s> ^commands-present true)
+}
+
+sp {place-test*apply*cleanup*execute-trajectory
+   (state <s> ^superstate nil
+              ^svs.command <cmd>
+              ^agent-name place-test
+              ^operator.name clean-up)
+   (<cmd> ^execute-trajectory <et>)
+-->
+   (<cmd> ^execute-trajectory <et> -)
+}
+
+sp {place-test*elaborate*commands-present*gripper
+   (state <s> ^superstate nil
+              ^svs.command <cmd>
+              ^agent-name place-test)
+   (<cmd> ^set-gripper)
+-->
+   (<s> ^commands-present true)
+}
+
+sp {place-test*apply*cleanup*grippers
+   (state <s> ^superstate nil
+              ^svs.command <cmd>
+              ^agent-name place-test
+              ^operator.name clean-up)
+   (<cmd> ^set-gripper <sg>)
+-->
+   (<cmd> ^set-gripper <sg> -)
+}
+
+sp {place-test*elaborate*commands-present*line-motion
+   (state <s> ^superstate nil
+              ^svs.command <cmd>
+              ^agent-name place-test)
+   (<cmd> ^straight-line-motion)
+-->
+   (<s> ^commands-present true)
+}
+
+sp {place-test*apply*cleanup*line-motions
+   (state <s> ^superstate nil
+              ^svs.command <cmd>
+              ^agent-name place-test
+              ^operator.name clean-up)
+   (<cmd> ^straight-line-motion <sl>)
+-->
+   (<cmd> ^straight-line-motion <sl> -)
+}
