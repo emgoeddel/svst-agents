@@ -1,18 +1,76 @@
 # Propose to move the held-object to the tray
-sp {topstate*propose*put-down
+sp {topstate*propose*put-down*one-objective*not-box
    (state <s> ^superstate nil
               ^agent-name place-test
               ^svs <v>
-              ^load-object <lid>
+              ^load-object <lid> << can_sprite cup_blue >>
               ^held-object <lid>
               ^pickup-complete <lid>
               ^put-objectives <po>)
+   (<po> ^first.parameters <fop>)
 -->
    (<s> ^operator <o> +)
    (<o> ^name put-down
         ^objectives <po>
         ^object-id <lid>
         ^target-id grey_tray1)
+   (<fop> ^obstacle demo_generic)
+}
+
+sp {topstate*propose*put-down*two-objectives
+   (state <s> ^superstate nil
+              ^agent-name place-test
+              ^svs <v>
+              ^load-object can_coke
+              ^held-object can_coke
+              ^pickup-complete can_coke
+              ^put-objectives <po>)
+   (<po> ^first.parameters <fop>
+         ^second.parameters <sop>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name put-down
+        ^objectives <po>
+        ^object-id can_coke
+        ^target-id grey_tray1)
+   (<fop> ^obstacle demo_generic)
+   (<sop> ^obstacle demo_generic)
+}
+
+sp {topstate*propose*put-down*box-generic
+   (state <s> ^superstate nil
+              ^agent-name place-test
+              ^svs <v>
+              ^load-object <lid> tea_box_generic
+              ^held-object tea_box
+              ^pickup-complete tea_box
+              ^put-objectives <po>)
+   (<po> ^first.parameters <fop>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name put-down
+        ^objectives <po>
+        ^object-id tea_box
+        ^target-id grey_tray1)
+   (<fop> ^obstacle demo_generic)
+}
+
+sp {topstate*propose*put-down*box-lamp
+   (state <s> ^superstate nil
+              ^agent-name place-test
+              ^svs <v>
+              ^load-object <lid> tea_box_lamp
+              ^held-object tea_box
+              ^pickup-complete tea_box
+              ^put-objectives <po>)
+   (<po> ^first.parameters <fop>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name put-down
+        ^objectives <po>
+        ^object-id tea_box
+        ^target-id grey_tray1)
+   (<fop> ^obstacle demo_lamp)
 }
 
 # Propose to clean up old commands once put-down is over

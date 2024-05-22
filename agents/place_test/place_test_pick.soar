@@ -1,8 +1,8 @@
 # Propose to pick up the object to put on the tray
-sp {topstate*propose*pick-up*first
+sp {topstate*propose*pick-up*not-box
    (state <s> ^superstate nil
               ^agent-name place-test
-              ^load-object <lid>
+              ^load-object <lid> << can_coke can_sprite cup_blue >>
              -^held-object
               ^pick-objectives <po>)
 -->
@@ -10,6 +10,19 @@ sp {topstate*propose*pick-up*first
    (<o> ^name pick-up
         ^objectives <po>
         ^object-id <lid>)
+}
+
+sp {topstate*propose*pick-up*box
+   (state <s> ^superstate nil
+              ^agent-name place-test
+              ^load-object <lid> << tea_box_generic tea_box_lamp >>
+             -^held-object
+              ^pick-objectives <po>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name pick-up
+        ^objectives <po>
+        ^object-id tea_box)
 }
 
 # Propose to clean up old commands once pick-up is over

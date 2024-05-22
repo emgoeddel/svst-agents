@@ -70,7 +70,8 @@ sp {put-down*elaborate*target-area*place-test*first
               ^objectives <objs>
               ^topstate-svs.command <cmd>)
    (<objs> ^first <fo>)
-   (<fo> ^parameters <obp>)
+   (<fo> ^parameters <obp>
+        -^name endpoint-centrality)
    (<cmd> ^extract_once <eot>)
    (<eot> ^result <tr>
           ^type put_down_area
@@ -84,8 +85,7 @@ sp {put-down*elaborate*target-area*place-test*first
          ^yaw <az>) # see note in filter about big hack!
 -->
    (<obp> ^area-center <c>
-          ^area-dimensions <d>
-          ^obstacle demo_generic)
+          ^area-dimensions <d>)
    (<c> ^x <cx>
         ^y <cy>
         ^z <cz>)
@@ -100,7 +100,8 @@ sp {put-down*elaborate*target-area*place-test*second
               ^objectives <objs>
               ^topstate-svs.command <cmd>)
    (<objs> ^second <fo>)
-   (<fo> ^parameters <obp>)
+   (<fo> ^parameters <obp>
+        -^name endpoint-centrality)
    (<cmd> ^extract_once <eot>)
    (<eot> ^result <tr>
           ^type put_down_area
@@ -114,8 +115,7 @@ sp {put-down*elaborate*target-area*place-test*second
          ^yaw <az>) # see note in filter about big hack!
 -->
    (<obp> ^area-center <c>
-          ^area-dimensions <d>
-          ^obstacle demo_generic)
+          ^area-dimensions <d>)
    (<c> ^x <cx>
         ^y <cy>
         ^z <cz>)

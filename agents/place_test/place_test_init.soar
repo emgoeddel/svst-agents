@@ -24,13 +24,33 @@ sp {init-agent*apply*add-name
 }
 
 # Add the object for loading as an elaboration
-sp {init-agent*elaborate*target-object
+sp {init-agent*elaborate*target-object*not-box
    (state <s> ^superstate nil
               ^agent-name place-test
               ^svs.spatial-scene <sc>)
-   (<sc> ^child.id <lid> << tea_box tea_box2 can_coke can_sprite cup_blue >> )
+   (<sc> ^child.id <lid> << can_coke can_sprite cup_blue >> )
 -->
    (<s> ^load-object <lid>)
+}
+
+sp {init-agent*elaborate*target-object*box-with-generic
+   (state <s> ^superstate nil
+              ^agent-name place-test
+              ^svs.spatial-scene <sc>)
+   (<sc> ^child.id tea_box
+         ^child.id demo_generic)
+-->
+   (<s> ^load-object tea_box_generic)
+}
+
+sp {init-agent*elaborate*target-object*box-with-lamp
+   (state <s> ^superstate nil
+              ^agent-name place-test
+              ^svs.spatial-scene <sc>)
+   (<sc> ^child.id tea_box
+         ^child.id demo_lamp)
+-->
+   (<s> ^load-object tea_box_lamp)
 }
 
 # Elaborate objective info from object
@@ -58,13 +78,13 @@ sp {init-agent*elaborate*held-objectives
          ^object <cc>
          ^object <cs>
          ^object <bm>)
-   (<tb> ^name tea_box # TEA BOX IMPLIES DISTANCE FROM OBSTACLE
+   (<tb> ^name tea_box_lamp # TEA BOX IMPLIES DISTANCE FROM OBSTACLE
          ^objectives <tbo>)
    (<tbo> ^first <ftbo>)
    (<ftbo> ^name endpoint-distance
            ^parameters <ftbopms>)
    (<ftbopms> ^direction max)
-   (<tba> ^name tea_box2 # ALTERNATE TEA BOX IMPLIES CENTRALITY
+   (<tba> ^name tea_box_generic # ALTERNATE TEA BOX IMPLIES CENTRALITY
           ^objectives <tbao>)
    (<tbao> ^first <ftbao>)
    (<ftbao> ^name endpoint-centrality
