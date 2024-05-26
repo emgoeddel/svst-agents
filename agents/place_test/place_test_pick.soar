@@ -2,7 +2,7 @@
 sp {topstate*propose*pick-up*not-box
    (state <s> ^superstate nil
               ^agent-name place-test
-              ^load-object <lid> << can_coke can_sprite cup_blue >>
+              ^load-object <lid> << can_coke can_sprite can_fanta cup_blue >>
              -^held-object
               ^pick-objectives <po>)
 -->

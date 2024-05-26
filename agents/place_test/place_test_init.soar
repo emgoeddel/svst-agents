@@ -28,7 +28,7 @@ sp {init-agent*elaborate*target-object*not-box
    (state <s> ^superstate nil
               ^agent-name place-test
               ^svs.spatial-scene <sc>)
-   (<sc> ^child.id <lid> << can_coke can_sprite cup_blue >> )
+   (<sc> ^child.id <lid> << can_coke can_sprite can_fanta cup_blue >> )
 -->
    (<s> ^load-object <lid>)
 }
@@ -77,6 +77,7 @@ sp {init-agent*elaborate*held-objectives
          ^object <tba>
          ^object <cc>
          ^object <cs>
+         ^object <cf>
          ^object <bm>)
    (<tb> ^name tea_box_lamp # TEA BOX IMPLIES DISTANCE FROM OBSTACLE
          ^objectives <tbo>)
@@ -106,6 +107,8 @@ sp {init-agent*elaborate*held-objectives
    (<fcso> ^name end-effector-combo
            ^parameters <fcsopms>)
    (<fcsopms> ^direction min)
+   (<cf> ^name can_fanta
+         ^objectives none) # OTHER ALTERNATE CAN MEANS NONE
    (<bm> ^name cup_blue # MUG IMPLIES HELD OBJECT CLEARANCE
          ^objectives <bmo>)
    (<bmo> ^first <fbmo>)

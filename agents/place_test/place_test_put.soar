@@ -73,6 +73,22 @@ sp {topstate*propose*put-down*box-lamp
    (<fop> ^obstacle demo_lamp)
 }
 
+sp {topstate*propose*put-down*no-objectives
+   (state <s> ^superstate nil
+              ^agent-name place-test
+              ^svs <v>
+              ^load-object can_fanta
+              ^held-object can_fanta
+              ^pickup-complete can_fanta
+              ^put-objectives none)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name put-down
+        ^objectives none
+        ^object-id can_fanta
+        ^target-id grey_tray1)
+}
+
 # Propose to clean up old commands once put-down is over
 sp {topstate*propose*clean-up-put
    (state <s> ^superstate nil

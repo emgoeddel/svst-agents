@@ -85,15 +85,28 @@ sp {put-down*apply*make-find-trajectories*mast
 sp {put-down*apply*make-find-trajectories*no-mast
    (state <s> ^name put-down
               ^topstate-svs.command <cmd>
-              ^planning-target <pt>
+              ^target-area <ta>
               ^held-object <oid>
               ^objectives none
               ^operator.name make-find-trajectories)
+   (<ta> ^center <c>
+         ^dimensions <d>
+         ^gripper-orientation <go>)
+   (<go> ^roll <gro>
+         ^pitch <gpi>
+         ^yaw <gya>)
 -->
    (<cmd> ^find-trajectories <ft>)
    (<ft> ^target <pt>
          ^holding-object <oid>
          ^max-number 3)
+   (<pt> ^center <c>
+         ^size <d>
+         ^orientation <or>
+         ^frame self)
+   (<or> ^x <gro>
+         ^y <gpi>
+         ^z <gya>)
 }
 
 ############## SELECT TRAJECTORY ################
