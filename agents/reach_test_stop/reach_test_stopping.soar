@@ -1,0 +1,81 @@
+sp {reach-test*pick*propose*make-eval
+   (state <s> ^superstate <ss>
+              ^name pick-up)
+   (<ss> ^agent-name reach-test
+         ^selected-objectives.first <fo>
+         ^svs <v>)
+   (<fo> ^name <on>
+         ^parameters.obstacle <ob>)
+   (<v> ^command <cmd>
+        ^motor.trajectories <t>)
+   (<cmd> ^find-trajectories <ft>
+         -^evaluate-trajectories)
+   (<ft> ^id <sid>)
+   (<t> ^set <st>)
+   (<st> ^command-id <sid>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name make-eval
+        ^trajectory-set <sid>)
+}
+
+sp {reach-test*pick*apply*make-eval
+   (state <s> ^superstate <ss>
+              ^name pick-up
+              ^operator <op>)
+   (<ss> ^svs.command <c>
+         ^selected-objectives.first <fo>)
+   (<fo> ^name <on>
+         ^parameters.obstacle <ob>)
+   (<op> ^name make-eval
+         ^trajectory-set <sid>)
+-->
+   (<c> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^type value
+           ^update true
+           ^objective <on>
+           ^number 1
+           ^obstacle <ob>)
+}
+
+sp {reach-test*pick*propose*stop-command*best-time-over
+   (state <s> ^name pick-up
+              ^superstate <ss>)
+   (<ss> ^agent-name reach-test
+         ^svs <v>
+         ^selected-objectives.first.name time-over)
+   (<v> ^command <cmd>
+         ^motor.trajectories <mt>)
+   (<cmd> ^find-trajectories <ft>)
+   (<mt> ^set <ts>)
+   (<ts> ^command-id <sid>
+         ^trajectory <t>)
+   (<t> ^time-over 0.0)
+   (<ft> ^id <sid>
+        -^stop)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name stop-command)
+}
+
+
+sp {reach-test*pick*propose*stop-command*best-occlusion-time
+   (state <s> ^name pick-up
+              ^superstate <ss>)
+   (<ss> ^agent-name reach-test
+         ^svs <v>
+         ^selected-objectives.first.name occlusion-time)
+   (<v> ^command <cmd>
+         ^motor.trajectories <mt>)
+   (<cmd> ^find-trajectories <ft>)
+   (<mt> ^set <ts>)
+   (<ts> ^command-id <sid>
+         ^trajectory <t>)
+   (<t> ^occlusion-time 0.0)
+   (<ft> ^id <sid>
+        -^stop)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name stop-command)
+}
