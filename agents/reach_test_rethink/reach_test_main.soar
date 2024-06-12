@@ -1,0 +1,23 @@
+cd ../..
+
+pushd common
+pushd wait
+source wait.soar
+popd
+pushd pick_up
+source pick_up_main.soar
+popd
+pushd selection
+source selection_main.soar
+popd
+pushd held_object
+source held_object_main.soar
+popd
+popd
+
+pushd agents
+pushd reach_test_rethink
+source reach_test_init.soar
+source reach_test_pick.soar
+popd
+popd

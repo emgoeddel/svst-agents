@@ -1,0 +1,123 @@
+# Turn on SVS
+svs --enable
+svs ros.enable all
+svs objective_output on
+
+# Give the agent a name
+sp {init-agent*propose*add-name
+   (state <s> ^superstate nil
+              ^svs.spatial-scene <sc>
+             -^agent-name)
+   (<sc> ^child.id fetch)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name add-name)
+}
+
+sp {init-agent*apply*add-name
+   (state <s> ^superstate nil
+             -^agent-name
+              ^operator.name add-name)
+-->
+   (<s> ^agent-name reach-test)
+}
+
+# Add the object properties data as an elaboration
+sp {init-agent*elaborate*object-properties
+   (state <s> ^superstate nil
+              ^agent-name reach-test)
+-->
+   (<s> ^known-objects <ko>)
+   (<ko> ^object <l>
+         ^object <db>
+         ^object <v>
+         ^object <cb>
+         ^object <cs>
+         ^object.model-name demo_generic) #no properties
+   (<l> ^model-name demo_lamp
+        ^property-name fragile)
+   (<db> ^model-name demo_dropoff_box
+         ^property-name user-target)
+   (<v> ^model-name demo_vase
+        ^property-name valuable)
+   (<cb> ^model-name demo_cardboard_box
+         ^property-name hittable)
+   (<cs> ^model-name demo_cat
+         ^property-name moving)
+}
+
+# Add the objective map data as an elaboration
+sp {init-agent*elaborate*property-objectives
+   (state <s> ^superstate nil
+              ^agent-name reach-test)
+-->
+   (<s> ^property-objective-map <pom>)
+   (<pom> ^property <p1>
+          ^property <p2>
+          ^property <p3>
+          ^property <p4>
+          ^property <p5>)
+   (<p1> ^name fragile
+         ^objectives <obj1>)
+   (<obj1> ^first <o1o1>)
+   (<o1o1> ^name min-clear-subset
+           ^parameters <o1o1p>)
+   (<o1o1p> ^direction max)
+   (<p2> ^name user-target
+         ^objectives <obj2>)
+   (<obj2> ^first <o2o1>)
+   (<o2o1> ^name time-over
+           ^parameters <o2o1p>)
+   (<o2o1p> ^direction min)
+   (<p3> ^name valuable
+         ^objectives <obj3>)
+   (<obj3> ^first <o3o1>)
+   (<o3o1> ^name min-clearance
+           ^parameters <o3o1p>)
+   (<o3o1p> ^direction max)
+   (<p4> ^name hittable
+         ^objectives <obj4>)
+   (<obj4> ^first <o4o1>)
+   (<o4o1> ^name execution-time
+           ^parameters <o4o1p>)
+   (<o4o1p> ^direction min)
+   (<p5> ^name moving
+         ^objectives <obj5>)
+   (<obj5> ^first <o5o1>)
+   (<o5o1> ^name occlusion-time
+           ^parameters <o5o1p>)
+   (<o5o1p> ^direction min)
+}
+
+# Decide on objective based on object and add object as target of objective
+sp {init-agent*elaborate*selected-objective
+   (state <s> ^superstate nil
+              ^agent-name reach-test
+              ^svs.spatial-scene <scn>
+              ^known-objects <ko>
+              ^property-objective-map <po>)
+   (<scn> ^child.id <n>)
+   (<ko> ^object <ob>)
+   (<ob> ^model-name { <n> <> demo_generic }
+         ^property-name <pn>)
+   (<po> ^property <p>)
+   (<p> ^name <pn>
+        ^objectives <j>)
+   (<j> ^first <j1>)
+   (<j1> ^parameters <j1p>)
+-->
+   (<s> ^selected-objectives <j>)
+   (<j1p> ^obstacle <n>)
+}
+
+# Or use no objective if it's the generic
+sp {init-agent*elaborate*no-selected-objective
+   (state <s> ^superstate nil
+              ^agent-name reach-test
+              ^svs.spatial-scene <scn>
+              ^known-objects <ko>
+              ^property-objective-map <po>)
+   (<scn> ^child.id demo_generic)
+-->
+   (<s> ^selected-objectives none)
+}
