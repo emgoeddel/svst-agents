@@ -166,7 +166,7 @@ sp {selection*apply*two*elaborate-first-command
    (<c> ^evaluate-trajectories <eval>)
    (<eval> ^type select
            ^objective <on>
-           ^number 10
+           ^number { > 1 <sc> }
            ^status success)
 -->
    (<s> ^subset-selected true)

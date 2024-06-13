@@ -1,0 +1,102 @@
+# Use its own version of the selection operator
+sp {pick-up*prefer*rethinking
+   (state <s> ^name pick-up
+              ^operator <op1> +
+              ^operator <op2> +)
+   (<op1> ^name do-selection-check)
+   (<op2> ^name do-selection)
+-->
+   (<s> ^operator <op1> > <op2>)
+}
+
+sp {pick-up*propose*do-selection*with-rethinking
+   (state <s> ^name pick-up
+             -^selection-result.set-id <sid>
+              ^objectives { <objs> <> none }
+              ^topstate-svs <v>)
+   (<v> ^command <cmd>
+        ^motor.trajectories <t>)
+   (<cmd> ^find-trajectories <ft>
+         -^evaluate-trajectories.set-id <sid>)
+   (<ft> ^id <sid>
+         ^status << stopped complete >> )
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name do-selection-check
+        ^trajectory-set <sid>
+        ^objectives <objs>)
+}
+
+
+sp {selection*apply*single*make-select*loose-subset
+   (state <s> ^name << pick-up put-down >>
+              ^operator <op>
+              ^topstate-svs.command <cmd>)
+   (<op> ^name do-selection-check
+         ^trajectory-set <sid>
+         ^objectives <obs>)
+   (<obs> ^first <obj>
+         -^second)
+   (<obj> ^name <on>
+          ^parameters <pms>)
+   (<pms> ^obstacle <otc>
+          ^direction <dir>
+         -^area-center
+         -^area-dimensions)
+-->
+   (<cmd> ^evaluate-trajectories <eval>)
+   (<eval> ^set-id <sid>
+           ^objective <on>
+           ^type select
+           ^subset-type loose # Enables selecting more than 1 if tied!
+           ^obstacle <otc>
+           ^direction <dir>
+           ^number 1)
+}
+
+# If the subset ends up being > 1, do selection again with extra objective
+sp {pick-up*elaborate*extra-objective
+   (state <s> ^name pick-up
+             -^selection-result.set-id <sid>
+              ^objectives { <objs> <> none }
+              ^topstate-svs <v>)
+   (<v> ^command <cmd>
+        ^motor.trajectories <t>)
+   (<cmd> ^evaluate-trajectories <et>)
+   (<et> ^set-id <sid>
+         ^objective <on>
+         ^number 1
+         ^subset-type loose)
+   (<t> ^set <tset>)
+   (<tset> ^command-id <sid>
+           ^selection <res>)
+   (<res> ^name <on>
+          ^count { > 1 <lc> } )
+-->
+    (<objs> ^second <aso>)
+    (<aso> ^name execution-time
+           ^parameters <asop>)
+    (<asop> ^direction min)
+}
+
+sp {selection*apply*two*elaborate*reuse-first-command
+   (state <s> ^name selection
+              ^objectives <obs>
+              ^topstate-svs <v>)
+   (<v> ^command <c>
+        ^motor.trajectories <t>)
+   (<t> ^set <tset>)
+   (<obs> ^first.name <on>)
+   (<c> ^evaluate-trajectories <eval>)
+   (<eval> ^type select
+           ^set-id <sid>
+           ^objective <on>
+           ^number 1
+           ^status success)
+   (<tset> ^command-id <sid>
+           ^selection <res>)
+   (<res> ^name <on>
+          ^count { > 1 <lc> } )
+-->
+   (<s> ^subset-selected true)
+}

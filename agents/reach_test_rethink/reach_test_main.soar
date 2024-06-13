@@ -19,5 +19,6 @@ pushd agents
 pushd reach_test_rethink
 source reach_test_init.soar
 source reach_test_pick.soar
+source reach_test_adjust_selection.soar
 popd
 popd

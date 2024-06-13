@@ -37,9 +37,12 @@ sp {selection*apply*elaborate-result
            ^status success)
    (<t> ^set <tset>)
    (<tset> ^command-id <sid>
-           ^trajectory <sel>)
+           ^trajectory <sel>
+           ^selection <sr>)
    (<sel> ^id <tid>
           ^selected-by <on> )
+   (<sr> ^name <on>
+         ^count 1)
 -->
    (<s> ^selection-result <r>)
    (<r> ^set-id <sid>
@@ -60,10 +63,13 @@ sp {selection*apply*elaborate-result*endpoint-distance*once
            ^status success)
    (<t> ^set <tset>)
    (<tset> ^command-id <sid>
+           ^selection <sr>
            ^trajectory <sel>
           -^trajectory.selected-by endpoint-distance-d)
    (<sel> ^id <tid>
           ^selected-by endpoint-distance)
+   (<sr> ^name endpoint-distance
+         ^count 1)
 -->
    (<s> ^selection-result <r>)
    (<r> ^set-id <sid>
@@ -83,9 +89,12 @@ sp {selection*apply*elaborate-result*endpoint-distance*duplicate
            ^status success)
    (<t> ^set <tset>)
    (<tset> ^command-id <sid>
+           ^selection <sr>
            ^trajectory <sel>)
    (<sel> ^id <tid>
           ^selected-by endpoint-distance-d)
+   (<sr> ^name endpoint-distance-d
+         ^count 1)
 -->
    (<s> ^selection-result <r>)
    (<r> ^set-id <sid>
@@ -106,10 +115,13 @@ sp {selection*apply*elaborate-result*min-clear-subset*once
            ^status success)
    (<t> ^set <tset>)
    (<tset> ^command-id <sid>
+           ^selection <sr>
            ^trajectory <sel>
           -^trajectory.selected-by min-clear-subset-d)
    (<sel> ^id <tid>
           ^selected-by min-clear-subset)
+   (<sr> ^name min-clear-subset
+         ^count 1)
 -->
    (<s> ^selection-result <r>)
    (<r> ^set-id <sid>
@@ -129,9 +141,12 @@ sp {selection*apply*elaborate-result*min-clear-subset*duplicate
            ^status success)
    (<t> ^set <tset>)
    (<tset> ^command-id <sid>
+           ^selection <sr>
            ^trajectory <sel>)
    (<sel> ^id <tid>
           ^selected-by min-clear-subset-d)
+   (<sr> ^name min-clear-subset-d
+         ^count 1)
 -->
    (<s> ^selection-result <r>)
    (<r> ^set-id <sid>
@@ -152,10 +167,13 @@ sp {selection*apply*elaborate-result*occlusion-time*once
            ^status success)
    (<t> ^set <tset>)
    (<tset> ^command-id <sid>
+           ^selection <sr>
            ^trajectory <sel>
           -^trajectory.selected-by occlusion-time-d)
    (<sel> ^id <tid>
           ^selected-by occlusion-time)
+   (<sr> ^name occlusion-time
+         ^count 1)
 -->
    (<s> ^selection-result <r>)
    (<r> ^set-id <sid>
@@ -175,9 +193,12 @@ sp {selection*apply*elaborate-result*occlusion-time*duplicate
            ^status success)
    (<t> ^set <tset>)
    (<tset> ^command-id <sid>
+           ^selection <sr>
            ^trajectory <sel>)
    (<sel> ^id <tid>
           ^selected-by occlusion-time-d)
+   (<sr> ^name occlusion-time-d
+         ^count 1)
 -->
    (<s> ^selection-result <r>)
    (<r> ^set-id <sid>
@@ -198,10 +219,13 @@ sp {selection*apply*elaborate-result*time-over*once
            ^status success)
    (<t> ^set <tset>)
    (<tset> ^command-id <sid>
+           ^selection <sr>
            ^trajectory <sel>
           -^trajectory.selected-by time-over-d)
    (<sel> ^id <tid>
           ^selected-by time-over)
+   (<sr> ^name time-over
+         ^count 1)
 -->
    (<s> ^selection-result <r>)
    (<r> ^set-id <sid>
@@ -221,9 +245,12 @@ sp {selection*apply*elaborate-result*time-over*duplicate
            ^status success)
    (<t> ^set <tset>)
    (<tset> ^command-id <sid>
+           ^selection <sr>
            ^trajectory <sel>)
    (<sel> ^id <tid>
           ^selected-by time-over-d)
+   (<sr> ^name time-over-d
+         ^count 1)
 -->
    (<s> ^selection-result <r>)
    (<r> ^set-id <sid>
