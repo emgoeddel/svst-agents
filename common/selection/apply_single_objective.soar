@@ -30,7 +30,7 @@ sp {selection*apply*single*make-select*direction-only
            ^number 1)
 }
 
-# When objective has only ^obstacle (assumes maximizing)
+# When objective has only ^obstacle (assumes minimizing)
 sp {selection*apply*single*make-select*obstacle-only
    (state <s> ^name << pick-up put-down >>
               ^operator <op>
@@ -160,21 +160,4 @@ sp {selection*apply*single*make-select*everything
            ^direction <dir>
            ^obstacle <o>
            ^number 1)
-}
-
-# Still run the evaluation command if not doing MAST...
-# This is only so that output still gets written to file if enabled!
-sp {selection*apply*single*make-select*no-mast
-   (state <s> ^name << pick-up put-down >>
-              ^topstate-svs <v>
-              ^operator <op>)
-   (<op> ^name do-selection
-         ^trajectory-set <sid>
-         ^objectives none)
-   (<v> ^command <cmd>)
--->
-   (<cmd> ^evaluate-trajectories <eval>)
-   (<eval> ^set-id <sid>
-           ^type value
-           ^objective waypoints)
 }

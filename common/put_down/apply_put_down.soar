@@ -144,12 +144,15 @@ sp {put-down*propose*do-selection*no-mast
    (state <s> ^name put-down
              -^selection-result.set-id <sid>
               ^objectives none
-              ^topstate-svs <v>)
+              ^topstate-svs <v>
+              ^target-area <ta>)
    (<v> ^command <cmd>
         ^motor.trajectories <t>)
    (<cmd> ^find-trajectories <ft>)
    (<ft> ^id <sid>
          ^status << stopped complete >> )
+   (<ta> ^center <ac>
+         ^dimensions <ad>)
 -->
    (<s> ^operator <o> +)
    (<o> ^name do-selection
@@ -159,7 +162,9 @@ sp {put-down*propose*do-selection*no-mast
    (<fo> ^name waypoints
          ^parameters <pms>)
    (<pms> ^direction min
-          ^obstacle demo_generic)
+          ^obstacle demo_generic
+          ^area-center <ac>
+          ^area-dimensions <ad>)
 }
 
 ############## EXEC TRAJECTORY ################
