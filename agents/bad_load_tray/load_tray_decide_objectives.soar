@@ -383,29 +383,29 @@ sp {decide-objectives*apply*add-order*third
 }
 
 # Add default objective if relevant and space for it
-sp {decide-objectives*propose*default*no-held
-   (state <s> ^name decide-objectives
-             -^finished
-              ^held-object none
-              ^pending-objectives <po>)
--->
-   (<s> ^operator <o> +)
-   (<o> ^name add-default)
-}
+# sp {decide-objectives*propose*default*no-held
+#    (state <s> ^name decide-objectives
+#              -^finished
+#               ^held-object none
+#               ^pending-objectives <po>)
+# -->
+#    (<s> ^operator <o> +)
+#    (<o> ^name add-default)
+# }
 
-sp {decide-objectives*propose*default*held-no-objective
-   (state <s> ^name decide-objectives
-             -^finished
-              ^held-object <ho>
-              ^pending-objectives <po>
-              ^superstate.known-held <kh>)
-   (<kh> ^object <kho>)
-   (<kho> ^name <ho>
-          ^objectives none)
--->
-   (<s> ^operator <o> +)
-   (<o> ^name add-default)
-}
+# sp {decide-objectives*propose*default*held-no-objective
+#    (state <s> ^name decide-objectives
+#              -^finished
+#               ^held-object <ho>
+#               ^pending-objectives <po>
+#               ^superstate.known-held <kh>)
+#    (<kh> ^object <kho>)
+#    (<kho> ^name <ho>
+#           ^objectives none)
+# -->
+#    (<s> ^operator <o> +)
+#    (<o> ^name add-default)
+# }
 
 sp {decide-objectives*prefer*not-default
    (state <s> ^name decide-objectives

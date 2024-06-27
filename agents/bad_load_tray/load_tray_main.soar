@@ -19,7 +19,7 @@ popd
 popd
 
 pushd agents
-pushd load_tray
+pushd bad_load_tray
 source load_tray_init.soar
 source load_tray_pick.soar
 source load_tray_put.soar

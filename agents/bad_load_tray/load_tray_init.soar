@@ -58,16 +58,16 @@ sp {init-agent*elaborate*held-objectives
           ^second <scco>)
    (<fcco> ^name end-effector-length
            ^parameters <fccopms>)
-   (<fccopms> ^direction min)
+   (<fccopms> ^direction max)
    (<scco> ^name end-effector-rotation
            ^parameters <sccopms>)
-   (<sccopms> ^direction min)
+   (<sccopms> ^direction max)
    (<bm> ^name cup_blue1 # MUG IMPLIES HELD OBJECT CLEARANCE
          ^objectives <bmo>)
    (<bmo> ^first <fbmo>)
    (<fbmo> ^name held-obj-clearance
            ^parameters <fbmopms>)
-   (<fbmopms> ^direction max)
+   (<fbmopms> ^direction min)
 }
 
 # Add information about which OBSTACLES imply which objectives
@@ -84,14 +84,14 @@ sp {init-agent*elaborate*obstacle-objectives
    (<flo> ^name min-clear-subset
           ^parameters <lopms>)
    (<lopms> ^obstacle demo_lamp
-            ^direction max)
+            ^direction min)
    (<c> ^name cup_blue1 # MUG IMPLIES CLEARANCE FROM ITSELF
         ^objectives <co>)
    (<co> ^first <fco>)
    (<fco> ^name min-clear-subset
           ^parameters <copms>)
    (<copms> ^obstacle cup_blue1
-            ^direction max)
+            ^direction min)
 }
 
 # Add information about MOVEMENT ORDER implying objectives
@@ -112,14 +112,14 @@ sp {init-agent*elaborate*order-objectives
    (<foo> ^first <ffoo>)
    (<ffoo> ^name endpoint-centrality
            ^parameters <ffoopms>)
-   (<ffoopms> ^direction min)
+   (<ffoopms> ^direction max)
    (<so> ^name <sn> # SECOND OBJECT IMPLIES DISTANCE FROM FIRST
          ^objectives <soo>)
    (<soo> ^first <fsoo>)
    (<fsoo> ^name endpoint-distance
            ^parameters <fsoopms>)
    (<fsoopms> ^obstacle <fn>
-              ^direction max)
+              ^direction min)
    (<to> ^name <tn> # SECOND OBJECT IMPLIES DISTANCE FROM BOTH
          ^objectives <too>)
    (<too> ^first <ftoo>
@@ -127,9 +127,9 @@ sp {init-agent*elaborate*order-objectives
    (<ftoo> ^name endpoint-distance
            ^parameters <ftoopms>)
    (<ftoopms> ^obstacle <fn>
-              ^direction max)
+              ^direction min)
    (<stoo> ^name endpoint-distance
            ^parameters <stoopms>)
    (<stoopms> ^obstacle <sn>
-              ^direction max)
+              ^direction min)
 }
