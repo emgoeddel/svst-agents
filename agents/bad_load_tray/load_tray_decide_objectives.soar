@@ -383,29 +383,29 @@ sp {decide-objectives*apply*add-order*third
 }
 
 # Add default objective if relevant and space for it
-# sp {decide-objectives*propose*default*no-held
-#    (state <s> ^name decide-objectives
-#              -^finished
-#               ^held-object none
-#               ^pending-objectives <po>)
-# -->
-#    (<s> ^operator <o> +)
-#    (<o> ^name add-default)
-# }
+sp {decide-objectives*propose*default*no-held
+   (state <s> ^name decide-objectives
+             -^finished
+              ^held-object none
+              ^pending-objectives <po>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name add-default)
+}
 
-# sp {decide-objectives*propose*default*held-no-objective
-#    (state <s> ^name decide-objectives
-#              -^finished
-#               ^held-object <ho>
-#               ^pending-objectives <po>
-#               ^superstate.known-held <kh>)
-#    (<kh> ^object <kho>)
-#    (<kho> ^name <ho>
-#           ^objectives none)
-# -->
-#    (<s> ^operator <o> +)
-#    (<o> ^name add-default)
-# }
+sp {decide-objectives*propose*default*held-no-objective
+   (state <s> ^name decide-objectives
+             -^finished
+              ^held-object <ho>
+              ^pending-objectives <po>
+              ^superstate.known-held <kh>)
+   (<kh> ^object <kho>)
+   (<kho> ^name <ho>
+          ^objectives none)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name add-default)
+}
 
 sp {decide-objectives*prefer*not-default
    (state <s> ^name decide-objectives
@@ -428,7 +428,7 @@ sp {decide-objectives*apply*add-default*first
    (<po> ^first <dob>)
    (<dob> ^name execution-time
           ^parameters <dpms>)
-   (<dpms> ^direction min)
+   (<dpms> ^direction max)
 }
 
 sp {decide-objectives*apply*add-default*second
@@ -443,7 +443,7 @@ sp {decide-objectives*apply*add-default*second
    (<po> ^second <dob>)
    (<dob> ^name execution-time
           ^parameters <dpms>)
-   (<dpms> ^direction min)
+   (<dpms> ^direction max)
 }
 
 sp {decide-objectives*apply*add-default*third
@@ -459,7 +459,7 @@ sp {decide-objectives*apply*add-default*third
    (<po> ^third <dob>)
    (<dob> ^name execution-time
           ^parameters <dpms>)
-   (<dpms> ^direction min)
+   (<dpms> ^direction max)
 }
 
 # When the list is complete copy it up
