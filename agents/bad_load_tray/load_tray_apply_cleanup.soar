@@ -1,0 +1,121 @@
+sp {load-tray*prefer*actions-over-cleanup
+   (state <s> ^operator <a> +
+              ^operator <c> +)
+   (<c> ^name clean-up)
+-->
+   (<s> ^operator <a> > <c>)
+}
+
+sp {load-tray*elaborate*commands-present*extract
+   (state <s> ^superstate nil
+              ^svs.command <cmd>
+              ^agent-name load-tray)
+   (<cmd> ^extract_once)
+-->
+   (<s> ^commands-present true)
+}
+
+sp {load-tray*apply*cleanup*extracts
+   (state <s> ^superstate nil
+              ^svs.command <cmd>
+              ^agent-name load-tray
+              ^operator.name clean-up)
+   (<cmd> ^extract_once <eo>)
+-->
+   (<cmd> ^extract_once <eo> -)
+}
+
+sp {load-tray*elaborate*commands-present*find-trajectories
+   (state <s> ^superstate nil
+              ^svs.command <cmd>
+              ^agent-name load-tray)
+   (<cmd> ^find-trajectories)
+-->
+   (<s> ^commands-present true)
+}
+
+sp {load-tray*apply*cleanup*find-trajectories
+   (state <s> ^superstate nil
+              ^svs.command <cmd>
+              ^agent-name load-tray
+              ^operator.name clean-up)
+   (<cmd> ^find-trajectories <ft>)
+-->
+   (<cmd> ^find-trajectories <ft> -)
+}
+
+sp {load-tray*elaborate*commands-present*evaluate-trajectories
+   (state <s> ^superstate nil
+              ^svs.command <cmd>
+              ^agent-name load-tray)
+   (<cmd> ^evaluate-trajectories)
+-->
+   (<s> ^commands-present true)
+}
+
+sp {load-tray*apply*cleanup*evaluate-trajectories
+   (state <s> ^superstate nil
+              ^svs.command <cmd>
+              ^agent-name load-tray
+              ^operator.name clean-up)
+   (<cmd> ^evaluate-trajectories <et>)
+-->
+   (<cmd> ^evaluate-trajectories <et> -)
+}
+
+sp {load-tray*elaborate*commands-present*execute-trajectory
+   (state <s> ^superstate nil
+              ^svs.command <cmd>
+              ^agent-name load-tray)
+   (<cmd> ^execute-trajectory)
+-->
+   (<s> ^commands-present true)
+}
+
+sp {load-tray*apply*cleanup*execute-trajectory
+   (state <s> ^superstate nil
+              ^svs.command <cmd>
+              ^agent-name load-tray
+              ^operator.name clean-up)
+   (<cmd> ^execute-trajectory <et>)
+-->
+   (<cmd> ^execute-trajectory <et> -)
+}
+
+sp {load-tray*elaborate*commands-present*gripper
+   (state <s> ^superstate nil
+              ^svs.command <cmd>
+              ^agent-name load-tray)
+   (<cmd> ^set-gripper)
+-->
+   (<s> ^commands-present true)
+}
+
+sp {load-tray*apply*cleanup*grippers
+   (state <s> ^superstate nil
+              ^svs.command <cmd>
+              ^agent-name load-tray
+              ^operator.name clean-up)
+   (<cmd> ^set-gripper <sg>)
+-->
+   (<cmd> ^set-gripper <sg> -)
+}
+
+sp {load-tray*elaborate*commands-present*line-motion
+   (state <s> ^superstate nil
+              ^svs.command <cmd>
+              ^agent-name load-tray)
+   (<cmd> ^straight-line-motion)
+-->
+   (<s> ^commands-present true)
+}
+
+sp {load-tray*apply*cleanup*line-motions
+   (state <s> ^superstate nil
+              ^svs.command <cmd>
+              ^agent-name load-tray
+              ^operator.name clean-up)
+   (<cmd> ^straight-line-motion <sl>)
+-->
+   (<cmd> ^straight-line-motion <sl> -)
+}

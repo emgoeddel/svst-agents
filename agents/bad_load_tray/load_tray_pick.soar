@@ -1,0 +1,102 @@
+# Propose to pick up the first object to put on the tray
+sp {topstate*propose*pick-up*first
+   (state <s> ^superstate nil
+              ^agent-name load-tray
+              ^svs.spatial-scene <sc>
+              ^object-list <ol>
+              ^done-loading <d>
+             -^held-object
+              ^first-pick-objectives <fpo>)
+   (<ol> ^first <oid>)
+   (<d> -^object <oid>)
+   (<sc> ^child.id <oid>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name pick-up
+        ^objectives <fpo>
+        ^object-id <oid>)
+}
+
+# Propose to pick up the second object to put on the tray
+sp {topstate*propose*pick-up*second
+   (state <s> ^superstate nil
+              ^agent-name load-tray
+              ^svs.spatial-scene <sc>
+              ^object-list <ol>
+              ^done-loading <d>
+              ^held-object none
+             -^pickup-complete <oid>
+              ^second-pick-objectives <spo>)
+   (<ol> ^second <oid>
+         ^first <fo>)
+   (<d> -^object <oid>
+         ^object <fo>)
+   (<sc> ^child.id <oid>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name pick-up
+        ^objectives <spo>
+        ^object-id <oid>)
+}
+
+# Propose to pick up the third object to put on the tray
+sp {topstate*propose*pick-up*third
+   (state <s> ^superstate nil
+              ^agent-name load-tray
+              ^svs.spatial-scene <sc>
+              ^object-list <ol>
+              ^done-loading <d>
+              ^held-object none
+             -^pickup-complete <oid>
+              ^third-pick-objectives <tpo>)
+   (<ol> ^third <oid>
+         ^second <so>
+         ^first <fo>)
+   (<d> -^object <oid>
+         ^object <so>
+         ^object <fo>)
+   (<sc> ^child.id <oid>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name pick-up
+        ^objectives <tpo>
+        ^object-id <oid>)
+}
+
+# Propose to clean up old commands once pick-up is over
+sp {topstate*propose*clean-up-pick
+   (state <s> ^superstate nil
+              ^agent-name load-tray
+              ^commands-present
+              ^done-loading <d>
+              ^held-object <oid> { <oid> <> none })
+   (<d> -^object <oid>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name clean-up)
+}
+
+# Use this to also note that the pick-up is finished
+sp {topstate*apply*clean-up*pickup-complete
+   (state <s> ^superstate nil
+              ^agent-name load-tray
+              ^held-object <oid> { <oid> <> none }
+              ^operator.name clean-up)
+-->
+   (<s> ^pickup-complete <oid>)
+}
+
+sp {topstate*halt-when-done
+   (state <s> ^superstate nil
+              ^agent-name load-tray
+              ^object-list <ol>
+              ^done-loading <d>)
+   (<ol> ^first <fo>
+         ^second <so>
+         ^third <to>)
+   (<d> ^object <fo>
+        ^object <so>
+        ^object <to>)
+-->
+   (halt)
+}
