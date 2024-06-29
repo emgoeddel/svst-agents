@@ -333,15 +333,19 @@ sp {decide-objectives*apply*add-order*first
         ^added-order true)
 }
 
-sp {decide-objectives*apply*add-order*second-first
+sp {decide-objectives*apply*add-order*second-first*held-no-obj
    (state <s> ^operator.name add-order
               ^held-object <on>
               ^pending-objectives <po>
-              ^superstate.known-order <ko>)
+              ^superstate.known-order <ko>
+              ^superstate.known-held <kh>)
    (<ko> ^object <koo>)
    (<koo> ^name <on>
           ^objectives <kool>)
    (<kool> ^first <kof>)
+   (<kh> ^object <kho>)
+   (<kho> ^name <on>
+          ^objectives none)
    (<po> ^first
         -^second)
 -->
@@ -349,6 +353,26 @@ sp {decide-objectives*apply*add-order*second-first
    (<po> ^second <kof>)
 }
 
+sp {decide-objectives*apply*add-order*second-first*held-obj
+   (state <s> ^operator.name add-order
+              ^held-object <on>
+              ^pending-objectives <po>
+              ^superstate.known-order <ko>
+              ^superstate.known-held <kh>)
+   (<ko> ^object <koo>)
+   (<koo> ^name <on>
+          ^objectives <kool>)
+   (<kool> ^first <kof>)
+   (<kh> ^object <kho>)
+   (<kho> ^name <on>
+          ^objectives { <> none <khob> } )
+   (<po> ^first
+        -^second)
+-->
+   (<s> ^added-order true
+        ^finished true)
+   (<po> ^second <kof>)
+}
 sp {decide-objectives*apply*add-order*second-second
    (state <s> ^operator.name add-order
               ^held-object <on>
