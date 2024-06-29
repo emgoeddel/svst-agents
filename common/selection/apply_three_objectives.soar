@@ -187,7 +187,7 @@ sp {selection*apply*three*apply*second-subset*direction-only
            ^objective <on>
            ^type select
            ^direction <dir>
-           ^number 5)
+           ^number 3)
 }
 
 sp {selection*apply*three*apply*second-subset*obstacle-only
@@ -211,7 +211,7 @@ sp {selection*apply*three*apply*second-subset*obstacle-only
            ^objective <on>
            ^type select
            ^obstacle <otc>
-           ^number 5)
+           ^number 3)
 }
 
 sp {selection*apply*three*apply*second-subset*obstacle-direction
@@ -236,7 +236,7 @@ sp {selection*apply*three*apply*second-subset*obstacle-direction
            ^type select
            ^obstacle <otc>
            ^direction <dir>
-           ^number 5)
+           ^number 3)
 }
 
 sp {selection*apply*three*apply*second-subset*centrality
@@ -261,7 +261,7 @@ sp {selection*apply*three*apply*second-subset*centrality
            ^type select
            ^area-center <ac>
            ^area-dimensions <ad>
-           ^number 5)
+           ^number 3)
 }
 
 sp {selection*apply*three*apply*second-subset*centrality-direction
@@ -287,7 +287,7 @@ sp {selection*apply*three*apply*second-subset*centrality-direction
            ^area-center <ac>
            ^area-dimensions <ad>
            ^direction <dir>
-           ^number 5)
+           ^number 3)
 }
 
 # Once the command has processed, note success
@@ -299,7 +299,7 @@ sp {selection*apply*three*elaborate-second-command
    (<c> ^evaluate-trajectories <eval>)
    (<eval> ^type select
            ^objective <on>
-           ^number 5
+           ^number 3
            ^status success)
 -->
    (<s> ^second-subset-selected true)
