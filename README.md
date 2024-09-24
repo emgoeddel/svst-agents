@@ -8,4 +8,4 @@ Includes all agents described in Chapter 6 as subfolders of the `agents` folder.
 - Pick up with objective reconsideration = `reach_test_rethink`
 - Tray loading = `load_tray`
 
-Author: Lizzie Goeddel
+The `common` folder provides the default rules for selection, pick up, and put down substates, also described in Chapter 6.
