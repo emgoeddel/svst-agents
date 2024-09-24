@@ -1,7 +1,7 @@
 # Turn on SVS
 svs --enable
 svs ros.enable all
-svs objective_output on
+svs objective_output off
 
 # Give the agent a name
 sp {init-agent*propose*add-name

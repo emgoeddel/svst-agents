@@ -217,16 +217,16 @@ sp {pick-up*apply*make-execute
 }
 
 # Comment out to have the reaching agent actually execute!
-sp {pick-up*reach-test-only*halt
-   (state <s> ^name pick-up
-              ^superstate <ss>
-              ^topstate-svs.command <cmd>)
-   (<ss> ^agent-name reach-test)
-   (<cmd> ^execute-trajectory <x>)
-   (<x> ^status running)
--->
-   (halt)
-}
+#sp {pick-up*reach-test-only*halt
+#   (state <s> ^name pick-up
+#              ^superstate <ss>
+#              ^topstate-svs.command <cmd>)
+#   (<ss> ^agent-name reach-test)
+#   (<cmd> ^execute-trajectory <x>)
+#   (<x> ^status running)
+#-->
+#   (halt)
+#}
 
 
 ############## GRASP SECOND ################

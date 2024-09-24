@@ -217,16 +217,16 @@ sp {put-down*apply*make-execute
 }
 
 # Comment out to have the placing agent actually execute put-down!
-sp {pick-up*place-test-only*halt
-   (state <s> ^name put-down
-              ^superstate <ss>
-              ^topstate-svs.command <cmd>)
-   (<ss> ^agent-name place-test)
-   (<cmd> ^execute-trajectory <x>)
-   (<x> ^status running)
--->
-   (halt)
-}
+#sp {pick-up*place-test-only*halt
+#   (state <s> ^name put-down
+#              ^superstate <ss>
+#              ^topstate-svs.command <cmd>)
+#   (<ss> ^agent-name place-test)
+#   (<cmd> ^execute-trajectory <x>)
+#   (<x> ^status running)
+#-->
+#   (halt)
+#}
 
 ############## DROP POSE ################
 
